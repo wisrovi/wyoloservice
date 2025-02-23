@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wiliutils"
+version = "0.1.0"
+authors = [
+    { name="wisrovi", email="wisrovi.rodriguez@gmail.com" },
+]
+description = "Utilities for Python"
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.6"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/wisrovi/wutils"
+"Bug Tracker" = "https://github.com/wisrovi/wutils/issues"

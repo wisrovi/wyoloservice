@@ -1,0 +1,233 @@
+[
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
+        "label": "setup",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "find_packages",
+        "importPath": "setuptools",
+        "description": "setuptools",
+        "isExtraImport": true,
+        "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "Basemodel",
+        "kind": 6,
+        "importPath": "module.submodule.controller",
+        "description": "module.submodule.controller",
+        "peekOfCode": "class Basemodel:\n    def __init__(self):\n        self.name = \"Basemodel\"\n        self.type = \"Base\"",
+        "detail": "module.submodule.controller",
+        "documentation": {}
+    },
+    {
+        "label": "generate_directory_structure",
+        "kind": 2,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "def generate_directory_structure(base_dir):\n    \"\"\"Generates the directory structure in a tree-like format.\"\"\"\n    structure = []\n    for root, dirs, files in os.walk(base_dir):\n        level = root.replace(base_dir, \"\").count(os.sep)\n        indent = \"    \" * level\n        structure.append(f\"{indent}{os.path.basename(root)}/\")\n        sub_indent = \"    \" * (level + 1)\n        for file in sorted(files):\n            if file.endswith(\".py\"):",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "extract_code_snippet",
+        "kind": 2,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "def extract_code_snippet(file_path):\n    \"\"\"Extracts the full content of a Python file.\"\"\"\n    try:\n        with open(file_path, \"r\") as file:\n            content = file.read()\n            return content.strip()\n    except Exception as e:\n        return f\"# Error reading file: {e}\"\ndef generate_module_section(module_path, module_name):\n    \"\"\"Generates the section for a specific module, including its examples.\"\"\"",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "generate_module_section",
+        "kind": 2,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "def generate_module_section(module_path, module_name):\n    \"\"\"Generates the section for a specific module, including its examples.\"\"\"\n    examples = []\n    for file in sorted(os.listdir(module_path)):\n        if file.endswith(\".py\"):\n            file_path = os.path.join(module_path, file)\n            code_snippet = extract_code_snippet(file_path)\n            examples.append(\n                EXAMPLE_TEMPLATE.format(\n                    file_name=file,",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "generate_readme",
+        "kind": 2,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "def generate_readme(base_dir, readme_file):\n    \"\"\"Generates the README.md file for the examples directory.\"\"\"\n    directory_structure = generate_directory_structure(base_dir)\n    readme_content = HEADER_TEMPLATE.format(directory_structure=directory_structure)\n    # Add module-specific sections\n    for module in sorted(os.listdir(base_dir)):\n        module_path = os.path.join(base_dir, module)\n        if os.path.isdir(module_path):\n            readme_content += generate_module_section(module_path, module) + \"\\n\"\n    # Write to README.md",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "EXAMPLES_DIR",
+        "kind": 5,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "EXAMPLES_DIR = \"examples\"\nREADME_FILE = os.path.join(EXAMPLES_DIR, \"README.md\")\nHEADER_TEMPLATE = \"\"\"# Examples\nThis directory contains a collection of examples that demonstrate the usage of various modules and functionalities in this project. Each subfolder corresponds to a specific module and includes example scripts to help you understand how to use that module.\n## Directory Structure\nThe examples are organized as follows:\n```\n{directory_structure}\n```\n## How to Use",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "README_FILE",
+        "kind": 5,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "README_FILE = os.path.join(EXAMPLES_DIR, \"README.md\")\nHEADER_TEMPLATE = \"\"\"# Examples\nThis directory contains a collection of examples that demonstrate the usage of various modules and functionalities in this project. Each subfolder corresponds to a specific module and includes example scripts to help you understand how to use that module.\n## Directory Structure\nThe examples are organized as follows:\n```\n{directory_structure}\n```\n## How to Use\n1. Navigate to the module folder of interest, e.g., `examples/module1/`.",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "HEADER_TEMPLATE",
+        "kind": 5,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "HEADER_TEMPLATE = \"\"\"# Examples\nThis directory contains a collection of examples that demonstrate the usage of various modules and functionalities in this project. Each subfolder corresponds to a specific module and includes example scripts to help you understand how to use that module.\n## Directory Structure\nThe examples are organized as follows:\n```\n{directory_structure}\n```\n## How to Use\n1. Navigate to the module folder of interest, e.g., `examples/module1/`.\n2. Open the `README.md` in that folder to get detailed information about the examples.",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "MODULE_TEMPLATE",
+        "kind": 5,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "MODULE_TEMPLATE = \"\"\"\n### {module_name}\n#### Description\n{description}\n{examples}\n\"\"\"\nEXAMPLE_TEMPLATE = \"\"\"\n- **{file_name}**: {description}\n```python\n{code_snippet}",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "EXAMPLE_TEMPLATE",
+        "kind": 5,
+        "importPath": "examples_readme",
+        "description": "examples_readme",
+        "peekOfCode": "EXAMPLE_TEMPLATE = \"\"\"\n- **{file_name}**: {description}\n```python\n{code_snippet}\n  ```\n\"\"\"\ndef generate_directory_structure(base_dir):\n    \"\"\"Generates the directory structure in a tree-like format.\"\"\"\n    structure = []\n    for root, dirs, files in os.walk(base_dir):",
+        "detail": "examples_readme",
+        "documentation": {}
+    },
+    {
+        "label": "actual_version",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "actual_version = config_project[\"project\"][\"version\"]\n# incrementar la version\nversion = actual_version.split(\".\")\n# hay 3 partes en la version: major, minor, patch\n# cada parte se incrementa en 1, cuando la parte anterior llega a 9, se incrementa la siguiente parte en 1\n# si la parte anterior es 0, se incrementa en 1\nmajor = int(version[0])\nminor = int(version[1])\npatch = int(version[2])\nif patch < 9:",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "version",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "version = actual_version.split(\".\")\n# hay 3 partes en la version: major, minor, patch\n# cada parte se incrementa en 1, cuando la parte anterior llega a 9, se incrementa la siguiente parte en 1\n# si la parte anterior es 0, se incrementa en 1\nmajor = int(version[0])\nminor = int(version[1])\npatch = int(version[2])\nif patch < 9:\n    patch += 1\nelse:",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "major",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "major = int(version[0])\nminor = int(version[1])\npatch = int(version[2])\nif patch < 9:\n    patch += 1\nelse:\n    patch = 0\n    if minor < 9:\n        minor += 1\n    else:",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "minor",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "minor = int(version[1])\npatch = int(version[2])\nif patch < 9:\n    patch += 1\nelse:\n    patch = 0\n    if minor < 9:\n        minor += 1\n    else:\n        minor = 0",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "patch",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "patch = int(version[2])\nif patch < 9:\n    patch += 1\nelse:\n    patch = 0\n    if minor < 9:\n        minor += 1\n    else:\n        minor = 0\n        major += 1",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "new_version",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "new_version = f\"{major}.{minor}.{patch}\"\n# actualizar la version en el archivo pyproject.toml\nconfig_project[\"project\"][\"version\"] = new_version\nwith open(\"pyproject.toml\", \"w\") as file:\n    tomllib.dump(config_project, file)\nprint(f\"Version actual: {actual_version}\")\ncommand = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "config_project[\"project\"][\"version\"]",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "config_project[\"project\"][\"version\"] = new_version\nwith open(\"pyproject.toml\", \"w\") as file:\n    tomllib.dump(config_project, file)\nprint(f\"Version actual: {actual_version}\")\ncommand = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "command",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "command = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "command",
+        "kind": 5,
+        "importPath": "publish_version",
+        "description": "publish_version",
+        "peekOfCode": "command = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
+        "detail": "publish_version",
+        "documentation": {}
+    },
+    {
+        "label": "this_directory",
+        "kind": 5,
+        "importPath": "setup",
+        "description": "setup",
+        "peekOfCode": "this_directory = Path(__file__).parent\nlong_description = (this_directory / \"README.md\").read_text()\nsetup(\n    name=config_project[\"project\"][\"name\"],  # Nombre del paquete en PyPI\n    version=config_project[\"project\"][\"version\"],\n    packages=find_packages(),\n    install_requires=requirements,\n    classifiers=[\n        \"Programming Language :: Python :: 3\",\n        \"License :: OSI Approved :: MIT License\",",
+        "detail": "setup",
+        "documentation": {}
+    },
+    {
+        "label": "long_description",
+        "kind": 5,
+        "importPath": "setup",
+        "description": "setup",
+        "peekOfCode": "long_description = (this_directory / \"README.md\").read_text()\nsetup(\n    name=config_project[\"project\"][\"name\"],  # Nombre del paquete en PyPI\n    version=config_project[\"project\"][\"version\"],\n    packages=find_packages(),\n    install_requires=requirements,\n    classifiers=[\n        \"Programming Language :: Python :: 3\",\n        \"License :: OSI Approved :: MIT License\",\n        \"Operating System :: OS Independent\",",
+        "detail": "setup",
+        "documentation": {}
+    }
+]
