@@ -1,0 +1,10 @@
+defaults:
+  - override hydra/sweeper: optuna
+
+train:
+  batch_size: 32
+  epochs: 10
+
+sweeper:
+  n_trials: 50
+  sampler: random

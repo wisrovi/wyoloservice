@@ -1,5 +1,46 @@
 [
     {
+        "label": "tqdm",
+        "importPath": "tqdm",
+        "description": "tqdm",
+        "isExtraImport": true,
+        "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "yaml",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "yaml",
+        "description": "yaml",
+        "detail": "yaml",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -9,12 +50,238 @@
         "documentation": {}
     },
     {
+        "label": "glob",
+        "importPath": "glob",
+        "description": "glob",
+        "isExtraImport": true,
+        "detail": "glob",
+        "documentation": {}
+    },
+    {
+        "label": "Roboflow",
+        "importPath": "roboflow",
+        "description": "roboflow",
+        "isExtraImport": true,
+        "detail": "roboflow",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "Field",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "WSQLite",
+        "importPath": "wsqlite",
+        "description": "wsqlite",
+        "isExtraImport": true,
+        "detail": "wsqlite",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "UploadFile",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "File",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "shutil",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "shutil",
+        "description": "shutil",
+        "detail": "shutil",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "api.database",
+        "description": "api.database",
+        "isExtraImport": true,
+        "detail": "api.database",
+        "documentation": {}
+    },
+    {
+        "label": "TrainingHistory",
+        "importPath": "api.database",
+        "description": "api.database",
+        "isExtraImport": true,
+        "detail": "api.database",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "api.database",
+        "description": "api.database",
+        "isExtraImport": true,
+        "detail": "api.database",
+        "documentation": {}
+    },
+    {
+        "label": "TrainingHistory",
+        "importPath": "api.database",
+        "description": "api.database",
+        "isExtraImport": true,
+        "detail": "api.database",
+        "documentation": {}
+    },
+    {
+        "label": "enqueue_task",
+        "importPath": "api.redis_queue",
+        "description": "api.redis_queue",
+        "isExtraImport": true,
+        "detail": "api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "upload_model",
+        "importPath": "api.minio",
+        "description": "api.minio",
+        "isExtraImport": true,
+        "detail": "api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "list_models",
+        "importPath": "api.minio",
+        "description": "api.minio",
+        "isExtraImport": true,
+        "detail": "api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "download_model",
+        "importPath": "api.minio",
+        "description": "api.minio",
+        "isExtraImport": true,
+        "detail": "api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "boto3",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "boto3",
+        "description": "boto3",
+        "detail": "boto3",
+        "documentation": {}
+    },
+    {
+        "label": "mlflow",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mlflow",
+        "description": "mlflow",
+        "detail": "mlflow",
+        "documentation": {}
+    },
+    {
+        "label": "redis",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "redis",
+        "description": "redis",
+        "detail": "redis",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "hydra",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hydra",
+        "description": "hydra",
+        "detail": "hydra",
+        "documentation": {}
+    },
+    {
+        "label": "optuna",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "optuna",
+        "description": "optuna",
+        "detail": "optuna",
+        "documentation": {}
+    },
+    {
         "label": "subprocess",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "subprocess",
         "description": "subprocess",
         "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "tomli_w",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tomli_w",
+        "description": "tomli_w",
+        "detail": "tomli_w",
         "documentation": {}
     },
     {
@@ -42,12 +309,363 @@
         "documentation": {}
     },
     {
+        "label": "load_config",
+        "kind": 2,
+        "importPath": "examples.api_train.yolo_train",
+        "description": "examples.api_train.yolo_train",
+        "peekOfCode": "def load_config():\n    with open(\"config_train.yaml\", \"r\") as file:\n        config = yaml.safe_load(file)\n    return config\nif __name__ == \"__main__\":\n    config_train = load_config()[\"train\"]\n    config_test = load_config()[\"test\"]\n    config_val = load_config()[\"val\"]\n    MODEL = load_config()[\"model\"]\n    model = YOLO(MODEL)",
+        "detail": "examples.api_train.yolo_train",
+        "documentation": {}
+    },
+    {
+        "label": "MODEL",
+        "kind": 5,
+        "importPath": "examples.api_train.yolo_train",
+        "description": "examples.api_train.yolo_train",
+        "peekOfCode": "MODEL = \"yolov8n-cls.pt\"\n# MODEL = \"/dataset/results/train/weights/best.pt\"\ndef load_config():\n    with open(\"config_train.yaml\", \"r\") as file:\n        config = yaml.safe_load(file)\n    return config\nif __name__ == \"__main__\":\n    config_train = load_config()[\"train\"]\n    config_test = load_config()[\"test\"]\n    config_val = load_config()[\"val\"]",
+        "detail": "examples.api_train.yolo_train",
+        "documentation": {}
+    },
+    {
+        "label": "rf",
+        "kind": 5,
+        "importPath": "examples.dataset.people",
+        "description": "examples.dataset.people",
+        "peekOfCode": "rf = Roboflow(api_key=\"eE8kJi3wvnkEsw6FydSA\")\nproject = rf.workspace(\"leo-ueno\").project(\"people-detection-o4rdr\")\nversion = project.version(8)\ndataset = version.download(\"yolov8\")",
+        "detail": "examples.dataset.people",
+        "documentation": {}
+    },
+    {
+        "label": "project",
+        "kind": 5,
+        "importPath": "examples.dataset.people",
+        "description": "examples.dataset.people",
+        "peekOfCode": "project = rf.workspace(\"leo-ueno\").project(\"people-detection-o4rdr\")\nversion = project.version(8)\ndataset = version.download(\"yolov8\")",
+        "detail": "examples.dataset.people",
+        "documentation": {}
+    },
+    {
+        "label": "version",
+        "kind": 5,
+        "importPath": "examples.dataset.people",
+        "description": "examples.dataset.people",
+        "peekOfCode": "version = project.version(8)\ndataset = version.download(\"yolov8\")",
+        "detail": "examples.dataset.people",
+        "documentation": {}
+    },
+    {
+        "label": "dataset",
+        "kind": 5,
+        "importPath": "examples.dataset.people",
+        "description": "examples.dataset.people",
+        "peekOfCode": "dataset = version.download(\"yolov8\")",
+        "detail": "examples.dataset.people",
+        "documentation": {}
+    },
+    {
         "label": "Basemodel",
         "kind": 6,
         "importPath": "module.submodule.controller",
         "description": "module.submodule.controller",
         "peekOfCode": "class Basemodel:\n    def __init__(self):\n        self.name = \"Basemodel\"\n        self.type = \"Base\"",
         "detail": "module.submodule.controller",
+        "documentation": {}
+    },
+    {
+        "label": "TrainingHistory",
+        "kind": 6,
+        "importPath": "services.api.database",
+        "description": "services.api.database",
+        "peekOfCode": "class TrainingHistory(BaseModel):\n    id: int = Field(primary_key=True)\n    task_id: str\n    status: str\n    user_code: str\n    timestamp: str = datetime.utcnow()\n    config_path: str\n    model_path: str = None\n    cpu_usage: float = None\n    ram_usage: float = None",
+        "detail": "services.api.database",
+        "documentation": {}
+    },
+    {
+        "label": "DB_PATH",
+        "kind": 5,
+        "importPath": "services.api.database",
+        "description": "services.api.database",
+        "peekOfCode": "DB_PATH = \"/database/mlflow.db\"\n# Verificar si la carpeta /database existe, si no, crearla\nos.makedirs(os.path.dirname(DB_PATH), exist_ok=True)\ndb = WSQLite(TrainingHistory, \"/database/mlflow.db\")",
+        "detail": "services.api.database",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "kind": 5,
+        "importPath": "services.api.database",
+        "description": "services.api.database",
+        "peekOfCode": "db = WSQLite(TrainingHistory, \"/database/mlflow.db\")",
+        "detail": "services.api.database",
+        "documentation": {}
+    },
+    {
+        "label": "start_training",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def start_training(task_id: str, user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:\n        count = 0\n    # Insertar un nuevo usuario con el nuevo campo",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_trainings",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def get_trainings():\n    \"\"\"Consulta los entrenamientos registrados.\"\"\"\n    return db.get_all()\n@app.get(\"/best_model/{experiment_name}\")\ndef get_best_model(experiment_name: str):\n    \"\"\"Devuelve el mejor modelo del experimento.\"\"\"\n    versions = db.get_by_field(experiment_name=experiment_name)\n    best_version = max(versions, key=lambda v: v.loss)\n    if best_version:\n        return {",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_best_model",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def get_best_model(experiment_name: str):\n    \"\"\"Devuelve el mejor modelo del experimento.\"\"\"\n    versions = db.get_by_field(experiment_name=experiment_name)\n    best_version = max(versions, key=lambda v: v.loss)\n    if best_version:\n        return {\n            \"experiment_name\": experiment_name,\n            \"best_model\": best_version.recommended_model,\n            \"metrics\": {\n                \"loss\": best_version.loss,",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "get_model_versions",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def get_model_versions(task_id: str):\n    \"\"\"Devuelve todas las versiones de un modelo almacenadas en MinIO.\"\"\"\n    versions = db.get_by_field(task_id=task_id)\n    return [\n        {\"version\": v.task_id.split(\"_v\")[-1], \"url\": v.model_path} for v in versions\n    ]\n@app.get(\"/models/\")\ndef list_all_models():\n    \"\"\"Lista todos los modelos almacenados en MinIO.\"\"\"\n    return list_models()",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "list_all_models",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def list_all_models():\n    \"\"\"Lista todos los modelos almacenados en MinIO.\"\"\"\n    return list_models()\n@app.get(\"/download_model/{model_name}\")\ndef download_model_endpoint(model_name: str):\n    \"\"\"Descarga un modelo desde MinIO.\"\"\"\n    save_path = f\"/tmp/{model_name}\"\n    download_model(model_name, save_path)\n    return {\"message\": \"Modelo descargado\", \"path\": save_path}",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "download_model_endpoint",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def download_model_endpoint(model_name: str):\n    \"\"\"Descarga un modelo desde MinIO.\"\"\"\n    save_path = f\"/tmp/{model_name}\"\n    download_model(model_name, save_path)\n    return {\"message\": \"Modelo descargado\", \"path\": save_path}",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "CONFIG_DIR",
+        "kind": 5,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(task_id: str, user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(task_id: str, user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "upload_model",
+        "kind": 2,
+        "importPath": "services.api.minio",
+        "description": "services.api.minio",
+        "peekOfCode": "def upload_model(task_id: str, file):\n    \"\"\"Sube un modelo con versionado automático.\"\"\"\n    timestamp = datetime.datetime.utcnow().strftime(\"%Y%m%d%H%M%S\")\n    versioned_filename = f\"{task_id}_v{timestamp}.pt\"\n    s3.upload_fileobj(file.file, BUCKET_NAME, versioned_filename)\n    return {\"message\": \"Modelo subido\", \"filename\": versioned_filename}\ndef list_models():\n    \"\"\"Lista los modelos almacenados en MinIO con sus versiones.\"\"\"\n    response = s3.list_objects_v2(Bucket=BUCKET_NAME)\n    models = sorted([obj[\"Key\"] for obj in response.get(\"Contents\", [])], reverse=True)",
+        "detail": "services.api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "list_models",
+        "kind": 2,
+        "importPath": "services.api.minio",
+        "description": "services.api.minio",
+        "peekOfCode": "def list_models():\n    \"\"\"Lista los modelos almacenados en MinIO con sus versiones.\"\"\"\n    response = s3.list_objects_v2(Bucket=BUCKET_NAME)\n    models = sorted([obj[\"Key\"] for obj in response.get(\"Contents\", [])], reverse=True)\n    return {\"models\": models}\ndef download_model(filename: str):\n    \"\"\"Descarga una versión específica de un modelo.\"\"\"\n    file_path = f\"/tmp/{filename}\"\n    s3.download_file(BUCKET_NAME, filename, file_path)\n    return {\"message\": f\"Modelo descargado en {file_path}\"}",
+        "detail": "services.api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "download_model",
+        "kind": 2,
+        "importPath": "services.api.minio",
+        "description": "services.api.minio",
+        "peekOfCode": "def download_model(filename: str):\n    \"\"\"Descarga una versión específica de un modelo.\"\"\"\n    file_path = f\"/tmp/{filename}\"\n    s3.download_file(BUCKET_NAME, filename, file_path)\n    return {\"message\": f\"Modelo descargado en {file_path}\"}",
+        "detail": "services.api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "MINIO_ENDPOINT",
+        "kind": 5,
+        "importPath": "services.api.minio",
+        "description": "services.api.minio",
+        "peekOfCode": "MINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\ndef upload_model(task_id: str, file):\n    \"\"\"Sube un modelo con versionado automático.\"\"\"",
+        "detail": "services.api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "BUCKET_NAME",
+        "kind": 5,
+        "importPath": "services.api.minio",
+        "description": "services.api.minio",
+        "peekOfCode": "BUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\ndef upload_model(task_id: str, file):\n    \"\"\"Sube un modelo con versionado automático.\"\"\"\n    timestamp = datetime.datetime.utcnow().strftime(\"%Y%m%d%H%M%S\")",
+        "detail": "services.api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "s3",
+        "kind": 5,
+        "importPath": "services.api.minio",
+        "description": "services.api.minio",
+        "peekOfCode": "s3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\ndef upload_model(task_id: str, file):\n    \"\"\"Sube un modelo con versionado automático.\"\"\"\n    timestamp = datetime.datetime.utcnow().strftime(\"%Y%m%d%H%M%S\")\n    versioned_filename = f\"{task_id}_v{timestamp}.pt\"",
+        "detail": "services.api.minio",
+        "documentation": {}
+    },
+    {
+        "label": "log_training_run",
+        "kind": 2,
+        "importPath": "services.api.mlflow_tracking",
+        "description": "services.api.mlflow_tracking",
+        "peekOfCode": "def log_training_run(config, metrics):\n    \"\"\"Registra una ejecución en MLflow.\"\"\"\n    with mlflow.start_run():\n        mlflow.log_params(config)\n        mlflow.log_metrics(metrics)",
+        "detail": "services.api.mlflow_tracking",
+        "documentation": {}
+    },
+    {
+        "label": "MLFLOW_TRACKING_URI",
+        "kind": 5,
+        "importPath": "services.api.mlflow_tracking",
+        "description": "services.api.mlflow_tracking",
+        "peekOfCode": "MLFLOW_TRACKING_URI = \"http://mlflow:5000\"\nmlflow.set_tracking_uri(MLFLOW_TRACKING_URI)\ndef log_training_run(config, metrics):\n    \"\"\"Registra una ejecución en MLflow.\"\"\"\n    with mlflow.start_run():\n        mlflow.log_params(config)\n        mlflow.log_metrics(metrics)",
+        "detail": "services.api.mlflow_tracking",
+        "documentation": {}
+    },
+    {
+        "label": "enqueue_task",
+        "kind": 2,
+        "importPath": "services.api.redis_queue",
+        "description": "services.api.redis_queue",
+        "peekOfCode": "def enqueue_task(data_dict: str):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    redis_client.rpush(\"training_queue\", data_dict)\ndef dequeue_task():\n    \"\"\"Obtener la siguiente tarea de la cola en Redis.\"\"\"\n    return redis_client.rpop(\"training_queue\")",
+        "detail": "services.api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "dequeue_task",
+        "kind": 2,
+        "importPath": "services.api.redis_queue",
+        "description": "services.api.redis_queue",
+        "peekOfCode": "def dequeue_task():\n    \"\"\"Obtener la siguiente tarea de la cola en Redis.\"\"\"\n    return redis_client.rpop(\"training_queue\")",
+        "detail": "services.api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "redis_client",
+        "kind": 5,
+        "importPath": "services.api.redis_queue",
+        "description": "services.api.redis_queue",
+        "peekOfCode": "redis_client = redis.Redis(host=\"redis\", port=6379, db=0)\ndef enqueue_task(data_dict: str):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    redis_client.rpush(\"training_queue\", data_dict)\ndef dequeue_task():\n    \"\"\"Obtener la siguiente tarea de la cola en Redis.\"\"\"\n    return redis_client.rpop(\"training_queue\")",
+        "detail": "services.api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "evaluate_model",
+        "kind": 2,
+        "importPath": "services.evaluate",
+        "description": "services.evaluate",
+        "peekOfCode": "def evaluate_model(model_path, test_data):\n    \"\"\"Evalúa un modelo con nuevos datos y registra métricas en MLflow.\"\"\"\n    model = YOLO(model_path)\n    results = model.val(data=test_data)\n    mlflow.log_metrics({\n        \"precision\": results.results[\"precision\"],\n        \"recall\": results.results[\"recall\"],\n        \"map50\": results.results[\"map50\"],\n        \"map50_95\": results.results[\"map50_95\"]\n    })",
+        "detail": "services.evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "upload_to_minio",
+        "kind": 2,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "def upload_to_minio(task_id, model_path, version):\n    \"\"\"Guarda múltiples versiones del modelo en MinIO y devuelve la URL.\"\"\"\n    model_filename = f\"{task_id}_v{version}.pt\"\n    s3.upload_file(model_path, BUCKET_NAME, model_filename)\n    return f\"{MINIO_ENDPOINT}/{BUCKET_NAME}/{model_filename}\"\ndef save_best_model(task_id, model_path, version):\n    \"\"\"Registra el mejor modelo en la base de datos y lo sube a MinIO.\"\"\"\n    minio_url = upload_to_minio(task_id, model_path, version)\n    # Verificar si el `task_id` existe en la base de datos\n    existing_task = db.get_by_field(task_id=task_id)",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "save_best_model",
+        "kind": 2,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "def save_best_model(task_id, model_path, version):\n    \"\"\"Registra el mejor modelo en la base de datos y lo sube a MinIO.\"\"\"\n    minio_url = upload_to_minio(task_id, model_path, version)\n    # Verificar si el `task_id` existe en la base de datos\n    existing_task = db.get_by_field(task_id=task_id)\n    if existing_task is None:\n        print(f\"⚠️ Advertencia: No se encontró task_id {task_id} en la base de datos.\")\n        return\n    db.update(\n        1,",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "train_model",
+        "kind": 2,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "def train_model(config, task_id):\n    \"\"\"Entrena YOLOv8 con búsqueda de hiperparámetros y guarda el mejor modelo.\"\"\"\n    def objective(trial):\n        print(f\"🔍 Iniciando prueba {trial.number}...\")\n        config[\"train\"][\"epochs\"] = trial.suggest_int(\"train.epochs\", 10, 100, step=10)\n        config[\"train\"][\"batch\"] = trial.suggest_categorical(\n            \"train.batch\", [8, 16, 32, 64]\n        )\n        config[\"train\"][\"imgsz\"] = trial.suggest_categorical(\n            \"train.imgsz\", [320, 416, 512, 640]",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "def main(_):\n    print(\"✅ Worker iniciado. Esperando trabajos en la cola de Redis...\")\n    while True:\n        task = redis_client.blpop(\"training_queue\", timeout=5)\n        if task:\n            print(f\"📥 Nueva tarea recibida: {task[1]}\")\n            try:\n                task_data = json.loads(task[1])\n                if \"task_id\" not in task_data or \"config_path\" not in task_data:\n                    print(",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "MLFLOW_TRACKING_URI",
+        "kind": 5,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "MLFLOW_TRACKING_URI = \"http://mlflow:5000\"\nmlflow.set_tracking_uri(MLFLOW_TRACKING_URI)\nMINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "MINIO_ENDPOINT",
+        "kind": 5,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "MINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\nredis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "BUCKET_NAME",
+        "kind": 5,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "BUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\nredis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto\nDEFAULT_CONFIG = {",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "s3",
+        "kind": 5,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "s3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\nredis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto\nDEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "redis_client",
+        "kind": 5,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "redis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto\nDEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",\n    \"model\": \"yolov8n.pt\",\n    \"train\": {\"batch_size\": 32, \"epochs\": 10},\n    \"sweeper\": {\"n_trials\": 50, \"sampler\": \"random\"},\n}\ndef upload_to_minio(task_id, model_path, version):\n    \"\"\"Guarda múltiples versiones del modelo en MinIO y devuelve la URL.\"\"\"",
+        "detail": "services.worker",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_CONFIG",
+        "kind": 5,
+        "importPath": "services.worker",
+        "description": "services.worker",
+        "peekOfCode": "DEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",\n    \"model\": \"yolov8n.pt\",\n    \"train\": {\"batch_size\": 32, \"epochs\": 10},\n    \"sweeper\": {\"n_trials\": 50, \"sampler\": \"random\"},\n}\ndef upload_to_minio(task_id, model_path, version):\n    \"\"\"Guarda múltiples versiones del modelo en MinIO y devuelve la URL.\"\"\"\n    model_filename = f\"{task_id}_v{version}.pt\"\n    s3.upload_file(model_path, BUCKET_NAME, model_filename)",
+        "detail": "services.worker",
         "documentation": {}
     },
     {
@@ -181,7 +799,7 @@
         "kind": 5,
         "importPath": "publish_version",
         "description": "publish_version",
-        "peekOfCode": "new_version = f\"{major}.{minor}.{patch}\"\n# actualizar la version en el archivo pyproject.toml\nconfig_project[\"project\"][\"version\"] = new_version\nwith open(\"pyproject.toml\", \"w\") as file:\n    tomllib.dump(config_project, file)\nprint(f\"Version actual: {actual_version}\")\ncommand = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
+        "peekOfCode": "new_version = f\"{major}.{minor}.{patch}\"\n# actualizar la version en el archivo pyproject.toml\nconfig_project[\"project\"][\"version\"] = new_version\nwith open(\"pyproject.toml\", \"wb\") as file:\n    # guardar el archivo con la nueva version\n    tomli_w.dump(config_project, file)\nprint(f\"Version actual: {actual_version}\")\ncommand = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"",
         "detail": "publish_version",
         "documentation": {}
     },
@@ -190,7 +808,7 @@
         "kind": 5,
         "importPath": "publish_version",
         "description": "publish_version",
-        "peekOfCode": "config_project[\"project\"][\"version\"] = new_version\nwith open(\"pyproject.toml\", \"w\") as file:\n    tomllib.dump(config_project, file)\nprint(f\"Version actual: {actual_version}\")\ncommand = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
+        "peekOfCode": "config_project[\"project\"][\"version\"] = new_version\nwith open(\"pyproject.toml\", \"wb\") as file:\n    # guardar el archivo con la nueva version\n    tomli_w.dump(config_project, file)\nprint(f\"Version actual: {actual_version}\")\ncommand = \"python setup.py sdist bdist_wheel\"\nsubprocess.run(command, shell=True)\ncommand = \"twine upload dist/*\"\nsubprocess.run(command, shell=True)",
         "detail": "publish_version",
         "documentation": {}
     },

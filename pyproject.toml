@@ -18,6 +18,21 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+[project.dependencies]
+fastapi = "*"
+uvicorn = "*"
+SQLAlchemy = "*"
+SQLite4 = "*"
+redis = "*"
+boto3 = "*"
+requests = "*"
+psutil = "*"
+GPUtil = "*"
+numpy = "*"
+opencv-python-headless = "*"
+python-multipart = "*"
+
+
 [project.urls]
 "Homepage" = "https://github.com/wisrovi/wutils"
 "Bug Tracker" = "https://github.com/wisrovi/wutils/issues"

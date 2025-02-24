@@ -1,0 +1,141 @@
+version: "3.8"
+
+
+# Define reusable GPU resource constraints
+x-resources: &resources_gpu
+  shm_size: '32g'
+  cpu_shares: 4096
+  ulimits:
+    nofile:
+      soft: 1024
+      hard: 4096
+  environment:
+    - NVIDIA_VISIBLE_DEVICES=0
+    - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+  deploy:
+    resources:
+      limits:
+        cpus: "6.0"
+        memory: 16384M
+        # memory_swap: 16384M
+      reservations:
+        cpus: "1.0"
+        memory: 2048M
+        # memory_swap: 500M
+        devices:
+          - driver: nvidia
+            device_ids: [ "0" ]
+            capabilities: [ gpu ]
+
+
+services:
+  nfs_server:
+    image: erichough/nfs-server
+    environment:
+      - NFS_EXPORT_0=/exports/datasets *(rw,sync,no_subtree_check,no_root_squash)
+    volumes:
+      - ./tmp/nfs_data:/exports/datasets
+    privileged: true
+    restart: always
+    networks:
+      nfs_network:
+        ipv4_address: 28.10.4.10 # IP fija para el servidor NFS
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - nfs_network
+
+  minio:
+    image: minio/minio
+    command: server /data
+    environment:
+      - MINIO_ROOT_USER=minio
+      - MINIO_ROOT_PASSWORD=minio123
+    ports:
+      - "9005:9000"
+    volumes:
+      - ./tmp/minio_data:/data
+    networks:
+      - nfs_network
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.9.2
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:////database/mlflow.db  # Cambiado para que use la base de datos correcta
+      - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
+    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////database/mlflow.db", "--default-artifact-root", "/mlflow/artifacts"]
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./tmp/database:/database  # 📌 Asegura que MLflow pueda acceder a su base de datos
+      - ./tmp/mlflow:/mlflow      # Mantiene el almacenamiento de artefactos
+    networks:
+      - nfs_network
+
+  api:
+    build:
+      context: ./services
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - minio
+      - mlflow
+      - nfs_server
+    # entrypoint: ["/bin/sh", "-c", "/usr/local/bin/wait-for-it.sh nfs_server:2049 --strict --timeout=60 && uvicorn api.main:app --host 0.0.0.0 --port 8000"]
+    volumes:
+      - ./tmp/datasets:/datasets  # Carpeta compartida como volumen local
+      - ./tmp/config_versions:/config_versions
+      - ./tmp/database:/database
+    networks:
+      - nfs_network
+    # command: tail -f /dev/null
+
+  worker:
+    <<: *resources_gpu
+    build:
+      context: ./services
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
+      - api
+      - nfs_server
+    # entrypoint: ["/bin/sh", "-c", "/usr/local/bin/wait-for-it.sh nfs_server:2049 --strict --timeout=60 && python worker.py"]
+    volumes:
+      - ./tmp/datasets:/datasets  # Carpeta compartida como volumen local
+      - ./tmp/config_versions:/config_versions
+      - ./tmp/database:/database
+      - ./tmp/models:/models
+      - ./services:/app
+    networks:
+      - nfs_network
+    command: tail -f /dev/null
+
+networks:
+  nfs_network:
+    external: true
+
+volumes:
+  dataset_nfs:
+    driver: local
+    driver_opts:
+      type: "nfs"
+      # o: "addr=28.10.4.10,rw,nolock,soft,timeo=30,retrans=3"
+      o: "addr=28.10.4.10,rw,nfsvers=4,async"
+      device: ":/exports/datasets"
+
+
+
+# Para crear la red y el servidor NFS
+# docker network create --subnet=28.10.4.0/24 --gateway=28.10.4.1 --driver=bridge nfs_network
+# sudo modprobe nfs
+# echo "nfs" | sudo tee -a /etc/modules
+# sudo apt update && sudo apt install -y nfs-kernel-server nfs-common
+# sudo systemctl enable --now nfs-server
+# sudo systemctl restart nfs-server
+
