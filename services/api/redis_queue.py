@@ -6,7 +6,7 @@ TOPIC = "training_queue"
 queue_manager = RedisQueueManager(host="redis")
 
 
-def enqueue_task(data_dict: dict):
+def send_task_to_worker(data_dict: dict):
     """Agregar tarea a la cola en Redis."""
 
     queue_manager.publish(TOPIC, data_dict)

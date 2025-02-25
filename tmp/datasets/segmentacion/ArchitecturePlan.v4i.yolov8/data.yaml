@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Doors']
+
+roboflow:
+  workspace: architectureplan
+  project: architectureplan
+  version: 4
+  license: MIT
+  url: https://universe.roboflow.com/architectureplan/architectureplan/dataset/4

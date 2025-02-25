@@ -1,5 +1,5 @@
 defaults:
-  - override hydra/sweeper: optuna
+- override hydra/sweeper: optuna
 
 train:
   batch_size: 32

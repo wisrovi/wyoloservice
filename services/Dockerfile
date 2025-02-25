@@ -59,8 +59,8 @@ COPY . .
 EXPOSE 8000
 
 
-RUN echo "figlet train_service" >> ~/.zshrc
-RUN echo "figlet train_service" >> ~/.bashrc
+RUN echo "figlet wyoloservice" >> ~/.zshrc
+RUN echo "figlet wyoloservice" >> ~/.bashrc
 
 
 # Comando por defecto

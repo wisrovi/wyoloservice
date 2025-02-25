@@ -1,45 +1,65 @@
 version: "3.8"
 
-
 # Define reusable GPU resource constraints
 x-resources: &resources_gpu
-  shm_size: '32g'
-  cpu_shares: 4096
-  ulimits:
-    nofile:
-      soft: 1024
-      hard: 4096
+  shm_size: "64g"
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
   environment:
     - NVIDIA_VISIBLE_DEVICES=0
     - NVIDIA_DRIVER_CAPABILITIES=compute,utility
   deploy:
     resources:
-      limits:
-        cpus: "6.0"
-        memory: 16384M
-        # memory_swap: 16384M
+      # limits:
+      #   cpus: "6.0"
+      #   memory: 16384M
+      # memory_swap: 16384M
       reservations:
         cpus: "1.0"
         memory: 2048M
         # memory_swap: 500M
         devices:
           - driver: nvidia
-            device_ids: [ "0" ]
-            capabilities: [ gpu ]
-
+            device_ids: ["0"]
+            capabilities: [gpu]
 
 services:
-  nfs_server:
-    image: erichough/nfs-server
-    environment:
-      - NFS_EXPORT_0=/exports/datasets *(rw,sync,no_subtree_check,no_root_squash)
+  samba:
+    image: dperson/samba
+    ports:
+      # - "137:137/udp"  # NetBIOS Name Service
+      # - "138:138/udp"  # NetBIOS Datagram Service
+      # - "139:139/tcp"  # NetBIOS Session Service
+      - "445:445/tcp" # SMB over TCP
     volumes:
-      - ./tmp/nfs_data:/exports/datasets
+      # - ./samba/config:/etc/samba  # Archivos de configuración de Samba
+      - ./tmp/datasets:/data # Carpeta compartida
+    environment:
+      - TZ=Europe/Madrid # Zona horaria
+      - USERID=1000 # ID de usuario (personaliza según tu sistema)
+      - GROUPID=1000 # ID de grupo (personaliza según tu sistema)
+      - SAMBA_USERS=wisrovi;wyoloservice
+    command: >
+      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+
+  nfs:
+    # image: erichough/nfs-server
+    image: itsthenetwork/nfs-server-alpine:12
+    environment:
+      # - NFS_EXPORT_0=/datasets 192.168.1.0/24(rw,sync,no_subtree_check,no_root_squash) # Exporta a tu red local
+      - SHARED_DIRECTORY=/datasets
+    volumes:
+      - ./tmp/datasets:/datasets # Asegúrate de que esta ruta sea correcta
     privileged: true
     restart: always
+    ports:
+      - 2050:2049
     networks:
       nfs_network:
-        ipv4_address: 28.10.4.10 # IP fija para el servidor NFS
+          ipv4_address: 28.10.4.10 # IP interna del contenedor (no se usa para acceso externo)
 
   redis:
     image: redis:latest
@@ -48,33 +68,99 @@ services:
       - "6379:6379"
     networks:
       - nfs_network
+      - main_network
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=root
+      - HTTP_PASSWORD=qwerty
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - main_network
 
   minio:
     image: minio/minio
-    command: server /data
+    command: server /data --console-address ":9001"
     environment:
       - MINIO_ROOT_USER=minio
       - MINIO_ROOT_PASSWORD=minio123
     ports:
-      - "9005:9000"
+      - "9005:9000" # Puerto para el servicio S3
+      - "9006:9001" # Puerto para el panel de administración
     volumes:
       - ./tmp/minio_data:/data
     networks:
-      - nfs_network
+      - storage_network
+      - main_network
 
   mlflow:
-    image: ghcr.io/mlflow/mlflow:v2.9.2
+    build: 
+      context: ./enviroment
+      dockerfile: Dockerfile.mlflow
     environment:
-      - MLFLOW_BACKEND_STORE_URI=sqlite:////database/mlflow.db  # Cambiado para que use la base de datos correcta
-      - MLFLOW_ARTIFACT_ROOT=/mlflow/artifacts
-    command: ["mlflow", "server", "--host", "0.0.0.0", "--port", "5000", "--backend-store-uri", "sqlite:////database/mlflow.db", "--default-artifact-root", "/mlflow/artifacts"]
+      # db
+      - MLFLOW_BACKEND_STORE_URI=postgresql+psycopg2://postgres:postgres@postgres:5432/wyoloservice # Conexión a PostgreSQL
+      # minio
+      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000 # URL del servidor MinIO
+      - AWS_ACCESS_KEY_ID=minio # Credenciales de MinIO
+      - AWS_SECRET_ACCESS_KEY=minio123 # Credenciales de MinIO
+      #mlflow
+      - MLFLOW_TRACKING_URI=http://mlflow:5000 # URI de seguimiento de MLflow
+      - MLFLOW_ARTIFACT_URI=s3://mlflow-artifacts/ # Bucket en MinIO donde se almacenarán los artefactos
+    command:
+      [
+        "mlflow",
+        "server",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "5000",
+        "--backend-store-uri",
+        "postgresql+psycopg2://postgres:postgres@postgres:5432/wyoloservice",
+        "--default-artifact-root",
+        "s3://mlflow-artifacts/",
+      ]
     ports:
       - "5000:5000"
-    volumes:
-      - ./tmp/database:/database  # 📌 Asegura que MLflow pueda acceder a su base de datos
-      - ./tmp/mlflow:/mlflow      # Mantiene el almacenamiento de artefactos
     networks:
-      - nfs_network
+      - db_network
+      - storage_network
+      - main_network
+
+  postgres:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=wyoloservice
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - db_network
+      - main_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "1717:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: wisrovi.rodriguez@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 12345678
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - db_network
+      - main_network
 
   api:
     build:
@@ -86,15 +172,22 @@ services:
       - redis
       - minio
       - mlflow
-      - nfs_server
-    # entrypoint: ["/bin/sh", "-c", "/usr/local/bin/wait-for-it.sh nfs_server:2049 --strict --timeout=60 && uvicorn api.main:app --host 0.0.0.0 --port 8000"]
+      - nfs
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=wyoloservice
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
     volumes:
-      - ./tmp/datasets:/datasets  # Carpeta compartida como volumen local
+      - ./tmp/datasets:/datasets
       - ./tmp/config_versions:/config_versions
       - ./tmp/database:/database
+      - ./tmp/logs:/var/log/api
     networks:
       - nfs_network
-    # command: tail -f /dev/null
+      - db_network
+      - main_network
 
   worker:
     <<: *resources_gpu
@@ -104,38 +197,64 @@ services:
     depends_on:
       - redis
       - api
-      - nfs_server
-    # entrypoint: ["/bin/sh", "-c", "/usr/local/bin/wait-for-it.sh nfs_server:2049 --strict --timeout=60 && python worker.py"]
+      - nfs
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=wyoloservice
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
     volumes:
-      - ./tmp/datasets:/datasets  # Carpeta compartida como volumen local
+      - ./tmp/datasets:/datasets
       - ./tmp/config_versions:/config_versions
       - ./tmp/database:/database
       - ./tmp/models:/models
       - ./services:/app
+      - ./tmp/logs:/var/log/api
     networks:
       - nfs_network
+      - db_network
+      - main_network
     command: tail -f /dev/null
+    # command: python worker.py
 
 networks:
   nfs_network:
     external: true
+  db_network:
+    driver: bridge
+  storage_network:
+    driver: bridge
+  main_network:
+    driver: bridge
 
 volumes:
+  pgadmin-data:
   dataset_nfs:
     driver: local
     driver_opts:
       type: "nfs"
       # o: "addr=28.10.4.10,rw,nolock,soft,timeo=30,retrans=3"
       o: "addr=28.10.4.10,rw,nfsvers=4,async"
-      device: ":/exports/datasets"
-
-
-
+      device: ":/datasets"
 # Para crear la red y el servidor NFS
 # docker network create --subnet=28.10.4.0/24 --gateway=28.10.4.1 --driver=bridge nfs_network
-# sudo modprobe nfs
-# echo "nfs" | sudo tee -a /etc/modules
-# sudo apt update && sudo apt install -y nfs-kernel-server nfs-common
-# sudo systemctl enable --now nfs-server
-# sudo systemctl restart nfs-server
 
+# para el NFS, ver datos
+# sudo apt install nfs-client -y
+# sudo mkdir -p /mnt/wyoloservice/datasets
+# sudo mount -v -o vers=4,loud <host-ip>:/ /mnt/wyoloservice/datasets
+
+# para samba:
+# smb://<host-ip>/shared
+
+# Instrucciones de uso:
+# 1. Crear un archivo .env con las variables de entorno necesarias.
+# 2. Ejecutar `docker-compose up -d` para iniciar todos los servicios.
+# 3. Acceder a los servicios:
+#    - Samba: \\localhost\shared (Windows) o smb://localhost/shared (Linux/Mac)
+#    - NFS: montado en /mnt/wyoloservice/datasets
+#    - MLflow: http://localhost:5000
+#    - MinIO Console: http://localhost:9006
+#    - PgAdmin: http://localhost:1717
+#    - API: http://localhost:8000

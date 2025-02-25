@@ -17,3 +17,4 @@ optuna
 wsqlite
 wredis
 loguru
+logbook

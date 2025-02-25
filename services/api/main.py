@@ -1,9 +1,10 @@
 import json
+import uuid
 from fastapi import FastAPI, UploadFile, File
 import os
 import shutil
 from api.database import db, TrainingHistory
-from api.redis_queue import enqueue_task
+from api.redis_queue import send_task_to_worker
 from api.minio import upload_model, list_models, download_model
 
 CONFIG_DIR = "/config_versions"
@@ -13,8 +14,11 @@ app = FastAPI()
 
 
 @app.post("/train/")
-def start_training(task_id: str, user_code: str, file: UploadFile = File(...)):
+def start_training(user_code: str, file: UploadFile = File(...)):
     """Registra un entrenamiento y lo encola en Redis."""
+
+    task_id = str(uuid.uuid4()).replace("-", "").replace("_", "")
+
     config_path = os.path.join(CONFIG_DIR, f"{task_id}.yaml")
     with open(config_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -35,13 +39,15 @@ def start_training(task_id: str, user_code: str, file: UploadFile = File(...)):
         )
     )
 
-    task = {
-        "task_id": task_id,
-        "config_path": config_path,
-        "user_code": user_code,
-    }
-
-    enqueue_task(json.dumps(task))
+    send_task_to_worker(
+        json.dumps(
+            {
+                "task_id": task_id,
+                "config_path": config_path,
+                "user_code": user_code,
+            }
+        )
+    )
     return {"message": "Entrenamiento registrado", "task_id": task_id}
 
 

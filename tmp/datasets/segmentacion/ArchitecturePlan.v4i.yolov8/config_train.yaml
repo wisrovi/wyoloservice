@@ -1,0 +1,30 @@
+defaults:
+- override hydra/sweeper: optuna
+experiment_name: "person.v2i"
+content: "Este es un experimento de clasificación de imágenes."
+model: "yolov8n.pt"
+type: "yolo"
+train:
+  batch: -1
+  data: /datasets/segmentacion/ArchitecturePlan.v4i.yolov8/data.yaml
+  epochs: 10
+  imgsz: 640
+val:
+  conf: 0.01
+test:
+  conf: 0.01
+sweeper:
+  version: 1.0
+  direction: maximize
+  study_name: "ArchitecturePlanes"
+  storage: null
+  sampler: "TPESampler"
+  n_trials: 3
+  params:
+    train:
+      imgsz: [ "choice", 416, 640 ]
+      lr0: [ "loguniform", 1e-5, 1e-2 ]
+extras:
+  gpu:
+    id: 0
+    limit: 0.95
