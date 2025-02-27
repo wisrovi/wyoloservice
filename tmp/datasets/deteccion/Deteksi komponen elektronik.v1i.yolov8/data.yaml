@@ -1,10 +1,8 @@
-train: ../train/images
-val: ../valid/images
-test: ../test/images
-
+train: /datasets/deteccion/Deteksi komponen elektronik.v1i.yolov8/train/images
+val: /datasets/deteccion/Deteksi komponen elektronik.v1i.yolov8/valid/images
+test: /datasets/deteccion/Deteksi komponen elektronik.v1i.yolov8/test/images
 nc: 2
 names: ['multimeter', 'stm32']
-
 roboflow:
   workspace: yolopcv
   project: deteksi-komponen-elektronik

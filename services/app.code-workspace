@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../datasets"
+		},
+		{
+			"path": "../config_versions"
+		},
+		{
+			"path": "../models"
+		},
+		{
+			"path": "../database"
+		}
+	],
+	"settings": {}
+}

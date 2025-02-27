@@ -18,3 +18,5 @@ wsqlite
 wredis
 loguru
 logbook
+python-slugify
+# ray[tune]

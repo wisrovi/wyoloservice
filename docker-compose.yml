@@ -162,7 +162,7 @@ services:
       - db_network
       - main_network
 
-  api:
+  api_user:
     build:
       context: ./services
       dockerfile: Dockerfile
@@ -196,7 +196,7 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - redis
-      - api
+      - api_user
       - nfs
     environment:
       - DB_HOST=postgres
@@ -215,8 +215,8 @@ services:
       - nfs_network
       - db_network
       - main_network
-    command: tail -f /dev/null
-    # command: python worker.py
+    # command: tail -f /dev/null
+    command: python worker.py
 
 networks:
   nfs_network:
