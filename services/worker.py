@@ -16,6 +16,8 @@ from worker_utils import (
 )
 from wpipe.pipe import Pipeline
 
+from worker_utils.minio import MinioS3Client
+
 # Configura el primer logger: solo errores en un archivo
 logger.add("error_log.log", level="ERROR", rotation="10 MB", retention="7 days")
 
@@ -65,6 +67,12 @@ def main(cfg: OmegaConf):
     cfg = OmegaConf.to_container(cfg, resolve=True)
 
     DEFAULT_CONFIG.update(cfg)
+
+    MinioS3Client(
+        endpoint_url=cfg.get("minio", {}).get("MINIO_ENDPOINT"),
+        aws_access_key_id=cfg.get("minio", {}).get("MINIO_ID"),
+        aws_secret_access_key=cfg.get("minio", {}).get("MINIO_SECRET_KEY"),
+    )
 
     queue_manager.start()
     queue_manager.wait()

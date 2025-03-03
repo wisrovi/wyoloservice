@@ -220,8 +220,8 @@ services:
       - nfs_network
       - db_network
       - main_network
-    command: tail -f /dev/null
-    # command: python worker.py
+    # command: tail -f /dev/null
+    command: python worker.py
     # restart: always
 
 networks:

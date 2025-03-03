@@ -11,14 +11,16 @@ from loguru import logger
 from api.database import TrainingHistory, db
 
 
-
 class MinioS3Client:
     MINIO_ENDPOINT = "http://minio:9000"
     BUCKET_NAME = "models"
     MLFLOW_ARTIFACTS_BUCKET = "mlflow-artifacts"
 
     def __init__(
-        self, endpoint_url=None, aws_access_key_id=None, aws_secret_access_key=None
+        self,
+        endpoint_url=None,
+        aws_access_key_id=None,
+        aws_secret_access_key=None,
     ):
         """
         Inicializa el cliente MinIO/S3.
@@ -304,17 +306,15 @@ def save_best_model(
 
     logger.info(f"✅ Modelo recomendado guardado en MinIO: {minio_url}")
 
-
     return {}
 
 
-def results_up_to_minio(task_data:dict):
+def results_up_to_minio(task_data: dict):
     results_train = task_data["train"]
     best_trial = results_train["best_trial"]
     best_model_path = results_train["best_model_path"]
     RESULT_PATH = results_train["result_path"]
-    
-    
+
     try:
         s3: MinioS3Client = MinioS3Client(
             endpoint_url=task_data.get("minio", {}).get("MINIO_ENDPOINT"),
@@ -333,5 +333,5 @@ def results_up_to_minio(task_data:dict):
         )
     except Exception as e:
         logger.error(f"❌ Error al guardar el mejor modelo: {e}")
-        
+
     return {}

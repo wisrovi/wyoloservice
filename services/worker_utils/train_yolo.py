@@ -1,4 +1,5 @@
 import os
+import tempfile
 import traceback
 from datetime import datetime
 from glob import glob
@@ -8,6 +9,8 @@ import torch
 from loguru import logger
 from tqdm import tqdm
 from ultralytics import RTDETR, YOLO, settings
+
+# from ultralytics.utils.autobatch import autobatch
 
 # Update a setting
 settings.update({"mlflow": True})
@@ -71,10 +74,62 @@ def obtener_carpeta(ruta):
     return ruta_normalizada
 
 
+class TrainerWrapper:
+    config = {}
+    GPU_USE = 0.6  # procentaje de uso de GPU
+
+    def __init__(self, model, config: dict):
+        self.model = model
+        self.config = config
+
+        # Configura los callbacks
+        self.model.add_callback("on_train_start", self.on_train_start)
+        self.model.add_callback("on_train_end", self.on_train_end)
+
+    def on_train_end(self, trainer):
+        pytorch_model = trainer.model
+        mlflow.pytorch.log_model(pytorch_model, "model")
+
+        mlflow.log_metrics(trainer.metrics)
+        mlflow.log_metrics(trainer.metrics)
+
+    def on_train_start(self, trainer):
+        # optimal_batch = autobatch(
+        #     model=self.model,
+        #     imgsz=self.config["train"]["imgsz"],
+        #     fraction=self.GPU_USE,
+        #     batch_size=-1,
+        # )
+
+        # remove batch of self.config
+        config_copy = self.config.copy()
+        config_copy["train"].pop("batch")
+
+        mlflow.log_params(config_copy["train"])
+        mlflow.set_tag(
+            "mlflow.note.content", self.config.get("metadata", {}).get("content")
+        )
+        mlflow.set_tag(
+            "documentation", self.config.get("metadata", {}).get("documentation", "NA")
+        )
+
+        mlflow.set_tag("author", self.config.get("metadata", {}).get("author", "NA"))
+
+        mlflow.set_tag("experiment_type", trainer.model._get_name())
+        mlflow.set_tag("version", self.config.get("sweeper", {}).get("version", "NA"))
+        mlflow.log_artifact(self.config["config_path"])
+
+        mlflow.set_tag("data_source", self.config.get("train", {}).get("data", "NA"))
+
+    def train(self, config_train: dict):
+        return self.model.train(**config_train)
+
+
 # @handle_exception
 # @measure_time
 @clean_results
 def train_yolo(request_config: dict, trial_number: int):
+
     # Configurar las variables de entorno necesarias para MLflow
     os.environ["MLFLOW_S3_ENDPOINT_URL"] = request_config["minio"]["MINIO_ENDPOINT"]
     os.environ["AWS_ACCESS_KEY_ID"] = request_config["minio"]["MINIO_ID"]
@@ -121,26 +176,17 @@ def train_yolo(request_config: dict, trial_number: int):
         request_config["train"]["verbose"] = True
         request_config["train"]["plots"] = True
         request_config["train"]["exist_ok"] = True
-        
-        results = model.train(**request_config["train"])
 
-        # Iniciar una nueva ejecución única en MLflow
-        run_name = f"{request_config.get('task_id')}_trial_{trial_number}"
-        experiment_name = request_config.get("sweeper").get("study_name")
-        with mlflow.start_run() as run:
-            
+        # Custom method
+        mlflow.set_experiment(request_config.get("experiment_name"))
+        trainer = TrainerWrapper(config=request_config, model=model)
+        results = trainer.train(config_train=request_config["train"])
 
-            try:
-                # Assuming 'results' contains metrics like validation loss
-                # mlflow.log_metrics({'results': results.})
-                
-                # TODO: ver id session de mlflow
-                mlflow.pytorch.log_model(model, "model")
-            except Exception as e:
-                logger.error(f"Error al registrar el modelo en MLflow: {e}")
+        # traidcional method
+        # results = trainer.train(**request_config["train"])
 
-            request_config["experiment_type"] = str(results.task)
-            request_config["train"]["results"] = results.results_dict
+        request_config["experiment_type"] = str(results.task)
+        request_config["train"]["results"] = results.results_dict
 
     # Validación
     if "val" in request_config:

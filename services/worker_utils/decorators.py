@@ -111,7 +111,7 @@ def load_train_config(config_path=None):
                     # Obtener sugerencias de hiperparámetros desde el archivo de configuración
                     trial = args[0]
 
-                    if sweeper_config["algorithm"] == "optuna":
+                    if sweeper_config.get("algorithm", "optuna") == "optuna":
                         suggested_params, model = get_optuna_suggestions(
                             trial, param_config
                         )

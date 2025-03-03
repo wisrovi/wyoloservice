@@ -38,10 +38,10 @@ def merge_configs(default_config, user_config):
     return final_config
 
 
-
-
 DEFAULT_CONFIG = {}
-def read_user_config(task_data:dict):
+
+
+def read_user_config(task_data: dict):
     try:
         task_data = json.loads(task_data)
     except:
@@ -71,16 +71,15 @@ def read_user_config(task_data:dict):
             # actualizar final_config y añadir los campos que le faltan de DEFAULT_CONFIG
             final_config = merge_configs(DEFAULT_CONFIG, user_config)
 
+            final_config["config_path"] = config_path
+            final_config["task_id"] = task_data["task_id"]
     except Exception as e:
         logger.error(f"❌ Error al cargar YAML ({config_path}): {e}")
-
-    final_config["config_path"] = config_path
-    final_config["task_id"] = task_data["task_id"]
 
     try:
         with open(config_path, "w") as archivo:
             yaml.dump(final_config, archivo, default_flow_style=False)
     except Exception as e:
         pass
-    
+
     return final_config
