@@ -3,6 +3,7 @@ from functools import wraps
 import torch
 import yaml
 from loguru import logger
+
 # from ray import tune
 
 
@@ -39,6 +40,12 @@ def clean_gpu(func):
 
 
 def get_optuna_suggestions(trial, sweeper_config):
+    model = None
+    models = sweeper_config.get("model", None)
+    if models:
+        options = models[1:]
+        model = trial.suggest_categorical("models", options)
+
     sweeper_config = sweeper_config["train"]
 
     suggestions = {}
@@ -61,7 +68,8 @@ def get_optuna_suggestions(trial, sweeper_config):
             suggestions[key] = trial.suggest_loguniform(key, low, high)
         else:
             raise ValueError(f"Tipo de parámetro no soportado: {value}")
-    return suggestions
+
+    return suggestions, model
 
 
 def get_ray_suggestions(trial, sweeper_config):
@@ -104,7 +112,11 @@ def load_train_config(config_path=None):
                     trial = args[0]
 
                     if sweeper_config["algorithm"] == "optuna":
-                        suggested_params = get_optuna_suggestions(trial, param_config)
+                        suggested_params, model = get_optuna_suggestions(
+                            trial, param_config
+                        )
+                        if model:
+                            config["model"] = model
                     else:
                         suggested_params = get_ray_suggestions(trial, sweeper_config)
 
