@@ -75,6 +75,7 @@ def obtener_carpeta(ruta):
 
 
 class TrainerWrapper:
+    # https://github.com/ultralytics/ultralytics/issues/8214
     config = {}
     GPU_USE = 0.6  # procentaje de uso de GPU
 
