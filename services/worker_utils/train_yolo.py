@@ -3,6 +3,7 @@ import traceback
 from datetime import datetime
 from glob import glob
 
+import mlflow
 import torch
 from loguru import logger
 from tqdm import tqdm
@@ -12,7 +13,7 @@ from ultralytics import RTDETR, YOLO, settings
 settings.update({"mlflow": True})
 
 # Reset settings to default values
-# settings.reset()
+settings.reset()
 
 
 # decortador para capturar excepciones
@@ -78,7 +79,9 @@ def train_yolo(request_config: dict, trial_number: int):
     os.environ["MLFLOW_S3_ENDPOINT_URL"] = request_config["minio"]["MINIO_ENDPOINT"]
     os.environ["AWS_ACCESS_KEY_ID"] = request_config["minio"]["MINIO_ID"]
     os.environ["AWS_SECRET_ACCESS_KEY"] = request_config["minio"]["MINIO_SECRET_KEY"]
-    os.environ["MLFLOW_TRACKING_URI"] = request_config["mlflow"]["MLFLOW_TRACKING_URI"]  # URI del servidor MLflow
+    os.environ["MLFLOW_TRACKING_URI"] = request_config["mlflow"][
+        "MLFLOW_TRACKING_URI"
+    ]  # URI del servidor MLflow
     os.environ["MLFLOW_ARTIFACT_URI"] = "s3://mlflow-artifacts/"  # Bucket en MinIO
 
     # Configurar el nombre del experimento y el nombre de la ejecución
@@ -118,10 +121,26 @@ def train_yolo(request_config: dict, trial_number: int):
         request_config["train"]["verbose"] = True
         request_config["train"]["plots"] = True
         request_config["train"]["exist_ok"] = True
+        
         results = model.train(**request_config["train"])
 
-        request_config["experiment_type"] = str(results.task)
-        request_config["train"]["results"] = results.results_dict
+        # Iniciar una nueva ejecución única en MLflow
+        run_name = f"{request_config.get('task_id')}_trial_{trial_number}"
+        experiment_name = request_config.get("sweeper").get("study_name")
+        with mlflow.start_run() as run:
+            
+
+            try:
+                # Assuming 'results' contains metrics like validation loss
+                # mlflow.log_metrics({'results': results.})
+                
+                # TODO: ver id session de mlflow
+                mlflow.pytorch.log_model(model, "model")
+            except Exception as e:
+                logger.error(f"Error al registrar el modelo en MLflow: {e}")
+
+            request_config["experiment_type"] = str(results.task)
+            request_config["train"]["results"] = results.results_dict
 
     # Validación
     if "val" in request_config:

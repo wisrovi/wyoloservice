@@ -1,10 +1,15 @@
 import os
+import tempfile
 
 import boto3
 import hydra  # pip install hydra-core
 from botocore.exceptions import ClientError
 from omegaconf import DictConfig
 from tqdm import tqdm
+
+from loguru import logger
+from api.database import TrainingHistory, db
+
 
 
 class MinioS3Client:
@@ -219,3 +224,114 @@ def initialize_minio_client(cfg: DictConfig) -> MinioS3Client:
         aws_secret_access_key=cfg.minio.MINIO_SECRET_KEY,
     )
     return minio_client
+
+
+def save_best_model(
+    task_id,
+    model_path,
+    version,
+    results_model,
+    project_name,
+    s3: MinioS3Client,
+):
+    """Registra el mejor modelo en la base de datos y lo sube a MinIO."""
+
+    update_model = True
+
+    # TODO: falta validar el modelo anterior y compararlo con el modelo actual, si es mejor, se reemplaza, de lo contrario solo se suben los resultados del modelo actual
+
+    # if bucket_exists(bucket_name):
+    #     with tempfile.TemporaryDirectory() as temp_dir:
+    #         old_files = list_objects(bucket_name)
+
+    #         temp_file_path = os.path.join(temp_dir, "old.pt")
+
+    #         if data_path and old_files and f"{project_name}.pt" in old_files:
+    #             old_model = download_file(
+    #                 bucket_name, f"{project_name}.pt", temp_file_path
+    #             )
+
+    #             better_model = comparar_modelos_yolo(
+    #                 modelo1_path=old_model,
+    #                 modelo2_path=model_path,
+    #                 data_path=data_path,
+    #             )
+
+    #             if better_model == "old.pt":
+    #                 update_model = False
+
+    if update_model:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            with open(f"{temp_dir}/{project_name}-v{version}.txt", "w") as f:
+                f.write(f"{MinioS3Client.BUCKET_NAME}/{project_name}/{task_id}/*")
+
+            s3.upload_file(
+                file_path_local=f"{temp_dir}/{project_name}-v{version}.txt",
+                bucket_name=f"better-{MinioS3Client.BUCKET_NAME}",
+                name_file_s3=f"{project_name}-v{version}.txt",
+            )
+
+            minio_url = s3.upload_file(
+                file_path_local=model_path,
+                bucket_name=f"better-{MinioS3Client.BUCKET_NAME}",
+                name_file_s3=f"{project_name}-v{version}.pt",
+            )
+
+        try:
+            # TODO: validar que la actualizacion a la base de datos se haga correctamente
+
+            # Verificar si el `task_id` existe en la base de datos
+            existing_task = db.get_by_field(task_id=task_id)
+
+            db.update(
+                1,
+                TrainingHistory(
+                    id=existing_task,
+                    task_id=f"{task_id}_v{version}",
+                    model_path=minio_url,
+                    status="completed",
+                    recommended_model=minio_url,
+                ),
+            )
+        except Exception as e:
+            logger.error("❌ Error al actualizar la base de datos")
+
+    s3.upload_folder(
+        folder_path=results_model,
+        bucket_name=f"{MinioS3Client.BUCKET_NAME}",
+        prefix=f"{project_name}/{task_id}/",
+    )
+
+    logger.info(f"✅ Modelo recomendado guardado en MinIO: {minio_url}")
+
+
+    return {}
+
+
+def results_up_to_minio(task_data:dict):
+    results_train = task_data["train"]
+    best_trial = results_train["best_trial"]
+    best_model_path = results_train["best_model_path"]
+    RESULT_PATH = results_train["result_path"]
+    
+    
+    try:
+        s3: MinioS3Client = MinioS3Client(
+            endpoint_url=task_data.get("minio", {}).get("MINIO_ENDPOINT"),
+            aws_access_key_id=task_data.get("minio", {}).get("MINIO_ID"),
+            aws_secret_access_key=task_data.get("minio", {}).get("MINIO_SECRET_KEY"),
+        )
+
+        sweeper_config = task_data.get("sweeper", {})
+        save_best_model(
+            task_id=task_data["task_id"],
+            project_name=sweeper_config.get("study_name", "default_study"),
+            model_path=best_model_path,
+            version=sweeper_config["version"],
+            results_model=f"{RESULT_PATH}/{best_trial.number}/",
+            s3=s3,
+        )
+    except Exception as e:
+        logger.error(f"❌ Error al guardar el mejor modelo: {e}")
+        
+    return {}
