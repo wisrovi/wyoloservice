@@ -1,10 +1,127 @@
 [
     {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "json",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "json",
+        "description": "json",
+        "detail": "json",
+        "documentation": {}
+    },
+    {
+        "label": "argparse",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "argparse",
+        "description": "argparse",
+        "detail": "argparse",
+        "documentation": {}
+    },
+    {
+        "label": "pformat",
+        "importPath": "pprint",
+        "description": "pprint",
+        "isExtraImport": true,
+        "detail": "pprint",
+        "documentation": {}
+    },
+    {
+        "label": "jmespath",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "jmespath",
+        "description": "jmespath",
+        "detail": "jmespath",
+        "documentation": {}
+    },
+    {
+        "label": "exceptions",
+        "importPath": "jmespath",
+        "description": "jmespath",
+        "isExtraImport": true,
+        "detail": "jmespath",
+        "documentation": {}
+    },
+    {
+        "label": "mlflow",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mlflow",
+        "description": "mlflow",
+        "detail": "mlflow",
+        "documentation": {}
+    },
+    {
         "label": "tqdm",
         "importPath": "tqdm",
         "description": "tqdm",
         "isExtraImport": true,
         "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "tqdm",
+        "importPath": "tqdm",
+        "description": "tqdm",
+        "isExtraImport": true,
+        "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "tqdm",
+        "importPath": "tqdm",
+        "description": "tqdm",
+        "isExtraImport": true,
+        "detail": "tqdm",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "RTDETR",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
+        "label": "settings",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
         "documentation": {}
     },
     {
@@ -47,6 +164,14 @@
         "importPath": "os",
         "description": "os",
         "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "glob",
+        "importPath": "glob",
+        "description": "glob",
+        "isExtraImport": true,
+        "detail": "glob",
         "documentation": {}
     },
     {
@@ -107,12 +232,36 @@
         "documentation": {}
     },
     {
-        "label": "json",
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
+        "label": "uuid",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "json",
-        "description": "json",
-        "detail": "json",
+        "importPath": "uuid",
+        "description": "uuid",
+        "detail": "uuid",
         "documentation": {}
     },
     {
@@ -165,6 +314,14 @@
         "documentation": {}
     },
     {
+        "label": "TrainingHistory",
+        "importPath": "api.database",
+        "description": "api.database",
+        "isExtraImport": true,
+        "detail": "api.database",
+        "documentation": {}
+    },
+    {
         "label": "db",
         "importPath": "api.database",
         "description": "api.database",
@@ -181,7 +338,47 @@
         "documentation": {}
     },
     {
-        "label": "enqueue_task",
+        "label": "db",
+        "importPath": "api.database",
+        "description": "api.database",
+        "isExtraImport": true,
+        "detail": "api.database",
+        "documentation": {}
+    },
+    {
+        "label": "send_task_to_worker",
+        "importPath": "api.redis_queue",
+        "description": "api.redis_queue",
+        "isExtraImport": true,
+        "detail": "api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "TOPIC",
+        "importPath": "api.redis_queue",
+        "description": "api.redis_queue",
+        "isExtraImport": true,
+        "detail": "api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "queue_manager",
+        "importPath": "api.redis_queue",
+        "description": "api.redis_queue",
+        "isExtraImport": true,
+        "detail": "api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "TOPIC",
+        "importPath": "api.redis_queue",
+        "description": "api.redis_queue",
+        "isExtraImport": true,
+        "detail": "api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "queue_manager",
         "importPath": "api.redis_queue",
         "description": "api.redis_queue",
         "isExtraImport": true,
@@ -222,30 +419,109 @@
         "documentation": {}
     },
     {
-        "label": "mlflow",
-        "kind": 6,
+        "label": "RedisQueueManager",
+        "importPath": "wredis.queue",
+        "description": "wredis.queue",
         "isExtraImport": true,
-        "importPath": "mlflow",
-        "description": "mlflow",
-        "detail": "mlflow",
+        "detail": "wredis.queue",
         "documentation": {}
     },
     {
-        "label": "redis",
-        "kind": 6,
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
         "isExtraImport": true,
-        "importPath": "redis",
-        "description": "redis",
-        "detail": "redis",
+        "detail": "functools",
         "documentation": {}
     },
     {
-        "label": "time",
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "torch",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "tempfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tempfile",
+        "description": "tempfile",
+        "detail": "tempfile",
         "documentation": {}
     },
     {
@@ -258,12 +534,329 @@
         "documentation": {}
     },
     {
+        "label": "ClientError",
+        "importPath": "botocore.exceptions",
+        "description": "botocore.exceptions",
+        "isExtraImport": true,
+        "detail": "botocore.exceptions",
+        "documentation": {}
+    },
+    {
+        "label": "DictConfig",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "OmegaConf",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "math",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "math",
+        "description": "math",
+        "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "queue",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "queue",
+        "description": "queue",
+        "detail": "queue",
+        "documentation": {}
+    },
+    {
+        "label": "traceback",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "traceback",
+        "description": "traceback",
+        "detail": "traceback",
+        "documentation": {}
+    },
+    {
         "label": "optuna",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "optuna",
         "description": "optuna",
         "detail": "optuna",
+        "documentation": {}
+    },
+    {
+        "label": "clean_gpu",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "load_train_config",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "train_yolo",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "initialize_minio_client",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "train_yolo",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "catch_errors",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "clean_gpu",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "load_train_config",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "MinioS3Client",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_CONFIG",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "process_train_with_optuna",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "read_user_config",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "results_up_to_minio",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "start_train_scheduller_controller",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "multiprocessing",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "multiprocessing",
+        "description": "multiprocessing",
+        "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "signal",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "signal",
+        "description": "signal",
+        "detail": "signal",
+        "documentation": {}
+    },
+    {
+        "label": "tracemalloc",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tracemalloc",
+        "description": "tracemalloc",
+        "detail": "tracemalloc",
+        "documentation": {}
+    },
+    {
+        "label": "FileHandler",
+        "importPath": "logbook",
+        "description": "logbook",
+        "isExtraImport": true,
+        "detail": "logbook",
+        "documentation": {}
+    },
+    {
+        "label": "Logger",
+        "importPath": "logbook",
+        "description": "logbook",
+        "isExtraImport": true,
+        "detail": "logbook",
+        "documentation": {}
+    },
+    {
+        "label": "FileHandler",
+        "importPath": "logbook",
+        "description": "logbook",
+        "isExtraImport": true,
+        "detail": "logbook",
+        "documentation": {}
+    },
+    {
+        "label": "Logger",
+        "importPath": "logbook",
+        "description": "logbook",
+        "isExtraImport": true,
+        "detail": "logbook",
+        "documentation": {}
+    },
+    {
+        "label": "Pipeline",
+        "importPath": "wpipe.pipe",
+        "description": "wpipe.pipe",
+        "isExtraImport": true,
+        "detail": "wpipe.pipe",
+        "documentation": {}
+    },
+    {
+        "label": "MinioS3Client",
+        "importPath": "worker_utils.minio",
+        "description": "worker_utils.minio",
+        "isExtraImport": true,
+        "detail": "worker_utils.minio",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "cv2",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "cv2",
+        "description": "cv2",
+        "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "pandas",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pandas",
+        "description": "pandas",
+        "detail": "pandas",
+        "documentation": {}
+    },
+    {
+        "label": "matplotlib.pyplot",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "matplotlib.pyplot",
+        "description": "matplotlib.pyplot",
+        "detail": "matplotlib.pyplot",
+        "documentation": {}
+    },
+    {
+        "label": "fiftyone",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "fiftyone",
+        "description": "fiftyone",
+        "detail": "fiftyone",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "FPDF",
+        "importPath": "fpdf",
+        "description": "fpdf",
+        "isExtraImport": true,
+        "detail": "fpdf",
+        "documentation": {}
+    },
+    {
+        "label": "seaborn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "seaborn",
+        "description": "seaborn",
+        "detail": "seaborn",
         "documentation": {}
     },
     {
@@ -306,6 +899,24 @@
         "description": "setuptools",
         "isExtraImport": true,
         "detail": "setuptools",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": ".venv.bin.jp",
+        "description": ".venv.bin.jp",
+        "peekOfCode": "def main():\n    parser = argparse.ArgumentParser()\n    parser.add_argument('expression')\n    parser.add_argument('-f', '--filename',\n                        help=('The filename containing the input data.  '\n                              'If a filename is not given then data is '\n                              'read from stdin.'))\n    parser.add_argument('--ast', action='store_true',\n                        help=('Pretty print the AST, do not search the data.'))\n    args = parser.parse_args()",
+        "detail": ".venv.bin.jp",
+        "documentation": {}
+    },
+    {
+        "label": "artifacts",
+        "kind": 5,
+        "importPath": "enviroment.artifacts_valid",
+        "description": "enviroment.artifacts_valid",
+        "peekOfCode": "artifacts = mlflow.artifacts.list_artifacts(\"s3://mlflow-artifacts/\")\nprint(artifacts)",
+        "detail": "enviroment.artifacts_valid",
         "documentation": {}
     },
     {
@@ -403,7 +1014,7 @@
         "kind": 2,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "def start_training(task_id: str, user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:\n        count = 0\n    # Insertar un nuevo usuario con el nuevo campo",
+        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:\n        count = 0",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -457,7 +1068,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(task_id: str, user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:",
+        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -466,7 +1077,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(task_id: str, user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:",
+        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -543,30 +1154,291 @@
         "documentation": {}
     },
     {
-        "label": "enqueue_task",
+        "label": "send_task_to_worker",
         "kind": 2,
         "importPath": "services.api.redis_queue",
         "description": "services.api.redis_queue",
-        "peekOfCode": "def enqueue_task(data_dict: str):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    redis_client.rpush(\"training_queue\", data_dict)\ndef dequeue_task():\n    \"\"\"Obtener la siguiente tarea de la cola en Redis.\"\"\"\n    return redis_client.rpop(\"training_queue\")",
+        "peekOfCode": "def send_task_to_worker(data_dict: dict):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    queue_manager.publish(TOPIC, data_dict)",
         "detail": "services.api.redis_queue",
         "documentation": {}
     },
     {
-        "label": "dequeue_task",
-        "kind": 2,
-        "importPath": "services.api.redis_queue",
-        "description": "services.api.redis_queue",
-        "peekOfCode": "def dequeue_task():\n    \"\"\"Obtener la siguiente tarea de la cola en Redis.\"\"\"\n    return redis_client.rpop(\"training_queue\")",
-        "detail": "services.api.redis_queue",
-        "documentation": {}
-    },
-    {
-        "label": "redis_client",
+        "label": "TOPIC",
         "kind": 5,
         "importPath": "services.api.redis_queue",
         "description": "services.api.redis_queue",
-        "peekOfCode": "redis_client = redis.Redis(host=\"redis\", port=6379, db=0)\ndef enqueue_task(data_dict: str):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    redis_client.rpush(\"training_queue\", data_dict)\ndef dequeue_task():\n    \"\"\"Obtener la siguiente tarea de la cola en Redis.\"\"\"\n    return redis_client.rpop(\"training_queue\")",
+        "peekOfCode": "TOPIC = \"training_queue\"\nqueue_manager = RedisQueueManager(host=\"redis\")\ndef send_task_to_worker(data_dict: dict):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    queue_manager.publish(TOPIC, data_dict)",
         "detail": "services.api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "queue_manager",
+        "kind": 5,
+        "importPath": "services.api.redis_queue",
+        "description": "services.api.redis_queue",
+        "peekOfCode": "queue_manager = RedisQueueManager(host=\"redis\")\ndef send_task_to_worker(data_dict: dict):\n    \"\"\"Agregar tarea a la cola en Redis.\"\"\"\n    queue_manager.publish(TOPIC, data_dict)",
+        "detail": "services.api.redis_queue",
+        "documentation": {}
+    },
+    {
+        "label": "catch_errors",
+        "kind": 2,
+        "importPath": "services.worker_utils.decorators",
+        "description": "services.worker_utils.decorators",
+        "peekOfCode": "def catch_errors(func):\n    \"\"\"\n    Decorador para capturar errores y registrarlos en un archivo usando Loguru.\n    \"\"\"\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        try:\n            # Ejecuta la función\n            return func(*args, **kwargs)\n        except Exception as e:",
+        "detail": "services.worker_utils.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "clean_gpu",
+        "kind": 2,
+        "importPath": "services.worker_utils.decorators",
+        "description": "services.worker_utils.decorators",
+        "peekOfCode": "def clean_gpu(func):\n    \"\"\"\n    Decorador para capturar errores y registrarlos en un archivo usando Loguru.\n    \"\"\"\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        torch.cuda.empty_cache()  # Libera caché de GPU\n        return func(*args, **kwargs)\n    return wrapper\ndef get_optuna_suggestions(trial, sweeper_config):",
+        "detail": "services.worker_utils.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "get_optuna_suggestions",
+        "kind": 2,
+        "importPath": "services.worker_utils.decorators",
+        "description": "services.worker_utils.decorators",
+        "peekOfCode": "def get_optuna_suggestions(trial, sweeper_config):\n    model = None\n    models = sweeper_config.get(\"model\", None)\n    if models:\n        options = models[1:]\n        model = trial.suggest_categorical(\"models\", options)\n    sweeper_config = sweeper_config[\"train\"]\n    suggestions = {}\n    for key, value in sweeper_config.items():\n        if isinstance(value, dict):  # Si es un diccionario, procesa recursivamente",
+        "detail": "services.worker_utils.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "get_ray_suggestions",
+        "kind": 2,
+        "importPath": "services.worker_utils.decorators",
+        "description": "services.worker_utils.decorators",
+        "peekOfCode": "def get_ray_suggestions(trial, sweeper_config):\n    search_space = {}\n    # Convertir el espacio de búsqueda\n    for section, params in sweeper_config.get(\"search_space\", {}).items():\n        search_space[section] = {}\n        for param, value in params.items():\n            distribution, *args = value\n            if distribution == \"loguniform\":\n                search_space[section][param] = tune.loguniform(*args)\n            elif distribution == \"choice\":",
+        "detail": "services.worker_utils.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "load_train_config",
+        "kind": 2,
+        "importPath": "services.worker_utils.decorators",
+        "description": "services.worker_utils.decorators",
+        "peekOfCode": "def load_train_config(config_path=None):\n    \"\"\"\n    Decorador de fábrica para capturar errores y registrarlos en un archivo usando Loguru.\n    Permite pasar argumentos al decorador.\n    \"\"\"\n    def decorator(func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            if config_path:\n                logger.info(f\"Cargando configuración desde: {config_path}\")",
+        "detail": "services.worker_utils.decorators",
+        "documentation": {}
+    },
+    {
+        "label": "MinioS3Client",
+        "kind": 6,
+        "importPath": "services.worker_utils.minio",
+        "description": "services.worker_utils.minio",
+        "peekOfCode": "class MinioS3Client:\n    MINIO_ENDPOINT = \"http://minio:9000\"\n    BUCKET_NAME = \"models\"\n    MLFLOW_ARTIFACTS_BUCKET = \"mlflow-artifacts\"\n    def __init__(\n        self,\n        endpoint_url=None,\n        aws_access_key_id=None,\n        aws_secret_access_key=None,\n    ):",
+        "detail": "services.worker_utils.minio",
+        "documentation": {}
+    },
+    {
+        "label": "initialize_minio_client",
+        "kind": 2,
+        "importPath": "services.worker_utils.minio",
+        "description": "services.worker_utils.minio",
+        "peekOfCode": "def initialize_minio_client(cfg: DictConfig) -> MinioS3Client:\n    \"\"\"\n    Inicializa el cliente MinIO/S3 utilizando la configuración de Hydra.\n    Args:\n        cfg (DictConfig): Configuración de Hydra.\n    Returns:\n        MinioS3Client: Instancia del cliente MinIO/S3.\n    \"\"\"\n    minio_client = MinioS3Client(\n        endpoint_url=cfg.minio.MINIO_ENDPOINT,",
+        "detail": "services.worker_utils.minio",
+        "documentation": {}
+    },
+    {
+        "label": "save_best_model",
+        "kind": 2,
+        "importPath": "services.worker_utils.minio",
+        "description": "services.worker_utils.minio",
+        "peekOfCode": "def save_best_model(\n    task_id,\n    model_path,\n    version,\n    results_model,\n    project_name,\n    s3: MinioS3Client,\n):\n    \"\"\"Registra el mejor modelo en la base de datos y lo sube a MinIO.\"\"\"\n    update_model = True",
+        "detail": "services.worker_utils.minio",
+        "documentation": {}
+    },
+    {
+        "label": "results_up_to_minio",
+        "kind": 2,
+        "importPath": "services.worker_utils.minio",
+        "description": "services.worker_utils.minio",
+        "peekOfCode": "def results_up_to_minio(task_data: dict):\n    results_train = task_data[\"train\"]\n    best_trial = results_train[\"best_trial\"]\n    best_model_path = results_train[\"best_model_path\"]\n    RESULT_PATH = results_train[\"result_path\"]\n    try:\n        s3: MinioS3Client = MinioS3Client(\n            endpoint_url=task_data.get(\"minio\", {}).get(\"MINIO_ENDPOINT\"),\n            aws_access_key_id=task_data.get(\"minio\", {}).get(\"MINIO_ID\"),\n            aws_secret_access_key=task_data.get(\"minio\", {}).get(\"MINIO_SECRET_KEY\"),",
+        "detail": "services.worker_utils.minio",
+        "documentation": {}
+    },
+    {
+        "label": "process_train_with_optuna",
+        "kind": 2,
+        "importPath": "services.worker_utils.optimize_optuna",
+        "description": "services.worker_utils.optimize_optuna",
+        "peekOfCode": "def process_train_with_optuna(request_config_user: dict):\n    sweeper_config = request_config_user.get(\"sweeper\", {})\n    to_process_queue = request_config_user[\"to_process_queue\"]\n    to_thread_queue = request_config_user[\"to_thread_queue\"]\n    @clean_gpu\n    @load_train_config(config_path=request_config_user.get(\"config_path\"))\n    def objective(trial, config=None):\n        if TRADITIONAL_METHOD_TO_USE:\n            # metodo tradicional\n            response = train_yolo(config, trial_number=trial.number)",
+        "detail": "services.worker_utils.optimize_optuna",
+        "documentation": {}
+    },
+    {
+        "label": "TRADITIONAL_METHOD_TO_USE",
+        "kind": 5,
+        "importPath": "services.worker_utils.optimize_optuna",
+        "description": "services.worker_utils.optimize_optuna",
+        "peekOfCode": "TRADITIONAL_METHOD_TO_USE = False\ndef process_train_with_optuna(request_config_user: dict):\n    sweeper_config = request_config_user.get(\"sweeper\", {})\n    to_process_queue = request_config_user[\"to_process_queue\"]\n    to_thread_queue = request_config_user[\"to_thread_queue\"]\n    @clean_gpu\n    @load_train_config(config_path=request_config_user.get(\"config_path\"))\n    def objective(trial, config=None):\n        if TRADITIONAL_METHOD_TO_USE:\n            # metodo tradicional",
+        "detail": "services.worker_utils.optimize_optuna",
+        "documentation": {}
+    },
+    {
+        "label": "process_train_with_ray_tuner",
+        "kind": 2,
+        "importPath": "services.worker_utils.optimize_ray",
+        "description": "services.worker_utils.optimize_ray",
+        "peekOfCode": "def process_train_with_ray_tuner(request_config_user, task_id):\n    \"\"\"\n    Realiza la optimización de hiperparámetros utilizando Ray Tune.\n    Args:\n        request_config_user (dict): Configuración proporcionada por el usuario.\n        task_id (str): Identificador de la tarea.\n    Returns:\n        tuple: Mejor trial, ruta del mejor modelo y ruta de resultados.\n    \"\"\"\n    sweeper_config = request_config_user.get(\"sweeper\", {})",
+        "detail": "services.worker_utils.optimize_ray",
+        "documentation": {}
+    },
+    {
+        "label": "TrainerWrapper",
+        "kind": 6,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    def __init__(self, model, config: dict):\n        self.model = model\n        self.config = config\n        # Configura los callbacks\n        self.model.add_callback(\"on_train_start\", self.on_train_start)\n        self.model.add_callback(\"on_train_end\", self.on_train_end)",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "handle_exception",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def handle_exception(func):\n    def wrapper(*args, **kwargs):\n        try:\n            return func(*args, **kwargs)\n        except Exception as e:\n            logger.exception(e)\n            return {\"Error\": str(e)}\n    return wrapper\n# decorador para medir tiempo\ndef measure_time(func):",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "measure_time",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def measure_time(func):\n    def wrapper(*args, **kwargs):\n        start = datetime.now()\n        result = func(*args, **kwargs)\n        end = datetime.now()\n        result[\"time\"] = end - start\n        return result\n    return wrapper\ndef clean_results(func):\n    def wrapper(*args, **kwargs):",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "clean_results",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def clean_results(func):\n    def wrapper(*args, **kwargs):\n        try:\n            return func(*args, **kwargs)\n        except Exception as e:\n            logger.exception(e)\n            traceback.print_exc()\n            return float(\"nan\")\n        finally:\n            torch.cuda.empty_cache()  # Libera caché de GPU",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "get_datetime",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def get_datetime():\n    now = datetime.now()\n    return now.strftime(\"%Y%m%d_%H%M%S\")\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)\n    return ruta_normalizada",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_carpeta",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)\n    return ruta_normalizada\nclass TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train_yolo",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def train_yolo(request_config: dict, trial_number: int):\n    # Configurar las variables de entorno necesarias para MLflow\n    os.environ[\"MLFLOW_S3_ENDPOINT_URL\"] = request_config[\"minio\"][\"MINIO_ENDPOINT\"]\n    os.environ[\"AWS_ACCESS_KEY_ID\"] = request_config[\"minio\"][\"MINIO_ID\"]\n    os.environ[\"AWS_SECRET_ACCESS_KEY\"] = request_config[\"minio\"][\"MINIO_SECRET_KEY\"]\n    os.environ[\"MLFLOW_TRACKING_URI\"] = request_config[\"mlflow\"][\n        \"MLFLOW_TRACKING_URI\"\n    ]  # URI del servidor MLflow\n    os.environ[\"MLFLOW_ARTIFACT_URI\"] = \"s3://mlflow-artifacts/\"  # Bucket en MinIO\n    # Configurar el nombre del experimento y el nombre de la ejecución",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "comparar_modelos_yolo",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def comparar_modelos_yolo(modelo1_path: str, modelo2_path: str, data_path: str):\n    \"\"\"\n    Compara dos modelos YOLOv8 usando datos de validación.\n    Args:\n        modelo1_path (str): Ruta al primer modelo YOLOv8.\n        modelo2_path (str): Ruta al segundo modelo YOLOv8.\n        data_path (str): Ruta al archivo de datos de validación (YAML).\n    Returns:\n        str: Ruta del modelo con el mejor mAP, o None si hay un error.\n    \"\"\"",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train_scheduller_controller",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def train_scheduller_controller(q: queue.Queue, response_q: queue.Queue):\n    \"\"\"Proceso que gestiona la cola y ejecuta train_yolo.\"\"\"\n    while True:\n        try:\n            request_config, trial_number = q.get(timeout=5)  # Espera un dato\n            if isinstance(request_config, dict) and isinstance(trial_number, int):\n                result = train_yolo(request_config, trial_number)\n                result[\"status\"] = \"OK\"\n                response_q.put(result)  # Envía la respuesta al hilo optuna_worker\n            else:",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "start_train_scheduller_controller",
+        "kind": 2,
+        "importPath": "services.worker_utils.train_yolo",
+        "description": "services.worker_utils.train_yolo",
+        "peekOfCode": "def start_train_scheduller_controller(\n    thread_to_process_queue: queue.Queue = queue.Queue(),\n    process_to_thread_queue: queue.Queue = queue.Queue(),\n):\n    scheduler_process = multiprocessing.Process(\n        target=train_scheduller_controller,\n        args=(thread_to_process_queue, process_to_thread_queue),\n    )\n    scheduler_process.start()\n    return scheduler_process",
+        "detail": "services.worker_utils.train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "merge_configs",
+        "kind": 2,
+        "importPath": "services.worker_utils.utils",
+        "description": "services.worker_utils.utils",
+        "peekOfCode": "def merge_configs(default_config, user_config):\n    \"\"\"\n    Fusiona dos configuraciones: user_config tiene prioridad sobre default_config.\n    Los campos faltantes en user_config se completan con los valores de default_config.\n    Args:\n        default_config (dict): Configuración predeterminada.\n        user_config (dict): Configuración proporcionada por el usuario.\n    Returns:\n        dict: Configuración final fusionada.\n    \"\"\"",
+        "detail": "services.worker_utils.utils",
+        "documentation": {}
+    },
+    {
+        "label": "read_user_config",
+        "kind": 2,
+        "importPath": "services.worker_utils.utils",
+        "description": "services.worker_utils.utils",
+        "peekOfCode": "def read_user_config(task_data: dict):\n    try:\n        task_data = json.loads(task_data)\n    except:\n        pass\n    logger.debug(f\"📥 Nueva tarea recibida: {task_data}\")\n    if \"task_id\" not in task_data or \"config_path\" not in task_data:\n        logger.error(\n            f\"⚠️ La tarea recibida no tiene la estructura esperada: {task_data}\"\n        )",
+        "detail": "services.worker_utils.utils",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_CONFIG",
+        "kind": 5,
+        "importPath": "services.worker_utils.utils",
+        "description": "services.worker_utils.utils",
+        "peekOfCode": "DEFAULT_CONFIG = {}\ndef read_user_config(task_data: dict):\n    try:\n        task_data = json.loads(task_data)\n    except:\n        pass\n    logger.debug(f\"📥 Nueva tarea recibida: {task_data}\")\n    if \"task_id\" not in task_data or \"config_path\" not in task_data:\n        logger.error(\n            f\"⚠️ La tarea recibida no tiene la estructura esperada: {task_data}\"",
+        "detail": "services.worker_utils.utils",
+        "documentation": {}
+    },
+    {
+        "label": "logged_model",
+        "kind": 5,
+        "importPath": "services.eval",
+        "description": "services.eval",
+        "peekOfCode": "logged_model = 'runs:/<run_id>/model'\nloaded_pytorch_model = mlflow.pytorch.load_model(logged_model)\n# Reconstruir el modelo YOLO\nreconstructed_yolo_model = YOLO(loaded_pytorch_model)\n# Usar el modelo reconstruido\nresults = reconstructed_yolo_model(\"imagen.jpg\")",
+        "detail": "services.eval",
+        "documentation": {}
+    },
+    {
+        "label": "loaded_pytorch_model",
+        "kind": 5,
+        "importPath": "services.eval",
+        "description": "services.eval",
+        "peekOfCode": "loaded_pytorch_model = mlflow.pytorch.load_model(logged_model)\n# Reconstruir el modelo YOLO\nreconstructed_yolo_model = YOLO(loaded_pytorch_model)\n# Usar el modelo reconstruido\nresults = reconstructed_yolo_model(\"imagen.jpg\")",
+        "detail": "services.eval",
+        "documentation": {}
+    },
+    {
+        "label": "reconstructed_yolo_model",
+        "kind": 5,
+        "importPath": "services.eval",
+        "description": "services.eval",
+        "peekOfCode": "reconstructed_yolo_model = YOLO(loaded_pytorch_model)\n# Usar el modelo reconstruido\nresults = reconstructed_yolo_model(\"imagen.jpg\")",
+        "detail": "services.eval",
+        "documentation": {}
+    },
+    {
+        "label": "results",
+        "kind": 5,
+        "importPath": "services.eval",
+        "description": "services.eval",
+        "peekOfCode": "results = reconstructed_yolo_model(\"imagen.jpg\")",
+        "detail": "services.eval",
         "documentation": {}
     },
     {
@@ -579,29 +1451,173 @@
         "documentation": {}
     },
     {
-        "label": "upload_to_minio",
+        "label": "save_best_model",
         "kind": 2,
-        "importPath": "services.worker",
-        "description": "services.worker",
-        "peekOfCode": "def upload_to_minio(task_id, model_path, version):\n    \"\"\"Guarda múltiples versiones del modelo en MinIO y devuelve la URL.\"\"\"\n    model_filename = f\"{task_id}_v{version}.pt\"\n    s3.upload_file(model_path, BUCKET_NAME, model_filename)\n    return f\"{MINIO_ENDPOINT}/{BUCKET_NAME}/{model_filename}\"\ndef save_best_model(task_id, model_path, version):\n    \"\"\"Registra el mejor modelo en la base de datos y lo sube a MinIO.\"\"\"\n    minio_url = upload_to_minio(task_id, model_path, version)\n    # Verificar si el `task_id` existe en la base de datos\n    existing_task = db.get_by_field(task_id=task_id)",
-        "detail": "services.worker",
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def save_best_model(\n    task_id,\n    model_path,\n    version,\n    results_model,\n    project_name,\n    data_path_for_test: str = None,\n):\n    \"\"\"Registra el mejor modelo en la base de datos y lo sube a MinIO.\"\"\"\n    update_model = True",
+        "detail": "services.worker copy",
         "documentation": {}
     },
     {
-        "label": "save_best_model",
+        "label": "process_train",
         "kind": 2,
-        "importPath": "services.worker",
-        "description": "services.worker",
-        "peekOfCode": "def save_best_model(task_id, model_path, version):\n    \"\"\"Registra el mejor modelo en la base de datos y lo sube a MinIO.\"\"\"\n    minio_url = upload_to_minio(task_id, model_path, version)\n    # Verificar si el `task_id` existe en la base de datos\n    existing_task = db.get_by_field(task_id=task_id)\n    if existing_task is None:\n        print(f\"⚠️ Advertencia: No se encontró task_id {task_id} en la base de datos.\")\n        return\n    db.update(\n        1,",
-        "detail": "services.worker",
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def process_train(request_config_user, task_id):\n    sweeper_config = request_config_user.get(\"sweeper\", {})\n    @clean_gpu\n    @load_train_config(config_path=request_config_user.get(\"config_path\"))\n    def objective(trial, config=None):\n        config = train_yolo(config, trial_number=trial.number)\n        if math.isnan(config):\n            raise optuna.TrialPruned(\"Rendimiento insuficiente.\")\n        metric = config.get(\"metric\", float(\"nan\"))\n        return metric",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "worker",
+        "kind": 2,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def worker(task_data: dict):\n    task_data = json.loads(task_data)\n    logger.debug(f\"📥 Nueva tarea recibida: {task_data}\")\n    if \"task_id\" not in task_data or \"config_path\" not in task_data:\n        logger.error(\n            f\"⚠️ La tarea recibida no tiene la estructura esperada: {task_data}\"\n        )\n        return\n    config_path = task_data[\"config_path\"]\n    # Leer el archivo YAML del usuario",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def main(cfg):\n    mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)\n    logger.info(f\"MLflow URI: {cfg.mlflow.MLFLOW_TRACKING_URI}\")\n    queue_manager.start()\n    queue_manager.wait()\nmain()",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_carpeta",
+        "kind": 2,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)\n    return ruta_normalizada\ndef get_datetime():\n    now = datetime.now()\n    return now.strftime(\"%Y%m%d_%H%M%S\")",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "get_datetime",
+        "kind": 2,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def get_datetime():\n    now = datetime.now()\n    return now.strftime(\"%Y%m%d_%H%M%S\")\ndef train_model(request_config_user, task_id):\n    \"\"\"Entrena YOLOv8 con búsqueda de hiperparámetros y guarda el mejor modelo.\"\"\"\n    # config use of GPU\n    if False:\n        if (\n            torch.cuda.is_available()\n            and \"extras\" in request_config_user",
+        "detail": "services.worker copy",
         "documentation": {}
     },
     {
         "label": "train_model",
         "kind": 2,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def train_model(request_config_user, task_id):\n    \"\"\"Entrena YOLOv8 con búsqueda de hiperparámetros y guarda el mejor modelo.\"\"\"\n    # config use of GPU\n    if False:\n        if (\n            torch.cuda.is_available()\n            and \"extras\" in request_config_user\n            and \"gpu\" in request_config_user[\"extras\"]\n            and \"limit\" in request_config_user[\"extras\"][\"gpu\"]\n            and 0.3 < float(request_config_user[\"extras\"][\"gpu\"][\"limit\"]) < 1",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "def main(_):\n    logger.info(\"✅ Worker iniciado. Esperando trabajos en la cola de Redis...\")\n    custom_logger.info(\"✅ Worker iniciado. Esperando trabajos en la cola de Redis...\")\n    @queue_manager.on_message(TOPIC)\n    def worker(task_data: dict):\n        task_data = json.loads(task_data)\n        logger.debug(f\"📥 Nueva tarea recibida: {task_data}\")\n        if \"task_id\" not in task_data or \"config_path\" not in task_data:\n            logger.error(\n                f\"⚠️ La tarea recibida no tiene la estructura esperada: {task_data}\"",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "custom_logger",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "custom_logger = Logger(\"wyoloservice\")\ns3: MinioS3Client = initialize_minio_client()\n# Configuración base por defecto\nDEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",\n    \"model\": \"yolov8n.pt\",\n    \"train\": {\"batch_size\": 32, \"epochs\": 10},\n    \"sweeper\": {\"n_trials\": 1, \"sampler\": \"random\"},\n}\ndef save_best_model(",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "DEFAULT_CONFIG",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "DEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",\n    \"model\": \"yolov8n.pt\",\n    \"train\": {\"batch_size\": 32, \"epochs\": 10},\n    \"sweeper\": {\"n_trials\": 1, \"sampler\": \"random\"},\n}\ndef save_best_model(\n    task_id,\n    model_path,\n    version,",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "MLFLOW_TRACKING_URI",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "MLFLOW_TRACKING_URI = \"http://mlflow:5000\"\nMINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\nMINIO_ID = \"minio\"\nMINIO_KEY = \"minio123\"\nREDIS_HOST = \"redis\"\nREDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "MINIO_ENDPOINT",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "MINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\nMINIO_ID = \"minio\"\nMINIO_KEY = \"minio123\"\nREDIS_HOST = \"redis\"\nREDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "BUCKET_NAME",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "BUCKET_NAME = \"models\"\nMINIO_ID = \"minio\"\nMINIO_KEY = \"minio123\"\nREDIS_HOST = \"redis\"\nREDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "MINIO_ID",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "MINIO_ID = \"minio\"\nMINIO_KEY = \"minio123\"\nREDIS_HOST = \"redis\"\nREDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "MINIO_KEY",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "MINIO_KEY = \"minio123\"\nREDIS_HOST = \"redis\"\nREDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "REDIS_HOST",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "REDIS_HOST = \"redis\"\nREDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)\n    return ruta_normalizada",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "REDIS_PORT",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "REDIS_PORT = 6379\nthreshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)\n    return ruta_normalizada\ndef get_datetime():",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "threshold",
+        "kind": 5,
+        "importPath": "services.worker copy",
+        "description": "services.worker copy",
+        "peekOfCode": "threshold = 0.02\ndef obtener_carpeta(ruta):\n    # Normalizar la ruta\n    ruta_normalizada = os.path.normpath(ruta)\n    # Si la ruta normalizada no es un directorio, extraer el directorio\n    if not os.path.isdir(ruta_normalizada):\n        return os.path.dirname(ruta_normalizada)\n    return ruta_normalizada\ndef get_datetime():\n    now = datetime.now()",
+        "detail": "services.worker copy",
+        "documentation": {}
+    },
+    {
+        "label": "worker",
+        "kind": 2,
         "importPath": "services.worker",
         "description": "services.worker",
-        "peekOfCode": "def train_model(config, task_id):\n    \"\"\"Entrena YOLOv8 con búsqueda de hiperparámetros y guarda el mejor modelo.\"\"\"\n    def objective(trial):\n        print(f\"🔍 Iniciando prueba {trial.number}...\")\n        config[\"train\"][\"epochs\"] = trial.suggest_int(\"train.epochs\", 10, 100, step=10)\n        config[\"train\"][\"batch\"] = trial.suggest_categorical(\n            \"train.batch\", [8, 16, 32, 64]\n        )\n        config[\"train\"][\"imgsz\"] = trial.suggest_categorical(\n            \"train.imgsz\", [320, 416, 512, 640]",
+        "peekOfCode": "def worker(task_data: dict):\n    try:\n        task_data = json.loads(task_data)\n    except:\n        pass\n    try:\n        task_data[\"to_process_queue\"] = to_process_queue\n        task_data[\"to_thread_queue\"] = to_thread_queue\n        pipeline.run(task_data)\n    except Exception as e:",
         "detail": "services.worker",
         "documentation": {}
     },
@@ -610,62 +1626,98 @@
         "kind": 2,
         "importPath": "services.worker",
         "description": "services.worker",
-        "peekOfCode": "def main(_):\n    print(\"✅ Worker iniciado. Esperando trabajos en la cola de Redis...\")\n    while True:\n        task = redis_client.blpop(\"training_queue\", timeout=5)\n        if task:\n            print(f\"📥 Nueva tarea recibida: {task[1]}\")\n            try:\n                task_data = json.loads(task[1])\n                if \"task_id\" not in task_data or \"config_path\" not in task_data:\n                    print(",
+        "peekOfCode": "def main(cfg: OmegaConf):\n    global DEFAULT_CONFIG\n    mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)\n    logger.info(f\"MLflow URI: {cfg.mlflow.MLFLOW_TRACKING_URI}\")\n    # convertir a dict\n    cfg = OmegaConf.to_container(cfg, resolve=True)\n    DEFAULT_CONFIG.update(cfg)\n    MinioS3Client(\n        endpoint_url=cfg.get(\"minio\", {}).get(\"MINIO_ENDPOINT\"),\n        aws_access_key_id=cfg.get(\"minio\", {}).get(\"MINIO_ID\"),",
         "detail": "services.worker",
         "documentation": {}
     },
     {
-        "label": "MLFLOW_TRACKING_URI",
+        "label": "custom_logger",
         "kind": 5,
         "importPath": "services.worker",
         "description": "services.worker",
-        "peekOfCode": "MLFLOW_TRACKING_URI = \"http://mlflow:5000\"\nmlflow.set_tracking_uri(MLFLOW_TRACKING_URI)\nMINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)",
+        "peekOfCode": "custom_logger = Logger(\"wyoloservice\")\nto_process_queue = queue.Queue()\nto_thread_queue = queue.Queue()\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (process_train_with_optuna, \"model_train\", \"v1.0\"),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]",
         "detail": "services.worker",
         "documentation": {}
     },
     {
-        "label": "MINIO_ENDPOINT",
+        "label": "to_process_queue",
         "kind": 5,
         "importPath": "services.worker",
         "description": "services.worker",
-        "peekOfCode": "MINIO_ENDPOINT = \"http://minio:9000\"\nBUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\nredis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto",
+        "peekOfCode": "to_process_queue = queue.Queue()\nto_thread_queue = queue.Queue()\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (process_train_with_optuna, \"model_train\", \"v1.0\"),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)",
         "detail": "services.worker",
         "documentation": {}
     },
     {
-        "label": "BUCKET_NAME",
+        "label": "to_thread_queue",
         "kind": 5,
         "importPath": "services.worker",
         "description": "services.worker",
-        "peekOfCode": "BUCKET_NAME = \"models\"\ns3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\nredis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto\nDEFAULT_CONFIG = {",
+        "peekOfCode": "to_thread_queue = queue.Queue()\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (process_train_with_optuna, \"model_train\", \"v1.0\"),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)\n@queue_manager.on_message(TOPIC)",
         "detail": "services.worker",
         "documentation": {}
     },
     {
-        "label": "s3",
+        "label": "pipeline",
         "kind": 5,
         "importPath": "services.worker",
         "description": "services.worker",
-        "peekOfCode": "s3 = boto3.client(\n    \"s3\",\n    endpoint_url=MINIO_ENDPOINT,\n    aws_access_key_id=\"minio\",\n    aws_secret_access_key=\"minio123\",\n)\nredis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto\nDEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",",
+        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (process_train_with_optuna, \"model_train\", \"v1.0\"),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)\n@queue_manager.on_message(TOPIC)\ndef worker(task_data: dict):",
         "detail": "services.worker",
         "documentation": {}
     },
     {
-        "label": "redis_client",
+        "label": "url",
         "kind": 5,
-        "importPath": "services.worker",
-        "description": "services.worker",
-        "peekOfCode": "redis_client = redis.Redis(host=\"redis\", port=6379, decode_responses=True)\n# Configuración base por defecto\nDEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",\n    \"model\": \"yolov8n.pt\",\n    \"train\": {\"batch_size\": 32, \"epochs\": 10},\n    \"sweeper\": {\"n_trials\": 50, \"sampler\": \"random\"},\n}\ndef upload_to_minio(task_id, model_path, version):\n    \"\"\"Guarda múltiples versiones del modelo en MinIO y devuelve la URL.\"\"\"",
-        "detail": "services.worker",
+        "importPath": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "description": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "peekOfCode": "url = \"http://api_user:8000/train/\"\n# Parámetros de la solicitud\nparams = {\"user_code\": \"color_ball\"}\n# Archivo a enviar\nfiles = {\n    \"file\": (\n        \"config_train.yaml\",\n        open(\n            \"/datasets/clasificacion/colorball.v8i.multiclass/config_train.yaml\", \"rb\"\n        ),",
+        "detail": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
         "documentation": {}
     },
     {
-        "label": "DEFAULT_CONFIG",
+        "label": "params",
         "kind": 5,
-        "importPath": "services.worker",
-        "description": "services.worker",
-        "peekOfCode": "DEFAULT_CONFIG = {\n    \"experiment_name\": \"default_experiment\",\n    \"model\": \"yolov8n.pt\",\n    \"train\": {\"batch_size\": 32, \"epochs\": 10},\n    \"sweeper\": {\"n_trials\": 50, \"sampler\": \"random\"},\n}\ndef upload_to_minio(task_id, model_path, version):\n    \"\"\"Guarda múltiples versiones del modelo en MinIO y devuelve la URL.\"\"\"\n    model_filename = f\"{task_id}_v{version}.pt\"\n    s3.upload_file(model_path, BUCKET_NAME, model_filename)",
-        "detail": "services.worker",
+        "importPath": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "description": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "peekOfCode": "params = {\"user_code\": \"color_ball\"}\n# Archivo a enviar\nfiles = {\n    \"file\": (\n        \"config_train.yaml\",\n        open(\n            \"/datasets/clasificacion/colorball.v8i.multiclass/config_train.yaml\", \"rb\"\n        ),\n        \"application/x-yaml\",\n    )",
+        "detail": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "documentation": {}
+    },
+    {
+        "label": "files",
+        "kind": 5,
+        "importPath": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "description": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "peekOfCode": "files = {\n    \"file\": (\n        \"config_train.yaml\",\n        open(\n            \"/datasets/clasificacion/colorball.v8i.multiclass/config_train.yaml\", \"rb\"\n        ),\n        \"application/x-yaml\",\n    )\n}\n# Encabezados de la solicitud",
+        "detail": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "documentation": {}
+    },
+    {
+        "label": "headers",
+        "kind": 5,
+        "importPath": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "description": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "peekOfCode": "headers = {\"accept\": \"application/json\"}\n# Realizar la solicitud POST\nresponse = requests.post(url, params=params, headers=headers, files=files)\n# Imprimir la respuesta\nprint(response.status_code)\nprint(response.json())",
+        "detail": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "documentation": {}
+    },
+    {
+        "label": "response",
+        "kind": 5,
+        "importPath": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "description": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "peekOfCode": "response = requests.post(url, params=params, headers=headers, files=files)\n# Imprimir la respuesta\nprint(response.status_code)\nprint(response.json())",
+        "detail": "tmp.datasets.clasificacion.colorball.v8i.multiclass.emulate.request",
+        "documentation": {}
+    },
+    {
+        "label": "YOLODataValidator",
+        "kind": 6,
+        "importPath": "tmp.datasets.deteccion.Deteksi komponen elektronik.v1i.yolov8.yolo_valid",
+        "description": "tmp.datasets.deteccion.Deteksi komponen elektronik.v1i.yolov8.yolo_valid",
+        "peekOfCode": "class YOLODataValidator:\n    def __init__(self, image_folder, label_folder, pdf_name, data_yaml, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.pdf_name = pdf_name\n        self.data_yaml = data_yaml\n        self.report_folder = \"reports\"\n        self.verbose = verbose\n        os.makedirs(self.report_folder, exist_ok=True)\n        self._configure_logger()",
+        "detail": "tmp.datasets.deteccion.Deteksi komponen elektronik.v1i.yolov8.yolo_valid",
         "documentation": {}
     },
     {

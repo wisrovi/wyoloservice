@@ -1,4 +1,6 @@
 import json
+import multiprocessing
+import queue
 import sys
 import traceback
 
@@ -13,6 +15,7 @@ from worker_utils import (
     process_train_with_optuna,
     read_user_config,
     results_up_to_minio,
+    start_train_scheduller_controller,
 )
 from wpipe.pipe import Pipeline
 
@@ -33,6 +36,10 @@ FileHandler("full_log.log").push_application()
 custom_logger = Logger("wyoloservice")
 
 
+to_process_queue = multiprocessing.Queue()
+to_thread_queue = multiprocessing.Queue()
+
+
 pipeline = Pipeline()
 pipeline.set_steps(
     [
@@ -51,6 +58,9 @@ def worker(task_data: dict):
         pass
 
     try:
+        task_data["to_process_queue"] = to_process_queue
+        task_data["to_thread_queue"] = to_thread_queue
+
         pipeline.run(task_data)
     except Exception as e:
         traceback.print_exc()
@@ -74,8 +84,14 @@ def main(cfg: OmegaConf):
         aws_secret_access_key=cfg.get("minio", {}).get("MINIO_SECRET_KEY"),
     )
 
+    scheduler_process = start_train_scheduller_controller(
+        to_process_queue=to_process_queue,
+        to_thread_queue=to_thread_queue,
+    )
+
     queue_manager.start()
     queue_manager.wait()
+    scheduler_process.join()
 
 
 if __name__ == "__main__":

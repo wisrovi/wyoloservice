@@ -1,3 +1,4 @@
+import multiprocessing
 import os
 import tempfile
 import traceback
@@ -184,7 +185,7 @@ def train_yolo(request_config: dict, trial_number: int):
         results = trainer.train(config_train=request_config["train"])
 
         # traidcional method
-        # results = trainer.train(**request_config["train"])
+        # results = model.train(**request_config["train"])
 
         request_config["experiment_type"] = str(results.task)
         request_config["train"]["results"] = results.results_dict
@@ -303,3 +304,36 @@ def comparar_modelos_yolo(modelo1_path: str, modelo2_path: str, data_path: str):
     except Exception as e:
         print(f"Error al comparar modelos: {e}")
         return None
+
+
+def train_scheduller_controller(
+    to_process_queue: multiprocessing.Queue, to_thread_queue: multiprocessing.Queue
+):
+    """Proceso que gestiona la cola y ejecuta train_yolo."""
+    while True:
+        request_config, trial_number = to_process_queue.get()  # Espera un dato
+        if isinstance(request_config, dict) and isinstance(trial_number, int):
+            logger.info("[TRAINER]: Nueva tarea, iniciando entrenamiento")
+            results = train_yolo(request_config, trial_number)
+
+            if "model" in results:
+                results.pop("model")
+
+            results["status"] = "OK"
+            to_thread_queue.put(results)  # Envía la respuesta al hilo optuna_worker
+        else:
+            logger.info("[TRAINER]: Formato de datos incorrecto")
+
+
+def start_train_scheduller_controller(
+    to_process_queue: multiprocessing.Queue = multiprocessing.Queue(),
+    to_thread_queue: multiprocessing.Queue = multiprocessing.Queue(),
+):
+
+    scheduler_process = multiprocessing.Process(
+        target=train_scheduller_controller,
+        args=(to_process_queue, to_thread_queue),
+    )
+    scheduler_process.start()
+
+    return scheduler_process
