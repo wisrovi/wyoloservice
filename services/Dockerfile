@@ -53,6 +53,7 @@ RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 
 # Copiar el código fuente
+WORKDIR /app
 COPY . .
 
 # Exponer el puerto de FastAPI

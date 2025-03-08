@@ -1,0 +1,279 @@
+sudo apt install wget gpg
+sudo mkdir -p /etc/apt/keyrings
+wget -qO - https://dvc.org/deb/iterative.asc | sudo gpg --dearmor -o /etc/apt/keyrings/packages.iterative.gpg
+echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/packages.iterative.gpg] https://dvc.org/deb/ stable main" | sudo tee /etc/apt/sources.list.d/dvc.list
+sudo chmod 644 /etc/apt/keyrings/packages.iterative.gpg /etc/apt/sources.list.d/dvc.list
+sudo apt update
+sudo apt install dvc
+
+
+pip install dvc
+
+
+
+
+
+dvc init
+
+Esto crea el directorio .dvc necesario para DVC.
+
+
+
+
+export AWS_ACCESS_KEY_ID=dvc
+export AWS_SECRET_ACCESS_KEY=wyoloservice
+export AWS_ENDPOINT_URL=http://localhost:7451
+dvc remote add -d minio s3://dvc
+
+ó
+
+
+mc alias set local http://localhost:7451 dvc wyoloservice
+
+
+
+
+Esto crea un alias llamado nas_minio que puedes usar para ejecutar comandos mc contra tu servidor MinIO.
+
+Tu configuración define los parámetros necesarios para conectarte a un servidor MinIO. Aquí tienes una explicación de cada componente:
+
+    MINIO_ENDPOINT:
+        Este es el punto de acceso (URL) a tu servidor MinIO. En tu caso, es http://192.168.1.60:30702. Esto indica que MinIO está accesible en la dirección IP 192.168.1.60 y en el puerto 34449.
+        Es crucial notar que estás usando http, no https. Esto significa que la conexión no está cifrada. En un entorno de producción, es altamente recomendable usar https para proteger tus datos.
+    MINIO_ID:
+        Este es el ID de acceso (access key) que se usa para autenticarte con el servidor MinIO. En tu caso, es 3070.
+    MINIO_SECRET_KEY:
+        Esta es la clave secreta (secret key) que se usa para autenticarte con el servidor MinIO. En tu caso, es worker3070.
+        Es absolutamente vital proteger esta clave, ya que otorga acceso completo a tu servidor MinIO.
+    MINIO_BUCKET:
+        Este es el nombre del "bucket" (cubeta) de MinIO que vas a utilizar. Un "bucket" es esencialmente un contenedor para tus objetos (archivos) dentro de MinIO. En tu caso, es models.
+
+
+
+
+
+Es importante crear el butket
+
+mc mb local/dvc
+dvc remote modify minio region us-east-1
+
+
+
+
+
+para verificar la configuracion
+dvc remote list
+
+NOTA: Esto debería mostrar "minio" como el almacenamiento remoto predeterminado.
+
+
+
+
+
+
+dvc config core.autostage true
+
+
+
+
+
+
+Ahora, configura tu instancia de MinIO como el almacenamiento remoto para DVC.
+
+Ejecuta el siguiente comando, reemplazando models con el nombre de tu bucket en MinIO si es diferente:
+
+
+dvc remote add -d minio_remote s3://models
+
+
+
+Esto añade un almacenamiento remoto llamado minio_remote a DVC. La opción -d lo establece como el almacenamiento remoto predeterminado.
+
+
+DVC intentará usar las credenciales de mc para conectarse a MinIO. Si tienes problemas, puedes configurar las credenciales directamente en DVC:
+dvc remote modify minio_remote endpointurl http://192.168.1.60:34449
+dvc remote modify minio_remote access_key_id minio
+dvc remote modify minio_remote secret_access_key minio123
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Agrega tus Datos a DVC:
+Navega al directorio que contiene tus datos. Por ejemplo, si tus datos están en un directorio llamado data, navega a ese directorio.
+Ejecuta dvc add data. Esto crea un archivo data.dvc que rastrea el directorio data.
+DVC calcula los hashes de los archivos en data y almacena esta información en data.dvc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Confirma los Cambios en Git:
+
+    DVC usa Git para versionar los archivos .dvc.
+
+    Ejecuta los siguientes comandos para confirmar los cambios:
+
+
+
+
+
+subir datos a dvc
+
+# archivo
+dvc add datos/tu_archivo.csv
+
+# carpeta
+dvc add datos/
+
+
+dvc push
+
+
+
+
+
+
+git add data.dvc .gitignore
+git commit -m "Agregando datos a DVC"
+
+
+
+
+NOTA: El archivo .gitignore es automaticamente modificado por DVC.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Envía los Datos a MinIO:
+
+    Ejecuta dvc push. Esto copia los datos rastreados por DVC a tu bucket en MinIO.
+    Solo se copiarán los archivos que hayan cambiado desde la última vez que ejecutaste dvc push.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Reproducir Datos:
+
+    Para obtener una versión específica de tus datos, usa git checkout para cambiar a la versión correspondiente del archivo .dvc.
+    Luego, ejecuta dvc pull para descargar los datos desde MinIO.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Compartir Datos:
+
+    Otros pueden clonar tu repositorio Git y ejecutar dvc pull para obtener los datos desde MinIO.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Puntos Importantes:
+
+    Asegúrate de que tu instancia de MinIO esté accesible desde tu máquina.
+    Protege tus credenciales de MinIO. No las incluyas directamente en tu código si es posible.
+    Considera usar DVC pipelines para automatizar tu flujo de trabajo de aprendizaje automático.
+    Documenta tus conjuntos de datos y su estructura.
+
+Con estos pasos, tus datos estarán versionados y almacenados de forma segura en tu instancia de MinIO.
+
+
+
+
+
+
+
+
+
+
+
+
+

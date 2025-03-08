@@ -2,10 +2,15 @@ mlflow:
   MLFLOW_TRACKING_URI: http://mlflow:5000
 
 minio:
-  MINIO_ENDPOINT: http://minio:9000
-  MINIO_ID: minio
-  MINIO_SECRET_KEY: minio123
+  MINIO_ENDPOINT: http://mlflow-minio:9000
+  MINIO_ID: mlflow
+  MINIO_SECRET_KEY: wyoloservice
   MINIO_BUCKET: models
+
+dvc:
+  MINIO_ENDPOINT: http://dvc-minio:9000
+  MINIO_ID: dvc
+  MINIO_SECRET_KEY: wyoloservice
 
 redis:
   REDIS_HOST: redis

@@ -1,0 +1,6 @@
+outs:
+- md5: 19615dab3ec2db1ff3c32ab1eba13012.dir
+  size: 8006594
+  nfiles: 269
+  hash: md5
+  path: colorball.v8i.multiclass

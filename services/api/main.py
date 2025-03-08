@@ -1,14 +1,30 @@
 import json
-import uuid
-from fastapi import FastAPI, UploadFile, File
 import os
 import shutil
-from api.database import db, TrainingHistory
-from api.redis_queue import send_task_to_worker
-from api.minio import upload_model, list_models, download_model
+import uuid
+
+import yaml
+from api.database import TrainingHistory, db
+from api.minio import download_model, list_models
+from fastapi import FastAPI, File, UploadFile
+from wredis.queue import RedisQueueManager
 
 CONFIG_DIR = "/config_versions"
 os.makedirs(CONFIG_DIR, exist_ok=True)
+
+
+config_path = "/app/config.yaml"
+with open(config_path, "r") as f:
+    cfg = yaml.safe_load(f)
+
+
+redis_config = cfg.get("redis", {})
+queue_manager = RedisQueueManager(
+    host=redis_config.get("REDIS_HOST"),
+    port=redis_config.get("REDIS_PORT"),
+    db=redis_config.get("REDIS_DB"),
+)
+
 
 app = FastAPI()
 
@@ -39,15 +55,15 @@ def start_training(user_code: str, file: UploadFile = File(...)):
         )
     )
 
-    send_task_to_worker(
-        json.dumps(
-            {
-                "task_id": task_id,
-                "config_path": config_path,
-                "user_code": user_code,
-            }
-        )
+    queue_manager.publish(
+        queue_name=redis_config.get("TOPIC"),
+        data={
+            "task_id": task_id,
+            "config_path": config_path,
+            "user_code": user_code,
+        },
     )
+
     return {"message": "Entrenamiento registrado", "task_id": task_id}
 
 
