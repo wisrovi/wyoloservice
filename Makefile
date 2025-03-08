@@ -19,20 +19,11 @@ stop_env:
 
 
 
-start:
-	docker-compose -f docker-compose.yml --compatibility up -d --build --force-recreate --no-deps
+start_services:
+	docker-compose -f docker-compose.services.yml --compatibility up -d --build --force-recreate --no-deps
 
-stop:
-	docker-compose -f docker-compose.yml down
+stop_services:
+	docker-compose -f docker-compose.services.yml down
 
-build:
-	docker-compose -f docker-compose.yml build
-
-debug:
-	docker-compose -f docker-compose.yml exec web python3 app.py
-
-into:
-	docker-compose -f docker-compose.yml exec web zsh
-
-log:
-	docker-compose -f docker-compose.yml logs -f web
+build_services:
+	docker-compose -f docker-compose.services.yml build

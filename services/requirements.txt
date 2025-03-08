@@ -20,4 +20,5 @@ wpipe
 loguru
 logbook
 python-slugify
+dvc
 # ray[tune]

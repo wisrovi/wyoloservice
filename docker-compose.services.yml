@@ -34,11 +34,6 @@ services:
     ports:
       - "8000:8000"
     restart: always
-    depends_on:
-      - redis
-      - minio
-      - mlflow
-      - nfs
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -58,9 +53,7 @@ services:
       context: ./services
       dockerfile: Dockerfile
     depends_on:
-      - redis
       - api_user
-      - nfs
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -73,11 +66,11 @@ services:
       - ./tmp/database:/database
       - ./tmp/models:/models
       - ./services:/app
-      - ./tmp/logs:/var/log/api
+      - ./tmp/logs:/var/log/worker
     networks:
       - nfs_network
-    # command: tail -f /dev/null
-    command: python worker.py
+    command: tail -f /dev/null
+    # command: python worker.py
     # restart: always
 
 networks:
