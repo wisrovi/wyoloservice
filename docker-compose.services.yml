@@ -33,7 +33,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    restart: always
+    # restart: always
     environment:
       - DB_HOST=postgres
       - DB_PORT=5432
@@ -67,6 +67,7 @@ services:
       - ./tmp/models:/models
       - ./services:/app
       - ./tmp/logs:/var/log/worker
+    working_dir: /app/worker
     networks:
       - nfs_network
     command: tail -f /dev/null

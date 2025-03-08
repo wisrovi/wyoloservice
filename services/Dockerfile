@@ -53,8 +53,19 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 
 # Copiar el código fuente
-WORKDIR /app
-COPY . .
+WORKDIR /lib/wyoloservice
+COPY lib .
+RUN pip install -e .
+
+WORKDIR /app/api/
+COPY api/ .
+
+WORKDIR /app/worker/
+COPY worker/ .
+
+
+WORKDIR /app/
+COPY config.yaml .
 
 # Exponer el puerto de FastAPI
 EXPOSE 8000
@@ -67,4 +78,5 @@ RUN echo "figlet wyoloservice" >> ~/.bashrc
 # Comando por defecto
 # CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # Comando por defecto
+WORKDIR /app/
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

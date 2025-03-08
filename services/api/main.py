@@ -1,10 +1,9 @@
-import json
 import os
 import shutil
 import uuid
 
 import yaml
-from api.database import TrainingHistory, db
+from train_yolo import TrainingHistory, db
 from api.minio import download_model, list_models
 from fastapi import FastAPI, File, UploadFile
 from wredis.queue import RedisQueueManager
