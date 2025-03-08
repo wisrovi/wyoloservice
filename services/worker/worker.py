@@ -1,12 +1,10 @@
 import json
 import multiprocessing
-import queue
 import sys
 import traceback
 
 import hydra
 import mlflow
-from api.redis_queue import TOPIC, queue_manager
 from logbook import FileHandler, Logger
 from loguru import logger
 from omegaconf import OmegaConf
@@ -17,9 +15,9 @@ from worker_utils import (
     results_up_to_minio,
     start_train_scheduller_controller,
 )
-from wpipe.pipe import Pipeline
-
 from worker_utils.minio import MinioS3Client
+from wpipe.pipe import Pipeline
+from wredis.queue import RedisQueueManager
 
 # Configura el primer logger: solo errores en un archivo
 logger.add("error_log.log", level="ERROR", rotation="10 MB", retention="7 days")
@@ -50,22 +48,6 @@ pipeline.set_steps(
 )
 
 
-@queue_manager.on_message(TOPIC)
-def worker(task_data: dict):
-    try:
-        task_data = json.loads(task_data)
-    except:
-        pass
-
-    try:
-        task_data["to_process_queue"] = to_process_queue
-        task_data["to_thread_queue"] = to_thread_queue
-
-        pipeline.run(task_data)
-    except Exception as e:
-        traceback.print_exc()
-
-
 @hydra.main(config_path="/app", config_name="config", version_base=None)
 def main(cfg: OmegaConf):
     global DEFAULT_CONFIG
@@ -88,6 +70,29 @@ def main(cfg: OmegaConf):
         to_process_queue=to_process_queue,
         to_thread_queue=to_thread_queue,
     )
+
+    redis_config = cfg.get("redis", {})
+
+    queue_manager = RedisQueueManager(
+        host=redis_config.get("REDIS_HOST"),
+        port=redis_config.get("REDIS_PORT"),
+        db=redis_config.get("REDIS_DB"),
+    )
+
+    @queue_manager.on_message(redis_config.get("TOPIC"))
+    def worker(task_data: dict):
+        try:
+            task_data = json.loads(task_data)
+        except:
+            pass
+
+        try:
+            task_data["to_process_queue"] = to_process_queue
+            task_data["to_thread_queue"] = to_thread_queue
+
+            pipeline.run(task_data)
+        except Exception as e:
+            traceback.print_exc()
 
     queue_manager.start()
     queue_manager.wait()
