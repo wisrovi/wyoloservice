@@ -1,60 +1,68 @@
 import math
-import queue
+import os
+import tempfile
 
-from ultralytics import YOLO
 import mlflow
-import torch
-import traceback
-
 import optuna
+import yaml
 from loguru import logger
-from worker_utils import clean_gpu, load_train_config, train_yolo
+from train_yolo import train_run
+from ultralytics import YOLO
+from tqdm import tqdm
 
-
-TRADITIONAL_METHOD_TO_USE = False
+from worker_utils import clean_gpu, load_train_config
 
 
 def process_train_with_optuna(request_config_user: dict):
     sweeper_config = request_config_user.get("sweeper", {})
-    to_process_queue = request_config_user["to_process_queue"]
-    to_thread_queue = request_config_user["to_thread_queue"]
 
-    @clean_gpu
-    @load_train_config(config_path=request_config_user.get("config_path"))
-    def objective(trial, config=None):
+    with tqdm(
+        total=sweeper_config.get("n_trials", 10),
+        desc="Buscando mejores hiperparametros",
+        dynamic_ncols=True,
+    ) as barra_progreso:
 
-        if TRADITIONAL_METHOD_TO_USE:
-            # metodo tradicional
-            response = train_yolo(config, trial_number=trial.number)
-        else:
-            # metodo usando colas, esto se usa puesto que inicialmente la funcion "process_train_with_optuna"
-            # ha sido invocado desde un hilo (por el hilo de recepcion de datos de redis_queue)
-            # y dado que "train_yolo" crea hilos y procesos de entrenamiento de YOLO (ultralytics)
-            # algunas veces se rompe, debido a que en un hilo no es correcto crear mas hilos o procesos porque puede y de hecho falla
-            # por ello el entrenamiento sucede cuando se pone algo en la cola "to_process_queue", que se ejecuta en un proceso paralelo del hilo principal
-            # este ejecuta el entrenamiento y pone los resultados del mismo en "to_thread_queue"
-            # los cuales son esperados y capturados por "objective" de "process_train_with_optuna" para continuar con el proceso de optuna
+        @clean_gpu
+        @load_train_config(config_path=request_config_user.get("config_path"))
+        def objective(trial, config=None):
+            barra_progreso.update(1)  # Actualiza la barra de progreso en 1 unidad
 
-            # ejecutar el entrenamiento en un proceso independiente
-            to_process_queue.put((config, trial.number))
+            barra_progreso.write(f"Impresión {trial.number}")  # Usamos write para imprimir
 
-            # Espera la respuesta del entrenamiento
-            response = to_thread_queue.get()
+            try:
+                # crear una carpeta temporal
+                with tempfile.TemporaryDirectory() as temp_dir:
+                    ruta_archivo = os.path.join(temp_dir, "config.yaml")
+                    with open(ruta_archivo, "w") as archivo_yaml:
+                        yaml.dump(config, archivo_yaml)
 
-        # procesar los resultados del entrenamiento
-        if not isinstance(response, dict) and math.isnan(response):
-            raise optuna.TrialPruned("Rendimiento insuficiente.")
+                    metric = train_run(
+                        config_path=ruta_archivo,
+                        trial_number=int(trial.number),
+                        verbose=False,
+                        fitness=config.get("sweeper", {}).get("fitness", "fitness"),
+                    )
 
-        metric = response.get("metric", float("nan"))
+                    if (
+                        metric is None
+                        or not isinstance(metric, float)
+                        or math.isnan(metric)
+                    ):
+                        raise optuna.TrialPruned("Rendimiento insuficiente.")
 
-        return metric
+                return metric
+            except Exception as e:
+                logger.error(f"Error en la ejecución del objetivo: {e}")
+                raise optuna.TrialPruned("Error en la ejecución del objetivo.")
 
-    study = optuna.create_study(
-        direction=sweeper_config.get("direction", "minimize"),
-        study_name=sweeper_config.get("study_name", "default_study"),
-        sampler=getattr(optuna.samplers, sweeper_config.get("sampler", "TPESampler"))(),
-    )
-    study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
+        study = optuna.create_study(
+            direction=sweeper_config.get("direction", "minimize"),
+            study_name=sweeper_config.get("study_name", "default_study"),
+            sampler=getattr(
+                optuna.samplers, sweeper_config.get("sampler", "TPESampler")
+            )(),
+        )
+        study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
 
     try:
         best_trial = study.best_trial
@@ -62,16 +70,15 @@ def process_train_with_optuna(request_config_user: dict):
         result_path = f'/models/{sweeper_config.get("study_name", "default_study")}/{request_config_user["type"]}/{request_config_user["task_id"]}'
         best_model_path = f"{result_path}/trail_history/trial_{best_trial.number}.pt"
 
-        # try:
-        #     model = YOLO(best_model_path)
-        #     mlflow.pytorch.log_model(model, "model")
-        #     # Convert to ONNX first
-        #     model.export(format='onnx', path='model.onnx')
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                ruta_archivo = os.path.join(temp_dir, "model.onnx")
+                model = YOLO(best_model_path)
+                model.export(format="onnx", path=ruta_archivo)
 
-        #     # Then log the ONNX model to MLflow
-        #     mlflow.log_artifact('model.onnx', artifact_path="models")
-        # except:
-        #     logger.error("Can't upload model to mlflow")
+                mlflow.log_artifact(ruta_archivo, artifact_path="models")
+        except:
+            logger.error("Can't upload model to mlflow")
 
         return {
             "train": {

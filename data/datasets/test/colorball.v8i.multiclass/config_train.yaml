@@ -1,9 +1,10 @@
 model: "yolov8n-cls.pt"
 type: "yolo"
+dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
   batch: 4
   data: /datasets/clasificacion/colorball.v8i.multiclass/
-  epochs: 1
+  epochs: 10
   imgsz: 640
 # val:
 #   conf: 0.01
@@ -16,7 +17,8 @@ sweeper:
   study_name: "color_ball_v2"
   storage: null
   sampler: "TPESampler"
-  n_trials: 1
+  fitness: "metrics/accuracy_top1"
+  n_trials: 5
   search_space:
     model: [ "choice", "yolov8n-cls.pt" ]
     train:

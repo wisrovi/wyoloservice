@@ -1,0 +1,31 @@
+mlflow:
+  MLFLOW_TRACKING_URI: http://mlflow:5000
+minio:
+  MINIO_ENDPOINT: http://mlflow-minio:9000
+  MINIO_ID: mlflow
+  MINIO_SECRET_KEY: wyoloservice
+  MINIO_BUCKET: models
+dvc:
+  MINIO_ENDPOINT: http://dvc-minio:9000
+  MINIO_ID: dvc
+  MINIO_SECRET_KEY: wyoloservice
+redis:
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
+  REDIS_DB: 0
+  REDIS_PASSWORD: ''
+  TOPIC: training_queue
+default:
+  timeout: 60
+  max_retries: 3
+  retry_delay: 1
+  threshold: 0.35
+  override hydra/sweeper: optuna
+model: yolov8n.pt
+train:
+  batch: -1
+  epochs: 1
+sweeper:
+  max_t: 100
+  grace_period: 5
+  max_concurrent: 1

@@ -125,7 +125,7 @@ services:
       # db
       - MLFLOW_BACKEND_STORE_URI=postgresql+psycopg2://postgres:postgres@postgres:5432/wyoloservice # Conexión a PostgreSQL
       # minio
-      - MLFLOW_S3_ENDPOINT_URL=http://minio:9000 # URL del servidor MinIO
+      - MLFLOW_S3_ENDPOINT_URL=http://mlflow-minio:9000 # URL del servidor MinIO
       - AWS_ACCESS_KEY_ID=minio # Credenciales de MinIO
       - AWS_SECRET_ACCESS_KEY=minio123 # Credenciales de MinIO
       #mlflow

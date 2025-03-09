@@ -1,5 +1,4 @@
 import json
-import multiprocessing
 import sys
 import traceback
 
@@ -8,16 +7,16 @@ import mlflow
 from logbook import FileHandler, Logger
 from loguru import logger
 from omegaconf import OmegaConf
+from wpipe.pipe import Pipeline
+from wredis.queue import RedisQueueManager
+
 from worker_utils import (
     DEFAULT_CONFIG,
     process_train_with_optuna,
     read_user_config,
     results_up_to_minio,
-    start_train_scheduller_controller,
 )
 from worker_utils.minio import MinioS3Client
-from wpipe.pipe import Pipeline
-from wredis.queue import RedisQueueManager
 
 # Configura el primer logger: solo errores en un archivo
 logger.add("error_log.log", level="ERROR", rotation="10 MB", retention="7 days")
@@ -32,10 +31,6 @@ logger.add(
 # Configura el tercer logger: todos los niveles en un archivo separado (completamente independiente)
 FileHandler("full_log.log").push_application()
 custom_logger = Logger("wyoloservice")
-
-
-to_process_queue = multiprocessing.Queue()
-to_thread_queue = multiprocessing.Queue()
 
 
 pipeline = Pipeline()
@@ -66,11 +61,6 @@ def main(cfg: OmegaConf):
         aws_secret_access_key=cfg.get("minio", {}).get("MINIO_SECRET_KEY"),
     )
 
-    scheduler_process = start_train_scheduller_controller(
-        to_process_queue=to_process_queue,
-        to_thread_queue=to_thread_queue,
-    )
-
     redis_config = cfg.get("redis", {})
 
     queue_manager = RedisQueueManager(
@@ -87,16 +77,12 @@ def main(cfg: OmegaConf):
             pass
 
         try:
-            task_data["to_process_queue"] = to_process_queue
-            task_data["to_thread_queue"] = to_thread_queue
-
             pipeline.run(task_data)
         except Exception as e:
             traceback.print_exc()
 
     queue_manager.start()
     queue_manager.wait()
-    scheduler_process.join()
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ from omegaconf import DictConfig
 from tqdm import tqdm
 
 from loguru import logger
-from api.database import TrainingHistory, db
+from train_yolo import TrainingHistory, db
 
 
 class MinioS3Client:
