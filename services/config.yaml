@@ -18,6 +18,7 @@ redis:
   REDIS_DB: 0
   REDIS_PASSWORD: ""
   TOPIC: training_queue
+  RESULT_TOPIC: results_queue
 
 default:
   timeout: 60
@@ -39,3 +40,9 @@ sweeper:
   grace_period: 5
   max_concurrent: 1
   
+
+hydra:
+  run:
+    dir: /var/log/worker/hydra/individual
+  sweep:
+    dir: /var/log/worker/hydra/group

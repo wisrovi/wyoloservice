@@ -2,7 +2,9 @@ version: "3.8"
 
 # Define reusable GPU resource constraints
 x-resources: &resources_gpu
-  shm_size: "64g"
+  # la shm_size es calculada de acuerdo al 80% de la memoria RAM como maximo
+  # es importante que el ordenador a entrenar tenga al menos lo mismo de swap que de RAM
+  shm_size: "24g"  
   logging:
     driver: "json-file"
     options:
@@ -13,13 +15,12 @@ x-resources: &resources_gpu
     - NVIDIA_DRIVER_CAPABILITIES=compute,utility
   deploy:
     resources:
-      # limits:
-      #   cpus: "6.0"
-      #   memory: 16384M
-      # memory_swap: 16384M
+      limits:
+        cpus: "6.0"
+        memory: 24g
       reservations:
-        cpus: "1.0"
-        memory: 2048M
+        # cpus: "1.0"
+        # memory: 2048M
         # memory_swap: 500M
         devices:
           - driver: nvidia
@@ -70,8 +71,8 @@ services:
     working_dir: /app/worker
     networks:
       - nfs_network
-    command: tail -f /dev/null
-    # command: python worker.py
+    # command: tail -f /dev/null
+    command: python worker.py
     # restart: always
 
 networks:

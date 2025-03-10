@@ -1,4 +1,3 @@
-import json
 import sys
 import traceback
 
@@ -10,16 +9,14 @@ from omegaconf import OmegaConf
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
 
-from worker_utils import (
-    DEFAULT_CONFIG,
-    process_train_with_optuna,
-    read_user_config,
-    results_up_to_minio,
-)
+from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
+
 from worker_utils.minio import MinioS3Client
 
 # Configura el primer logger: solo errores en un archivo
-logger.add("error_log.log", level="ERROR", rotation="10 MB", retention="7 days")
+logger.add(
+    "/var/log/worker/error_log.log", level="ERROR", rotation="10 MB", retention="7 days"
+)
 
 # Configura el segundo logger: mensajes normales en la consola
 logger.add(
@@ -28,8 +25,9 @@ logger.add(
     format="<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>",
 )
 
+
 # Configura el tercer logger: todos los niveles en un archivo separado (completamente independiente)
-FileHandler("full_log.log").push_application()
+FileHandler("/var/log/worker/full_log.log").push_application()
 custom_logger = Logger("wyoloservice")
 
 
@@ -37,7 +35,7 @@ pipeline = Pipeline()
 pipeline.set_steps(
     [
         (read_user_config, "read_config", "v1.0"),
-        (process_train_with_optuna, "model_train", "v1.0"),
+        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),
         (results_up_to_minio, "result_to_minio", "v1.0"),
     ]
 )
@@ -69,17 +67,31 @@ def main(cfg: OmegaConf):
         db=redis_config.get("REDIS_DB"),
     )
 
+    results_queue = redis_config.get("RESULT_TOPIC")
+
     @queue_manager.on_message(redis_config.get("TOPIC"))
     def worker(task_data: dict):
         try:
-            task_data = json.loads(task_data)
-        except:
-            pass
-
-        try:
-            pipeline.run(task_data)
+            results = pipeline.run(task_data)
         except Exception as e:
             traceback.print_exc()
+            return
+
+        try:
+            queue_manager.publish(
+                queue_name=results_queue,
+                data={
+                    "task_id": results["task_id"],
+                    "user_code": results["user_code"],
+                    "fitness": results["sweeper"]["fitness"],
+                    "minio_url": results.get("minio_url", None),
+                    "imgsz": results["train"]["imgsz"],
+                    "optimized_params": results["train"]["best_trial"].params,
+                    "optimizer": results["sweeper"]["algorithm"],
+                },
+            )
+        except Exception as e:
+            logger.error("Can't report results")
 
     queue_manager.start()
     queue_manager.wait()

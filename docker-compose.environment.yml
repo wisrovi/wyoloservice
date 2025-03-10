@@ -94,7 +94,7 @@ services:
       - MINIO_ROOT_USER=mlflow
       - MINIO_ROOT_PASSWORD=wyoloservice
     ports:
-      # - "7449:9000" # Puerto para el servicio S3
+      - "7449:9000" # Puerto para el servicio S3
       - "7450:9001" # Puerto para el panel de administración
     volumes:
       - ./tmp/mlflow_minio:/data
@@ -126,8 +126,8 @@ services:
       - MLFLOW_BACKEND_STORE_URI=postgresql+psycopg2://postgres:postgres@postgres:5432/wyoloservice # Conexión a PostgreSQL
       # minio
       - MLFLOW_S3_ENDPOINT_URL=http://mlflow-minio:9000 # URL del servidor MinIO
-      - AWS_ACCESS_KEY_ID=minio # Credenciales de MinIO
-      - AWS_SECRET_ACCESS_KEY=minio123 # Credenciales de MinIO
+      - AWS_ACCESS_KEY_ID=mlflow # Credenciales de MinIO
+      - AWS_SECRET_ACCESS_KEY=wyoloservice # Credenciales de MinIO
       #mlflow
       - MLFLOW_TRACKING_URI=http://mlflow:5000 # URI de seguimiento de MLflow
       - MLFLOW_ARTIFACT_URI=s3://mlflow-artifacts/ # Bucket en MinIO donde se almacenarán los artefactos

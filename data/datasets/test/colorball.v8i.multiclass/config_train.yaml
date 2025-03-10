@@ -4,7 +4,7 @@ dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
   batch: 4
   data: /datasets/clasificacion/colorball.v8i.multiclass/
-  epochs: 10
+  epochs: 1
   imgsz: 640
 # val:
 #   conf: 0.01
@@ -18,12 +18,12 @@ sweeper:
   storage: null
   sampler: "TPESampler"
   fitness: "metrics/accuracy_top1"
-  n_trials: 5
+  n_trials: 2
   search_space:
-    model: [ "choice", "yolov8n-cls.pt" ]
+    model: ["choice", "yolov8n-cls.pt"]
     train:
-      imgsz: [ "choice", 416 ]
-      lr0: [ "loguniform", 1e-5, 1e-2 ]
+      imgsz: ["choice", 416]
+      lr0: ["loguniform", 1e-5, 1e-2]
 extras:
   gpu:
     id: 0

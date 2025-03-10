@@ -14,6 +14,9 @@ start_env:
 stop_env:
 	docker-compose -f docker-compose.environment.yml down
 
+build_env:
+	docker-compose -f docker-compose.environment.yml build
+
 
 # ---------------------------------------------- SERVICES ----------------------------------------------
 
@@ -27,3 +30,7 @@ stop_services:
 
 build_services:
 	docker-compose -f docker-compose.services.yml build
+
+into_worker:
+	docker-compose -f docker-compose.services.yml exec  worker bash
+

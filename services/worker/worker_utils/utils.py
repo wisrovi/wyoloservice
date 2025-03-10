@@ -1,7 +1,23 @@
-from loguru import logger
-import json
+import shutil
 
-import yaml
+
+def copiar_archivo(ruta_origen, ruta_destino):
+    """
+    Copia un archivo de una ruta a otra.
+
+    Args:
+        ruta_origen (str): La ruta del archivo de origen.
+        ruta_destino (str): La ruta del archivo de destino.
+    """
+    try:
+        shutil.copy2(ruta_origen, ruta_destino)
+        print(f"Archivo copiado de '{ruta_origen}' a '{ruta_destino}'")
+    except FileNotFoundError:
+        print(f"Error: El archivo '{ruta_origen}' no existe.")
+    except PermissionError:
+        print(f"Error: No tienes permisos para copiar el archivo a '{ruta_destino}'.")
+    except Exception as e:
+        print(f"Ocurrió un error inesperado: {e}")
 
 
 # Función para actualizar y completar final_config
@@ -38,48 +54,3 @@ def merge_configs(default_config, user_config):
     return final_config
 
 
-DEFAULT_CONFIG = {}
-
-
-def read_user_config(task_data: dict):
-    try:
-        task_data = json.loads(task_data)
-    except:
-        pass
-
-    logger.debug(f"📥 Nueva tarea recibida: {task_data}")
-    if "task_id" not in task_data or "config_path" not in task_data:
-        logger.error(
-            f"⚠️ La tarea recibida no tiene la estructura esperada: {task_data}"
-        )
-        return
-
-    config_path = task_data["config_path"]
-
-    # Leer el archivo YAML del usuario
-    config_path = task_data["config_path"]
-    try:
-        with open(config_path, "r") as f:
-            user_config = yaml.safe_load(f)  # Convertir YAML a dict
-
-            # 🚨 Eliminar `defaults` si existe
-            user_config.pop("defaults", None)
-
-            # 🚨 Fusionar con la configuración base
-            final_config = DEFAULT_CONFIG.copy()
-
-            # actualizar final_config y añadir los campos que le faltan de DEFAULT_CONFIG
-            final_config = merge_configs(DEFAULT_CONFIG, user_config)
-
-            final_config["config_path"] = config_path
-            final_config["task_id"] = task_data["task_id"]
-    except Exception as e:
-        logger.error(f"❌ Error al cargar YAML ({config_path}): {e}")
-
-    try:
-        with open(config_path, "w") as archivo:
-            yaml.dump(final_config, archivo, default_flow_style=False)
-    except Exception as e:
-        pass
-
-    return final_config
