@@ -1,0 +1,36 @@
+model: "yolov8n-cls.pt"
+type: "yolo"
+# dvc_data_path: /datasets/clasificacion/colorball.v8i.multiclass.dvc
+train:
+  batch: -1
+  data: /datasets/clasificacion/support_age_gender/
+  epochs: 1000
+  imgsz: 640
+# val:
+#   conf: 0.01
+# test:
+#   conf: 0.01
+sweeper:
+  version: 2
+  algorithm: optuna
+  direction: maximize
+  study_name: "aidiagnost_age_gender"
+  sampler: "TPESampler"
+  fitness: "metrics/accuracy_top1"
+  n_trials: 25
+  search_space:
+    model: ["choice", "yolov8n-cls.pt", "yolov8s-cls.pt", "yolov8m-cls.pt"]
+    train:
+      imgsz: ["choice", 416, 640, 720]
+      lr0: ["loguniform", 1e-5, 1e-2]
+      momentum: ["range", 0.85, 0.98, 0.01]
+      freeze: ["range", 1, 5, 1]
+      optimizer: ["choice", SGD, Adam, AdamW, NAdam, RMSProp]
+extras:
+  gpu:
+    id: 0
+    limit: 0.60
+metadata:
+  content: "Este es un experimento de clasificación de imágenes para el proyecto AIDIAGNOST para buscar reconocer un rango de edad en una imagen donde aparezca una persona viendo su rostro"
+  author: "William Steve Rodriguez Villamizar"
+  documentation: "Este modelo fue entrenado con datos de marzo 2025."

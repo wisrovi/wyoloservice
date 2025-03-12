@@ -27,48 +27,33 @@ x-resources: &resources_gpu
             capabilities: [gpu]
 
 services:
-  samba:
-    image: dperson/samba
+  # api
+  api_user:
+    build:
+      context: ./services
+      dockerfile: Dockerfile
     ports:
-      # - "137:137/udp"  # NetBIOS Name Service
-      # - "138:138/udp"  # NetBIOS Datagram Service
-      # - "139:139/tcp"  # NetBIOS Session Service
-      - "7445:445/tcp" # SMB over TCP
-    restart: always
-    volumes:
-      # - ./samba/config:/etc/samba  # Archivos de configuración de Samba
-      - ./data/datasets:/data # Carpeta compartida
+      - "23450:8000"
+    # restart: always
     environment:
-      - TZ=Europe/Madrid # Zona horaria
-      - USERID=1000 # ID de usuario (personaliza según tu sistema)
-      - GROUPID=1000 # ID de grupo (personaliza según tu sistema)
-      - SAMBA_USERS=wisrovi;wyoloservice
-    command: >
-      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=wyoloservice
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    volumes:
+      - /media/training/Train_service_an/config_versions:/config_versions
+      - /media/training/Train_service_an/api_database:/database
+      - /media/training/Train_service_an/logs:/var/log/api
     networks:
       - nfs_network
 
-  nfs:
-    # image: erichough/nfs-server
-    image: itsthenetwork/nfs-server-alpine:12
-    environment:
-      # - NFS_EXPORT_0=/datasets 192.168.1.0/24(rw,sync,no_subtree_check,no_root_squash) # Exporta a tu red local
-      - SHARED_DIRECTORY=/datasets
-    volumes:
-      - ./data/datasets:/datasets # Asegúrate de que esta ruta sea correcta
-    privileged: true
-    restart: always
-    ports:
-      - 7446:2049
-    networks:
-      nfs_network:
-          ipv4_address: 28.10.4.10 # IP interna del contenedor (no se usa para acceso externo)
-
+  # environment
   redis:
     image: redis:latest
     restart: always
-    # ports:
-    #   - "7447:6379"
+    ports:
+      - "23438:6379"
     networks:
       - nfs_network
 
@@ -76,43 +61,13 @@ services:
     image: rediscommander/redis-commander:latest
     environment:
       - REDIS_HOSTS=local:redis:6379
-      - HTTP_USER=root
-      - HTTP_PASSWORD=qwerty
+      - HTTP_USER=redis
+      - HTTP_PASSWORD=wyoloservice
     restart: always
     ports:
-      - "7448:8081"
+      - "23439:8081"
     depends_on:
       - redis
-    networks:
-      - nfs_network
-
-  mlflow-minio:
-    image: minio/minio
-    command: server /data --console-address ":9001"
-    restart: always
-    environment:
-      - MINIO_ROOT_USER=mlflow
-      - MINIO_ROOT_PASSWORD=wyoloservice
-    ports:
-      - "7449:9000" # Puerto para el servicio S3
-      - "7450:9001" # Puerto para el panel de administración
-    volumes:
-      - ./tmp/mlflow_minio:/data
-    networks:
-      - nfs_network
-
-  dvc-minio:
-    image: minio/minio
-    command: server /data --console-address ":9001"
-    restart: always
-    environment:
-      - MINIO_ROOT_USER=dvc
-      - MINIO_ROOT_PASSWORD=wyoloservice
-    ports:
-      - "7451:9000" # Puerto para el servicio S3
-      - "7452:9001" # Puerto para el panel de administración
-    volumes:
-      - ./data/dvc:/data
     networks:
       - nfs_network
 
@@ -145,7 +100,7 @@ services:
         "s3://mlflow-artifacts/",
       ]
     ports:
-      - "7453:5000"
+      - "23435:5000"
     networks:
       - nfs_network
 
@@ -156,19 +111,18 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=wyoloservice
     volumes:
-      - ./tmp/db:/var/lib/postgresql/data
-    # ports:
-    #   - "7454:5432"
+      - /media/training/Train_service_an/postgres:/var/lib/postgresql/data
+    ports:
+      - "23436:5432"
     restart: always
     networks:
       - nfs_network
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin4_container
     restart: always
     ports:
-      - "7455:80"
+      - "23437:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: wisrovi.rodriguez@gmail.com
       PGADMIN_DEFAULT_PASSWORD: 12345678
@@ -177,19 +131,22 @@ services:
     networks:
       - nfs_network
 
+    # General:
+    #     name: postgres
+    # conection:
+    #     host name/address: postgres
+    #     port: 5432
+    #     username: postgres
+    #     password: postgres
+
+
 networks:
   nfs_network:
     external: true
 
 volumes:
   pgadmin-data:
-  dataset_nfs:
-    driver: local
-    driver_opts:
-      type: "nfs"
-      # o: "addr=28.10.4.10,rw,nolock,soft,timeo=30,retrans=3"
-      o: "addr=28.10.4.10,rw,nfsvers=4,async"
-      device: ":/datasets"
+
 # Para crear la red y el servidor NFS
 # docker network create --subnet=28.10.4.0/24 --gateway=28.10.4.1 --driver=bridge nfs_network
 

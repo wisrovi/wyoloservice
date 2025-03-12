@@ -55,82 +55,107 @@ class OptunaOptimize:
         )
         os.makedirs(f"{result_path}/trail_history/", exist_ok=True)
 
-        with tqdm(
-            total=sweeper_config.get("n_trials", 10),
-            desc="Searching for best hyperparameters",
-            dynamic_ncols=True,
-        ) as progress_bar:
+        progress_rich = request_config_user.get("progress_rich", None)
 
-            @OptunaOptimize.clean_gpu
-            @OptunaOptimize.load_train_config(
-                config_path=request_config_user.get("config_path")
-            )
-            def objective(trial, config=None):
-                """Objective function for hyperparameter optimization.
+        def progress_bar_generator():
+            if progress_rich is None:
+                with tqdm(
+                    total=sweeper_config.get("n_trials", 10),
+                    desc="Searching for best hyperparameters",
+                    dynamic_ncols=True,
+                ) as progress_bar:
+                    for _ in range(sweeper_config.get("n_trials", 10)):                        
+                        progress_bar.update(1)
+                        yield progress_bar, None
+            else:
+                task = progress_rich.add_task(
+                    f"[cyan]Searching for best hyperparameters",
+                    total=sweeper_config.get("n_trials", 10),
+                )
+                for _ in range(sweeper_config.get("n_trials", 10)):
+                    progress_rich.update(task, advance=1)
+                    yield progress_rich, task
 
-                Loads the training configuration, applies hyperparameter suggestions, and executes the training run.
+        @OptunaOptimize.clean_gpu
+        @OptunaOptimize.load_train_config(
+            config_path=request_config_user.get("config_path")
+        )
+        def objective(trial, config=None):
+            """Objective function for hyperparameter optimization.
 
-                Args:
-                    trial: An Optuna trial object.
-                    config (dict, optional): The training configuration loaded from the YAML file.
+            Loads the training configuration, applies hyperparameter suggestions, and executes the training run.
 
-                Returns:
-                    float: The performance metric produced by the training run.
+            Args:
+                trial: An Optuna trial object.
+                config (dict, optional): The training configuration loaded from the YAML file.
 
-                Raises:
-                    optuna.TrialPruned: If the training metric is invalid or an error occurs.
-                """
-                progress_bar.update(1)
-                progress_bar.write(f"Trial {trial.number}")
+            Returns:
+                float: The performance metric produced by the training run.
 
-                try:
-                    # Create a temporary directory to store a temporary config file
-                    with tempfile.TemporaryDirectory() as temp_dir:
-                        temp_config_path = os.path.join(temp_dir, "config.yaml")
-                        with open(temp_config_path, "w") as yaml_file:
-                            yaml.dump(config, yaml_file)
+            Raises:
+                optuna.TrialPruned: If the training metric is invalid or an error occurs.
+            """
 
-                        metric = train_run(
-                            config_path=temp_config_path,
-                            trial_number=int(trial.number),
-                            verbose=False,
-                            fitness=config.get("sweeper", {}).get("fitness", "fitness"),
+            progress_bar, task = next(progress_bar_generator())
+
+            if task:
+                progress_bar.update(
+                    task,
+                    description=f"[cyan]Trial {trial.number}",
+                )
+            else:
+                progress_bar.write(f"[cyan]Trial {trial.number}")
+
+            try:
+                # Create a temporary directory to store a temporary config file
+                with tempfile.TemporaryDirectory() as temp_dir:
+                    temp_config_path = os.path.join(temp_dir, "config.yaml")
+                    with open(temp_config_path, "w") as yaml_file:
+                        yaml.dump(config, yaml_file)
+
+                    metric = train_run(
+                        config_path=temp_config_path,
+                        trial_number=int(trial.number),
+                        verbose=False,
+                        fitness=config.get("sweeper", {}).get("fitness", "fitness"),
+                    )
+
+                    best_model = f"{result_path}/{int(trial.number)}/train_{config['task_id']}/weights/best.pt"
+                    if os.path.exists(best_model):
+                        OptunaOptimize.copy_file(
+                            origin_path=best_model,
+                            destiny_path=f"{result_path}/trail_history/trial_{int(trial.number)}.pt",
                         )
 
-                        best_model = f"{result_path}/{int(trial.number)}/train_{config['task_id']}/weights/best.pt"
-                        if os.path.exists(best_model):
-                            OptunaOptimize.copy_file(
-                                origin_path=best_model,
-                                destiny_path=f"{result_path}/trail_history/trial_{int(trial.number)}.pt",
-                            )
+                    if (
+                        metric is None
+                        or not isinstance(metric, float)
+                        or math.isnan(metric)
+                    ):
+                        raise optuna.TrialPruned("Insufficient performance.")
 
-                        if (
-                            metric is None
-                            or not isinstance(metric, float)
-                            or math.isnan(metric)
-                        ):
-                            raise optuna.TrialPruned("Insufficient performance.")
+                return metric
+            except Exception as e:
+                logger.error(f"Error executing objective: {e}")
+                raise optuna.TrialPruned("Error executing objective.")
 
-                    return metric
-                except Exception as e:
-                    logger.error(f"Error executing objective: {e}")
-                    raise optuna.TrialPruned("Error executing objective.")
-
-            study = optuna.create_study(
-                direction=sweeper_config.get("direction", "minimize"),
-                study_name=sweeper_config.get("study_name", "default_study"),
-                sampler=getattr(
-                    optuna.samplers, sweeper_config.get("sampler", "TPESampler")
-                )(),
-            )
-            study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
+        study = optuna.create_study(
+            direction=sweeper_config.get("direction", "minimize"),
+            study_name=sweeper_config.get("study_name", "default_study"),
+            sampler=getattr(
+                optuna.samplers, sweeper_config.get("sampler", "TPESampler")
+            )(),
+        )
+        study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
 
         try:
             best_trial = study.best_trial
             best_params = study.best_params
-            return best_trial, best_params, result_path
+            best_metric = best_trial.value  # Obtener la mejor métrica
+
+            return best_trial, best_params, best_metric, result_path
         except Exception:
-            return None, None, None
+            return None, None, None, None
 
     def onnx_convert(self, best_model_path: str, imgsz: int):
         """Convert a PyTorch model to ONNX format.
@@ -144,7 +169,7 @@ class OptunaOptimize:
         Returns:
             str: Path to the converted ONNX model, or None if conversion fails.
         """
-        
+
         model_task = None
         try:
             onnx_path = best_model_path.replace("pt", "onnx")
@@ -183,11 +208,17 @@ class OptunaOptimize:
                 - onnx_path: Path to the converted ONNX model.
             Returns an empty dictionary if the training process fails.
         """
-        best_trial, best_params, result_path = self.search_best_model(
+        
+        tempfile = request_config_user["tempfile"]
+        config_path = f"{tempfile}/{request_config_user['task_id']}.yaml"
+        
+        request_config_user["config_path"] = config_path
+
+        best_trial, best_params, best_metric, result_path = self.search_best_model(
             request_config_user
         )
 
-        if best_trial and best_params:
+        if best_trial and best_params and best_metric:
             best_model_path = (
                 f"{result_path}/trail_history/trial_{best_trial.number}.pt"
             )
@@ -199,10 +230,11 @@ class OptunaOptimize:
                 "train": {
                     "best_trial": best_trial,
                     "best_model_path": best_model_path,
+                    "best_metric": best_metric,
                     "result_path": result_path,
                     "imgsz": int(best_params["imgsz"]),
                     "onnx_path": model_converted,
-                    "model_task": model_task
+                    "model_task": model_task,
                 }
             }
         else:

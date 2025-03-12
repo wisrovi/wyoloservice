@@ -182,7 +182,7 @@ def save_best_model(
                 bucket_name=f"better-{MinioS3Client.BUCKET_NAME}",
                 name_file_s3=f"{project_name}-v{version}.pt",
             )
-            
+
             # TODO: subir el ONNXa better-models
             # s3.upload_file(
             #     file_path_local=f"{temp_dir}/{project_name}-v{version}.txt",
@@ -217,7 +217,7 @@ def save_best_model(
 
     logger.info(f"✅ Modelo recomendado guardado en MinIO: {minio_url}")
 
-    return {"minio_url":minio_url}
+    return {"minio_url": minio_url}
 
 
 def results_up_to_minio(task_data: dict):

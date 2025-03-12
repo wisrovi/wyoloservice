@@ -7,6 +7,18 @@ create_network:
 
 
 
+# ---------------------------------------------- FILES ----------------------------------------------
+start_files:
+	docker-compose -f docker-compose.files.yml --compatibility up -d --build --force-recreate --no-deps
+
+stop_files:
+	docker-compose -f docker-compose.files.yml down
+
+build_files:
+	docker-compose -f docker-compose.files.yml build
+
+
+
 # ---------------------------------------------- ENVIRONMENT ----------------------------------------------
 start_env:
 	docker-compose -f docker-compose.environment.yml --compatibility up -d --build --force-recreate --no-deps
@@ -33,4 +45,7 @@ build_services:
 
 into_worker:
 	docker-compose -f docker-compose.services.yml exec  worker bash
+
+logs_worker:
+	docker-compose -f docker-compose.services.yml logs -f  worker
 

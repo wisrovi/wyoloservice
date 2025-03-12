@@ -1,0 +1,60 @@
+{
+  "task_id": "8be4af973db645c4957291e3bcb53717",
+  "config_path": "/config_versions/8be4af973db645c4957291e3bcb53717.yaml",
+  "user_code": "color_ball",
+  "mlflow": { "MLFLOW_TRACKING_URI": "http://mlflow:5000" },
+  "minio": {
+    "MINIO_ENDPOINT": "http://mlflow-minio:9000",
+    "MINIO_ID": "mlflow",
+    "MINIO_SECRET_KEY": "wyoloservice",
+    "MINIO_BUCKET": "models"
+  },
+  "dvc": {
+    "MINIO_ENDPOINT": "http://dvc-minio:9000",
+    "MINIO_ID": "dvc",
+    "MINIO_SECRET_KEY": "wyoloservice"
+  },
+  "redis": {
+    "REDIS_HOST": "redis",
+    "REDIS_PORT": 6379,
+    "REDIS_DB": 0,
+    "REDIS_PASSWORD": "",
+    "TOPIC": "training_queue",
+    "RESULT_TOPIC": "results_queue"
+  },
+  "default": {
+    "timeout": 60,
+    "max_retries": 3,
+    "retry_delay": 1,
+    "threshold": 0.35,
+    "override hydra/sweeper": "optuna"
+  },
+  "model": "yolov8n-cls.pt",
+  "train": {
+    "best_trial": 5,
+    "best_model_path": "/models/color_ball_v2/yolo/8be4af973db645c4957291e3bcb53717/trail_history/trial_0.pt",
+    "result_path": "/models/color_ball_v2/yolo/8be4af973db645c4957291e3bcb53717",
+    "imgsz": 416,
+    "onnx_path": "/models/color_ball_v2/yolo/8be4af973db645c4957291e3bcb53717/trail_history/trial_0.onnx"
+  },
+  "sweeper": {
+    "max_t": 100,
+    "grace_period": 5,
+    "max_concurrent": 1,
+    "version": 1,
+    "algorithm": "optuna",
+    "direction": "maximize",
+    "study_name": "color_ball_v2",
+    "storage": null,
+    "sampler": "TPESampler",
+    "fitness": "metrics/accuracy_top1",
+    "n_trials": 5
+  },
+  "type": "yolo",
+  "dvc_data_path": "/datasets/clasificacion//colorball.v8i.multiclass.dvc",
+  "metadata": {
+    "content": "Este es un experimento de clasificación de imágenes.",
+    "author": "William Rodriguez",
+    "documentation": "Este modelo fue entrenado con datos del 2025."
+  }
+}

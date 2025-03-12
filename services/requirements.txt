@@ -16,7 +16,7 @@ hydra-optuna-sweeper
 optuna
 wsqlite
 wredis
-wpipe
+wpipe==0.1.6
 loguru
 logbook
 python-slugify

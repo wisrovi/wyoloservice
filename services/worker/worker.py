@@ -1,4 +1,5 @@
 import sys
+import tempfile
 import traceback
 
 import hydra
@@ -72,7 +73,9 @@ def main(cfg: OmegaConf):
     @queue_manager.on_message(redis_config.get("TOPIC"))
     def worker(task_data: dict):
         try:
-            results = pipeline.run(task_data)
+            with tempfile.TemporaryDirectory() as temp_dir:
+                task_data["tempfile"] = temp_dir
+                results = pipeline.run(task_data)
         except Exception as e:
             traceback.print_exc()
             return
@@ -86,7 +89,12 @@ def main(cfg: OmegaConf):
                     "fitness": results["sweeper"]["fitness"],
                     "minio_url": results.get("minio_url", None),
                     "imgsz": results["train"]["imgsz"],
-                    "optimized_params": results["train"]["best_trial"].params,
+                    "n_trials": results["sweeper"]["n_trials"],
+                    "optimized_params": {
+                        "params": results["train"]["best_trial"].params,
+                        "best_model_path": results["train"]["best_model_path"],
+                        "metric": results["train"]["best_metric"],
+                    },
                     "optimizer": results["sweeper"]["algorithm"],
                 },
             )

@@ -1,13 +1,13 @@
 mlflow:
-  MLFLOW_TRACKING_URI: http://192.168.1.60:23435
+  MLFLOW_TRACKING_URI: http://mlflow:5000
 minio:
-  MINIO_ENDPOINT: http://192.168.1.60:23444
+  MINIO_ENDPOINT: http://mlflow-minio:9000
   MINIO_ID: mlflow
   MINIO_SECRET_KEY: wyoloservice
   MINIO_BUCKET: models
 redis:
-  REDIS_HOST: 192.168.1.60
-  REDIS_PORT: 23438
+  REDIS_HOST: redis
+  REDIS_PORT: 6379
   REDIS_DB: 0
   REDIS_PASSWORD: ""
   TOPIC: training_queue

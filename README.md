@@ -5,6 +5,176 @@
 
 es importante que el ordenador a entrenar tenga al menos lo mismo de swap que de RAM
 
+### aumentar swap
+
+
+- Verifica si ya tienes swap:
+
+    Abre una terminal y ejecuta el siguiente comando:
+
+    ```bash
+    sudo swapon --show
+    ```
+    Si ves alguna salida, significa que ya tienes swap configurado.
+
+- Crea el archivo de intercambio:
+
+    Utilizaremos el comando `fallocate` para crear un archivo de 32 GB. Ejecuta:
+
+    ```bash
+    sudo fallocate -l 32G /swapfile
+    ```
+
+        
+
+    Este proceso puede tardar un poco, dependiendo de la velocidad de tu disco duro.
+
+- Establece los permisos correctos:
+
+    Para mayor seguridad, establece los permisos del archivo de intercambio para que solo el usuario root pueda leerlo y escribir en él:
+
+    ```bash
+    sudo chmod 600 /swapfile
+    ```
+
+- Formatea el archivo como swap:
+
+    Utiliza el comando `mkswap` para formatear el archivo como espacio de intercambio:
+
+    ```bash
+    sudo mkswap /swapfile
+    ```
+
+- Activa el swap:
+    
+    Activa el espacio de intercambio con el comando swapon:
+
+    ```bash
+    sudo swapon /swapfile
+    ```
+
+- Haz que el swap sea permanente:
+    
+    Para que el espacio de intercambio se active automáticamente al reiniciar el sistema, debes agregar una entrada al archivo `/etc/fstab`. Abre el archivo con un editor de texto (por ejemplo,`nano`):
+
+    ```bash
+    sudo nano /etc/fstab
+    ```
+
+    Agrega la siguiente línea al final del archivo:
+
+    ```bash
+    /swapfile swap swap defaults 0 0
+    ```
+
+    Guarda los cambios y cierra el editor.
+    
+
+- Ajusta la configuración de swappiness (opcional):
+
+    El valor de "swappiness" controla con qué frecuencia el sistema operativo utiliza el swap. Un valor más bajo significa que el sistema intentará usar la RAM tanto como sea posible antes de recurrir al swap.
+
+    Para ver el valor actual, ejecuta:
+
+    ```bash
+    cat /proc/sys/vm/swappiness
+    ```
+
+    Para cambiarlo, puedes editar el archivo `/etc/sysctl.conf`:
+
+    ```bash
+    sudo nano /etc/sysctl.conf
+    ```
+
+    Agrega o modifica la siguiente línea:
+
+    ```bash
+    vm.swappiness=10
+    ```
+
+    Guarda los cambios y ejecuta:
+
+    ```bash
+    sudo sysctl -p
+    ```
+
+- Verifica el swap:
+
+    Para confirmar que el swap está configurado correctamente, ejecuta nuevamente:
+
+    ```bash
+    sudo swapon --show
+    ```
+
+    También puedes usar el comando `free -h` para ver el uso de la memoria RAM y el swap.
+
+    * Consideraciones adicionales:
+
+         Si tienes un disco SSD, es posible que desees configurar un valor de swappiness más bajo para reducir el desgaste del SSD.
+
+         En sistemas con mucha RAM, es posible que no necesites tanto espacio de intercambio. Sin embargo, tener algo de swap puede ser útil en caso de que la RAM se llene por completo.
+
+         Si estas usando un sistema de virtualización, es posible que la configuración del swap se realice desde el sistema anfitrión.
+
+
+### montar los volumenes compartidos
+
+- Se crean las carpetas que sincronizaran datos con los volumenes compartidos:
+
+```
+sudo mkdir -p /mnt/train_service_config_models
+sudo mkdir -p /mnt/train_service_datasets
+sudo mkdir -p /mnt/train_service_db
+```
+
+
+- por ejemplo: 
+    - si el servidor donde se instalan los files y environment tiene la ip: 192.168.1.60
+
+
+los volumenes se montan con:
+
+```
+sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_datasets -o username=wisrovi,password=wyoloservice,port=23445,file_mode=0777,dir_mode=0777,iocharset=utf8
+
+sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_config_models -o username=wisrovi,password=wyoloservice,port=23447,file_mode=0777,dir_mode=0777,iocharset=utf8 
+
+sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_db -o username=wisrovi,password=wyoloservice,port=23448,file_mode=0777,dir_mode=0777,iocharset=utf8
+```
+
+Con esto si se escanea el contendido de las carpaetas creadas, ahora se podra ver contenido:
+
+- para datasets:
+
+    ```
+    ls /mnt/train_service_datasets
+    ```
+
+- para database:
+
+    ```
+    ls /mnt/train_service_db
+    ```
+
+
+- para config_models:
+
+   ```
+    ls /mnt/train_service_config_models
+    ```
+
+Para automatizar los procesos se montan en el `crontad` para que en el inicio del SO se automonten:
+
+- `crontad -e`
+
+    ```
+    @reboot sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_datasets -o username=admin,password=admin,port=23445,file_mode=0777,dir_mode=0777,iocharset=utf8 >> /tmp/mount.log 2>&1
+
+    @reboot sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_config_models -o username=admin,password=admin,port=23447,file_mode=0777,dir_mode=0777,iocharset=utf8 >> /tmp/mount.log 2>&1
+
+    @reboot sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_db -o username=admin,password=admin,port=23448,file_mode=0777,dir_mode=0777,iocharset=utf8 >> /tmp/mount.log 2>&1
+    ```
+
 
 ### API
 
@@ -68,6 +238,19 @@ EMAIL: wisrovi.rodriguez@gmail.com
 PASSWORD: 12345678
 ```
 
+Configurar asi:
+
+```
+    # General:
+    #     name: postgres
+    # conection:
+    #     host name/address: postgres
+    #     port: 5432
+    #     username: postgres
+    #     password: postgres
+```
+
+
 ### NFS
 
 ```bash
@@ -77,7 +260,7 @@ PORT=7446
 ### SAMBA
 
 ```bash
-URL=smb://localhost:7445/shared
+URL=smb://localhost:23445/shared
 USER=wisrovi
 PASSWORD=wyoloservice
 ```

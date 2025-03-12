@@ -2,7 +2,7 @@ model: "yolov8n-cls.pt"
 type: "yolo"
 dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
-  batch: 4
+  batch: -1
   data: /datasets/clasificacion/colorball.v8i.multiclass/
   epochs: 1
   imgsz: 640
@@ -11,10 +11,10 @@ train:
 # test:
 #   conf: 0.01
 sweeper:
-  version: 1
+  version: 2
   algorithm: optuna
   direction: maximize
-  study_name: "color_ball_v2"
+  study_name: "example_clasification"
   storage: null
   sampler: "TPESampler"
   fitness: "metrics/accuracy_top1"
@@ -22,7 +22,7 @@ sweeper:
   search_space:
     model: ["choice", "yolov8n-cls.pt"]
     train:
-      imgsz: ["choice", 416]
+      imgsz: ["choice", 416, 512, 640, 720, 920, 1024]
       lr0: ["loguniform", 1e-5, 1e-2]
 extras:
   gpu:

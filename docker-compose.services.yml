@@ -28,73 +28,38 @@ x-resources: &resources_gpu
             capabilities: [gpu]
 
 services:
-  api_user:
-    build:
-      context: ./services
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    # restart: always
-    environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=wyoloservice
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
-    volumes:
-      - ./tmp/config_versions:/config_versions
-      - ./tmp/database:/database
-      - ./tmp/logs:/var/log/api
-    networks:
-      - nfs_network
 
   worker:
     <<: *resources_gpu
     build:
       context: ./services
       dockerfile: Dockerfile
-    depends_on:
-      - api_user
+    labels:
+      com.docker.compose.read_only: "true"
     environment:
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_NAME=wyoloservice
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_HOST=192.168.1.60
     volumes:
-      - ./data/datasets:/datasets
-      - ./tmp/config_versions:/config_versions
-      - ./tmp/database:/database
-      - ./tmp/models:/models
-      - ./services:/app
-      - ./tmp/logs:/var/log/worker
+      - /mnt/train_service_datasets:/datasets/		
+      - /mnt/train_service_config_models:/config_versions
+      - /mnt/train_service_db:/database
+      # - /media/training/Train_service_an/models:/models
+      # - ./services:/app
+      - /media/training/Train_service_an/logs:/var/log/worker
     working_dir: /app/worker
-    networks:
-      - nfs_network
     # command: tail -f /dev/null
     command: python worker.py
-    # restart: always
+    restart: always
 
-networks:
-  nfs_network:
-    external: true
 
-volumes:
-  pgadmin-data:
-  dataset_nfs:
-    driver: local
-    driver_opts:
-      type: "nfs"
-      # o: "addr=28.10.4.10,rw,nolock,soft,timeo=30,retrans=3"
-      o: "addr=28.10.4.10,rw,nfsvers=4,async"
-      device: ":/datasets"
+
+
 # Para crear la red y el servidor NFS
 # docker network create --subnet=28.10.4.0/24 --gateway=28.10.4.1 --driver=bridge nfs_network
 
 # para el NFS, ver datos
 # sudo apt install nfs-client -y
-# sudo mkdir -p /mnt/wyoloservice/datasets
-# sudo mount -v -o vers=4,loud <host-ip>:/ /mnt/wyoloservice/datasets
+# sudo mkdir -p /media/training/Train_service_an/datasets
+# sudo mount -v -o vers=4,loud <host-ip>:/ /mnt/train_service_datasets
 
 # para samba:
 # smb://<host-ip>/shared

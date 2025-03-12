@@ -76,9 +76,13 @@ def read_user_config(task_data: dict):
         logger.error(f"❌ Error al cargar YAML ({config_path}): {e}")
 
     try:
+        tempfile = task_data["tempfile"]
+        config_path = f"{tempfile}/{final_config['task_id']}.yaml"
+
+        final_config["config_path"] = config_path
         with open(config_path, "w") as archivo:
             yaml.dump(final_config, archivo, default_flow_style=False)
     except Exception as e:
-        pass
+        raise Exception(str(e))
 
     return final_config

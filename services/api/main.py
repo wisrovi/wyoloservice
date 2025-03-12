@@ -4,7 +4,9 @@ import uuid
 
 import yaml
 from train_yolo import TrainingHistory, db
-from api.minio import download_model, list_models
+
+# from api.minio import download_model, list_models
+
 from fastapi import FastAPI, File, UploadFile
 from wredis.queue import RedisQueueManager
 
@@ -66,53 +68,53 @@ def start_training(user_code: str, file: UploadFile = File(...)):
     return {"message": "Entrenamiento registrado", "task_id": task_id}
 
 
-@app.get("/trainings/")
-def get_trainings():
-    """Consulta los entrenamientos registrados."""
-    return db.get_all()
+# @app.get("/trainings/")
+# def get_trainings():
+#     """Consulta los entrenamientos registrados."""
+#     return db.get_all()
 
 
-@app.get("/best_model/{experiment_name}")
-def get_best_model(experiment_name: str):
-    """Devuelve el mejor modelo del experimento."""
+# @app.get("/best_model/{experiment_name}")
+# def get_best_model(experiment_name: str):
+#     """Devuelve el mejor modelo del experimento."""
 
-    versions = db.get_by_field(experiment_name=experiment_name)
-    best_version = max(versions, key=lambda v: v.loss)
-    if best_version:
-        return {
-            "experiment_name": experiment_name,
-            "best_model": best_version.recommended_model,
-            "metrics": {
-                "loss": best_version.loss,
-                "precision": best_version.precision,
-                "recall": best_version.recall,
-                "map50": best_version.map50,
-                "map50_95": best_version.map50_95,
-            },
-        }
-    return {"message": "No se encontró un mejor modelo"}
-
-
-@app.get("/model_versions/{task_id}")
-def get_model_versions(task_id: str):
-    """Devuelve todas las versiones de un modelo almacenadas en MinIO."""
-
-    versions = db.get_by_field(task_id=task_id)
-
-    return [
-        {"version": v.task_id.split("_v")[-1], "url": v.model_path} for v in versions
-    ]
+#     versions = db.get_by_field(experiment_name=experiment_name)
+#     best_version = max(versions, key=lambda v: v.loss)
+#     if best_version:
+#         return {
+#             "experiment_name": experiment_name,
+#             "best_model": best_version.recommended_model,
+#             "metrics": {
+#                 "loss": best_version.loss,
+#                 "precision": best_version.precision,
+#                 "recall": best_version.recall,
+#                 "map50": best_version.map50,
+#                 "map50_95": best_version.map50_95,
+#             },
+#         }
+#     return {"message": "No se encontró un mejor modelo"}
 
 
-@app.get("/models/")
-def list_all_models():
-    """Lista todos los modelos almacenados en MinIO."""
-    return list_models()
+# @app.get("/model_versions/{task_id}")
+# def get_model_versions(task_id: str):
+#     """Devuelve todas las versiones de un modelo almacenadas en MinIO."""
+
+#     versions = db.get_by_field(task_id=task_id)
+
+#     return [
+#         {"version": v.task_id.split("_v")[-1], "url": v.model_path} for v in versions
+#     ]
 
 
-@app.get("/download_model/{model_name}")
-def download_model_endpoint(model_name: str):
-    """Descarga un modelo desde MinIO."""
-    save_path = f"/tmp/{model_name}"
-    download_model(model_name, save_path)
-    return {"message": "Modelo descargado", "path": save_path}
+# @app.get("/models/")
+# def list_all_models():
+#     """Lista todos los modelos almacenados en MinIO."""
+#     return list_models()
+
+
+# @app.get("/download_model/{model_name}")
+# def download_model_endpoint(model_name: str):
+#     """Descarga un modelo desde MinIO."""
+#     save_path = f"/tmp/{model_name}"
+#     download_model(model_name, save_path)
+#     return {"message": "Modelo descargado", "path": save_path}
