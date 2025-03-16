@@ -2,7 +2,7 @@ model: "yolov8n-cls.pt"
 type: "yolo"
 dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
-  batch: -1
+  batch: 2
   data: /datasets/clasificacion/colorball.v8i.multiclass/
   epochs: 1
   imgsz: 640

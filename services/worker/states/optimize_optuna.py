@@ -1,8 +1,8 @@
 import math
 import os
 import shutil
-import tempfile
 from functools import wraps
+import tempfile
 
 import torch
 import optuna
@@ -49,8 +49,11 @@ class OptunaOptimize:
             Returns (None, None, None) if no valid trial is found.
         """
         sweeper_config = request_config_user.get("sweeper", {})
+
+        tempfolder = request_config_user["tempfile"]
+
         result_path = (
-            f'/models/{sweeper_config.get("study_name", "default_study")}/'
+            f'{tempfolder}/models/{sweeper_config.get("study_name", "default_study")}/'
             f'{request_config_user["type"]}/{request_config_user["task_id"]}'
         )
         os.makedirs(f"{result_path}/trail_history/", exist_ok=True)
@@ -64,7 +67,7 @@ class OptunaOptimize:
                     desc="Searching for best hyperparameters",
                     dynamic_ncols=True,
                 ) as progress_bar:
-                    for _ in range(sweeper_config.get("n_trials", 10)):                        
+                    for _ in range(sweeper_config.get("n_trials", 10)):
                         progress_bar.update(1)
                         yield progress_bar, None
             else:
@@ -208,10 +211,10 @@ class OptunaOptimize:
                 - onnx_path: Path to the converted ONNX model.
             Returns an empty dictionary if the training process fails.
         """
-        
-        tempfile = request_config_user["tempfile"]
-        config_path = f"{tempfile}/{request_config_user['task_id']}.yaml"
-        
+
+        tempfolder = request_config_user["tempfile"]
+        config_path = f"{tempfolder}/{request_config_user['task_id']}.yaml"
+
         request_config_user["config_path"] = config_path
 
         best_trial, best_params, best_metric, result_path = self.search_best_model(

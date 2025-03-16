@@ -46,7 +46,11 @@ def ejecutar_comando(args: dict, trial_number: int, verbose=True):
             args = yaml.safe_load(f)
 
         experiment_name = args.get("sweeper").get("study_name")
-        RESULT_PATH = f'/models/{experiment_name}/{args["type"]}/{args["task_id"]}'
+        tempfile = args.get("tempfile", "")
+
+        RESULT_PATH = (
+            f'{tempfile}/models/{experiment_name}/{args["type"]}/{args["task_id"]}'
+        )
 
         with open(
             f"{RESULT_PATH}/trail_history/trial_{int(trial_number)}.train_log", "w"

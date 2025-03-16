@@ -1,12 +1,12 @@
 mlflow:
-  MLFLOW_TRACKING_URI: http://192.168.1.60:23435
+  MLFLOW_TRACKING_URI: http://localhost:23435
 minio:
-  MINIO_ENDPOINT: http://192.168.1.60:23444
+  MINIO_ENDPOINT: http://localhost:23444
   MINIO_ID: mlflow
   MINIO_SECRET_KEY: wyoloservice
   MINIO_BUCKET: models
 redis:
-  REDIS_HOST: 192.168.1.60
+  REDIS_HOST: localhost
   REDIS_PORT: 23438
   REDIS_DB: 0
   REDIS_PASSWORD: ""

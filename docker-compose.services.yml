@@ -33,21 +33,16 @@ services:
     <<: *resources_gpu
     build:
       context: ./services
-      dockerfile: Dockerfile
-    labels:
-      com.docker.compose.read_only: "true"
-    environment:
-      - DB_HOST=192.168.1.60
+      dockerfile: Dockerfile.worker
+    image: wisrovi/wyoloservice:worker
+    env_file:
+      - control_host.env
     volumes:
       - /mnt/train_service_datasets:/datasets/		
       - /mnt/train_service_config_models:/config_versions
       - /mnt/train_service_db:/database
-      # - /media/training/Train_service_an/models:/models
-      # - ./services:/app
-      - /media/training/Train_service_an/logs:/var/log/worker
     working_dir: /app/worker
     # command: tail -f /dev/null
-    command: python worker.py
     restart: always
 
 

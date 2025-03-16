@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+  dataset-filebrowser:
+    image: hurlenko/filebrowser
+    volumes:
+      - /media/training/Train_service_an/datasets:/data
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - FB_BASEURL=/
+      - VIRTUAL_HOST=wisrovi.com
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=wisrovi.com
+      - LETSENCRYPT_EMAIL=wisrovi.rodriguez@gmail.com
+    restart: always
+    ports:
+      - "23443:8080"
+  dataset-samba:
+    image: dperson/samba
+    ports:
+      - "23445:445/tcp"
+    restart: always
+    volumes:
+      - /media/training/Train_service_an/datasets:/data
+    environment:
+      - TZ=Europe/Madrid
+      - USERID=1000 
+      - GROUPID=1000 
+      - SAMBA_USERS=wisrovi;wyoloservice
+    command: >
+      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+
+  config-samba:
+    image: dperson/samba
+    restart: always
+    volumes:
+      - /media/training/Train_service_an/config_versions:/data
+    environment:
+      - TZ=Europe/Madrid
+      - USERID=1000
+      - GROUPID=1000
+      - SAMBA_USERS=wisrovi;wyoloservice
+    command: >
+      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+    ports:
+      - "23447:445/tcp"
+
+  db-samba:
+    image: dperson/samba
+    restart: always
+    volumes:
+      - /media/training/Train_service_an/api_database:/data
+    environment:
+      - TZ=Europe/Madrid
+      - USERID=1000 
+      - GROUPID=1000 
+      - SAMBA_USERS=wisrovi;wyoloservice
+    command: >
+      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+    ports:
+      - "23448:445/tcp" 
+

@@ -1,3 +1,4 @@
+import os
 import sys
 import tempfile
 import traceback
@@ -13,6 +14,12 @@ from wredis.queue import RedisQueueManager
 from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
 
 from worker_utils.minio import MinioS3Client
+
+
+CONTROL_HOST = os.getenv("CONTROL_HOST", None)
+if CONTROL_HOST is None:
+    raise Exception("CONTROL_HOST env var is not set")
+
 
 # Configura el primer logger: solo errores en un archivo
 logger.add(
@@ -45,6 +52,18 @@ pipeline.set_steps(
 @hydra.main(config_path="/app", config_name="config", version_base=None)
 def main(cfg: OmegaConf):
     global DEFAULT_CONFIG
+
+    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
+        "localhost", CONTROL_HOST
+    )
+    
+    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(
+        "localhost", CONTROL_HOST
+    )
+    
+    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace(
+        "localhost", CONTROL_HOST
+    )
 
     mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)
     logger.info(f"MLflow URI: {cfg.mlflow.MLFLOW_TRACKING_URI}")

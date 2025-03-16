@@ -3,9 +3,6 @@ version: "3.8"
 services:
   # api
   api_user:
-    build:
-      context: ./services
-      dockerfile: Dockerfile.api
     image: wisrovi/wyoloservice:api
     restart: always
     ports:
@@ -25,21 +22,6 @@ services:
     networks:
       - nfs_network
 
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-      - HTTP_USER=redis
-      - HTTP_PASSWORD=wyoloservice
-    restart: always
-    ports:
-      - "23439:8081"
-    depends_on:
-      - redis
-    networks:
-      - nfs_network
-
-
   mlflow-minio:
     image: minio/minio
     command: server /data --console-address ":9001"
@@ -56,9 +38,6 @@ services:
       - nfs_network
 
   mlflow:
-    build: 
-      context: ./enviroment
-      dockerfile: Dockerfile.mlflow
     image: wisrovi/wyoloservice:mlflow
     restart: always
     environment:
@@ -103,19 +82,6 @@ services:
     networks:
       - nfs_network
 
-  pgadmin:
-    image: dpage/pgadmin4
-    restart: always
-    ports:
-      - "23437:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: wisrovi.rodriguez@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: 12345678
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-    networks:
-      - nfs_network
-
     # General:
     #     name: postgres
     # conection:
@@ -131,25 +97,3 @@ networks:
 
 volumes:
   pgadmin-data:
-
-# Para crear la red y el servidor NFS
-# docker network create --subnet=28.10.4.0/24 --gateway=28.10.4.1 --driver=bridge nfs_network
-
-# para el NFS, ver datos
-# sudo apt install nfs-client -y
-# sudo mkdir -p /mnt/wyoloservice/datasets
-# sudo mount -v -o vers=4,loud <host-ip>:/ /mnt/wyoloservice/datasets
-
-# para samba:
-# smb://<host-ip>/shared
-
-# Instrucciones de uso:
-# 1. Crear un archivo .env con las variables de entorno necesarias.
-# 2. Ejecutar `docker-compose up -d` para iniciar todos los servicios.
-# 3. Acceder a los servicios:
-#    - Samba: \\localhost\shared (Windows) o smb://localhost/shared (Linux/Mac)
-#    - NFS: montado en /mnt/wyoloservice/datasets
-#    - MLflow: http://localhost:5000
-#    - MinIO Console: http://localhost:9006
-#    - PgAdmin: http://localhost:1717
-#    - API: http://localhost:8000

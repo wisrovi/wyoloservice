@@ -12,6 +12,7 @@ ENV PYTHONUNBUFFERED 1
 RUN apt-get update
 RUN apt-get upgrade -y
 RUN apt-get -y install net-tools
+RUN apt-get -y install git
 RUN apt install iputils-ping -y
 
 RUN apt-get update && \
@@ -57,12 +58,8 @@ WORKDIR /lib/wyoloservice
 COPY lib .
 RUN pip install -e .
 
-WORKDIR /app/api/
-COPY api/ .
-
 WORKDIR /app/worker/
 COPY worker/ .
-
 
 WORKDIR /app/
 COPY config.yaml .
@@ -71,12 +68,29 @@ COPY config.yaml .
 EXPOSE 8000
 
 
+
+
+WORKDIR /app/worker/
+
+# # Initialize a Git repository
+# RUN git init -q
+
+# # Configure Git with your details
+# RUN git config --local user.email "you@example.com"
+# RUN git config --local user.name "Your Name"
+
+# # Initialize DVCLive in your project
+# RUN dvc init -q
+
+# # Commit the DVCLive setup to your Git repository
+# RUN git commit -m "DVC init"
+
+
+
+
 RUN echo "figlet wyoloservice" >> ~/.zshrc
 RUN echo "figlet wyoloservice" >> ~/.bashrc
 
 
-# Comando por defecto
-# CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
-# Comando por defecto
-WORKDIR /app/
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+CMD ["python", "worker.py"]

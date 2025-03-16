@@ -175,8 +175,51 @@ Para automatizar los procesos se montan en el `crontad` para que en el inicio de
     @reboot sudo mount -t cifs //192.168.1.60/shared /mnt/train_service_db -o username=admin,password=admin,port=23448,file_mode=0777,dir_mode=0777,iocharset=utf8 >> /tmp/mount.log 2>&1
     ```
 
+### Control server
+
+El modo de funcionamiento de los servicios es el siguiente:
+
+- Hay tres tipos de servicios: 
+    - el servicio de entrenamiento
+    - el servicio de control.
+    - el servicio para que el usuario ponga el dataset.
+
+- El servicio de entrenamiento se encarga de entrenar los modelos de YOLO, de estos puede haber varios.
+- El servicio de control se encarga de registrar las peticones de entrenamiento y almacenar los resultados del entrenamiento.
+- La forma en que se comunica el servidor de control con el servidor de entrenamiento es mediante un protocolo samba con 3 volumenes compartidos:
+    - `train_service_datasets`
+    - `train_service_config_models`
+    - `train_service_db`
+- El servicio de control se encarga de enviar las tareas de entrenamiento al servicio de entrenamiento, la forma de enviar las tareas es mediante un archivo yaml y el compartido del dataset, el archivo de configuracion y la base de datos para almacenar los resultados.
+
+
+- El servicio de entrenamiento se ejecuta en el servidor de entrenamiento.
+- El servicio de control se ejecuta en el servidor de control.
+- El servicio de control se encarga de enviar las tareas de entrenamiento al servidor de entrenamiento.
+- El servidor de entrenamiento se encarga de realizar el entrenamiento y enviar los resultados al servidor de control.
+- El servidor de control se encarga de almacenar los resultados del entrenamiento en la base de datos.
+- El servidor de control se encarga de enviar las configuraciones de entrenamiento al servidor de entrenamiento.
+- El servidor de entrenamiento se encarga de utilizar las configuraciones de entrenamiento para realizar el entrenamiento.
+- El servidor de control se encarga de almacenar los modelos entrenados en el servidor de entrenamiento en el servidor de control.
+- Pueden haber varios servidores de entrenamiento y un solo servidor de control.
+
+
+Para crear un servidor de control
+
+
 
 ### API
+
+Para que la api funcione, perimero se debe crear una red de docker:
+
+```bash
+docker network create --subnet=28.10.4.0/24 --gateway=28.10.4.1 --driver=bridge nfs_network
+```
+
+
+
+
+
 
 ```bash
 URL=http://localhost:8000/docs

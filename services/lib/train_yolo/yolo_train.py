@@ -55,8 +55,9 @@ def train(config_path: str, fitness: str, trial_number: int):
         request_config["task_id"] = str(uuid.uuid4())
 
     experiment_name = request_config.get("sweeper").get("study_name")
+    tempfile = request_config.get("tempfile", "")
 
-    RESULT_PATH = f'/models/{experiment_name}/{request_config["type"]}/{request_config["task_id"]}/'
+    RESULT_PATH = f'{tempfile}/models/{experiment_name}/{request_config["type"]}/{request_config["task_id"]}/'
     os.makedirs(f"{RESULT_PATH}/trail_history", exist_ok=True)
     request_config["path_results"] = f"{RESULT_PATH}/{trial_number}/"
 

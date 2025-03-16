@@ -1,14 +1,60 @@
+import json
 import os
 import random
 from glob import glob
+from typing import List
 
 import dvc
+import GPUtil
 import mlflow
 from loguru import logger
 from PIL import Image
 from slugify import slugify
 from ultralytics import RTDETR, YOLO, settings
 from ultralytics.utils.autobatch import autobatch
+
+
+def obtener_info_gpu_json():
+    """
+    Obtiene información detallada sobre las GPUs disponibles y la devuelve en formato JSON.
+    Maneja el caso en que la propiedad 'processes' no esté disponible.
+    """
+    try:
+        gpus = GPUtil.getGPUs()
+        if not gpus:
+            return json.dumps({"error": "No se encontraron GPUs disponibles."})
+
+        gpu_info = []
+        for gpu in gpus:
+            gpu_data = {
+                # "gpu_id": gpu.id,
+                f"gpu_{gpu.id}_name": gpu.name,
+                f"gpu_{gpu.id}_uuid": gpu.uuid,
+                f"gpu_{gpu.id}_memoryTotal": gpu.memoryTotal,
+                f"gpu_{gpu.id}_memoryFree": gpu.memoryFree,
+                f"gpu_{gpu.id}_memoryUsed": gpu.memoryUsed,
+                f"gpu_{gpu.id}_load": gpu.load * 100,
+                f"gpu_{gpu.id}_temperature": gpu.temperature,
+            }
+            # Verifica si la propiedad 'processes' existe antes de intentar acceder a ella.
+            if hasattr(gpu, "processes"):
+                gpu_data["processes"] = [
+                    {
+                        "pid": process.pid,
+                        "name": process.name,
+                        "memory": process.memoryUsed,
+                    }
+                    for process in gpu.processes
+                ]
+            else:
+                gpu_data["processes"] = "Processes information not available."
+
+            gpu_info.append(gpu_data)
+
+        return gpu_info
+
+    except Exception as e:
+        return {"error": f"Ocurrió un error al obtener la información de la GPU: {e}"}
 
 
 class TrainerWrapper:
@@ -67,10 +113,10 @@ class TrainerWrapper:
     def on_train_end(self, trainer):
         pytorch_model = trainer.model
         mlflow.pytorch.log_model(pytorch_model, "model")
-        
+
         metrics = {}
         for key, value in trainer.metrics.items():
-            metrics[slugify(key)] = float(value)            
+            metrics[slugify(key)] = float(value)
 
         mlflow.log_metrics(metrics)
 
@@ -96,6 +142,14 @@ class TrainerWrapper:
         config_copy = self.config.copy()
         config_copy["train"].pop("batch")
 
+        try:
+            gpu_json_list: List[dict] = obtener_info_gpu_json()
+            for gpu_json in gpu_json_list:
+                for key, value in gpu_json.items():
+                    mlflow.set_tag(key, value)
+        except:
+            pass
+
         mlflow.log_params(config_copy["train"])
         mlflow.set_tag(
             "mlflow.note.content", self.config.get("metadata", {}).get("content")
@@ -112,20 +166,6 @@ class TrainerWrapper:
 
         mlflow.set_tag("data_source", self.config.get("train", {}).get("data", "NA"))
 
-        dvc_path = self.config.get("dvc_data_path", None)
-        if dvc_path:
-            try:
-                data_url = dvc.api.get_url(dvc_path)
-                data_path = dvc.api.get_data_path(dvc_path)
-                mlflow.log_input(
-                    mlflow.data.Dataset(source=data_url, name="dataset_dvc")
-                )
-                mlflow.log_input(
-                    mlflow.data.Dataset(source=data_path, name="dataset_dvc_local")
-                )
-            except:
-                pass
-
         # Subir 3 imágenes por clase
         self.log_example_images(model_type=trainer.model._get_name())
 
@@ -133,10 +173,13 @@ class TrainerWrapper:
         images, labels = self.get_images_and_labels(model_type=model_type)
 
         for i, (label, image_path) in enumerate(zip(labels, images)):
-            image = Image.open(image_path)
-            mlflow.log_image(image, f"example_images/{label}/image_{i}.png")
+            try:
+                image = Image.open(image_path)
+                mlflow.log_image(image, f"example_images/{label}/image_{i}.png")
+            except Exception as e:
+                logger.error(f"Error al cargar la imagen {image_path}: {e}")
 
-    def get_images_and_labels(self, model_type: str):
+    def get_images_and_labels(self, model_type: str, size: int = 5):
         images = []
         labels = []
 
@@ -150,7 +193,9 @@ class TrainerWrapper:
                 ]
                 for label in label_list:
                     image_paths = glob(os.path.join(data_path, "train", label, "*.jpg"))
-                    image_paths = random.sample(image_paths, min(3, len(image_paths)))
+                    image_paths = random.sample(
+                        image_paths, min(size, len(image_paths))
+                    )
 
                     for image in image_paths:
                         images.append(image)
