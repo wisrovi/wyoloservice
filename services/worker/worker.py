@@ -10,6 +10,7 @@ from loguru import logger
 from omegaconf import OmegaConf
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
+from wredis.token import RedisTokenManager
 
 from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
 
@@ -86,6 +87,11 @@ def main(cfg: OmegaConf):
         port=redis_config.get("REDIS_PORT"),
         db=redis_config.get("REDIS_DB"),
     )
+    
+    token_manager = RedisTokenManager(
+        host=redis_config.get("REDIS_HOST"),
+        port=redis_config.get("REDIS_PORT"),
+        db=redis_config.get("REDIS_DB"),)
 
     results_queue = redis_config.get("RESULT_TOPIC")
 
@@ -97,6 +103,9 @@ def main(cfg: OmegaConf):
                 results = pipeline.run(task_data)
         except Exception as e:
             traceback.print_exc()
+            
+            token_manager.write_token(token=task_data["task_id"], data=e.args[0])
+            
             return
 
         try:
