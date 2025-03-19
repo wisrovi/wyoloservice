@@ -25,15 +25,13 @@ x-resources: &resources_gpu
             capabilities: [gpu]
 
 services:
-
   worker:
     <<: *resources_gpu
     image: wisrovi/wyoloservice:worker
     env_file:
       - control_host.env
-    volumes:
-      - /mnt/train_service_datasets:/datasets/		
-      - /mnt/train_service_config_models:/config_versions
-      - /mnt/train_service_db:/database
-    working_dir: /app/worker
     restart: always
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH

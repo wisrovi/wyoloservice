@@ -21,6 +21,12 @@ RUN apt-get install ffmpeg libsm6 libxext6  -y
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 
+# Actualizar e instalar dependencias (incluyendo cifs-utils)
+RUN apt-get update && apt-get install -y \
+    make \
+    cifs-utils \
+    && rm -rf /var/lib/apt/lists/*
+
 # ZSH
 RUN apt-get update && apt-get install -y zsh
 RUN apt-get install -y wget
@@ -32,14 +38,25 @@ RUN apt-get install figlet -y
 RUN echo "alias ll='ls -l'" >> ~/.zshrc
 
 
+# Crear directorios de montaje
+RUN mkdir -p /config_versions \
+    && mkdir -p /database \
+    && mkdir -p /datasets
+
+RUN chmod -R 777 /config_versions \
+    && chmod -R 777 /database \
+    && chmod -R 777 /datasets    
+
 
 # Limpiar caché y archivos temporales
 RUN rm -rf /var/cache/apk/*
 RUN rm -rf /tmp/*
 RUN apt-get clean
 
-
-
+# Copiar el script para montar las unidades CIFS
+WORKDIR /usr/local/bin/
+COPY mount-cifs.sh .
+RUN chmod +x /usr/local/bin/mount-cifs.sh
 
 # Configurar el entorno de trabajo
 WORKDIR /app
@@ -93,4 +110,6 @@ RUN echo "figlet wyoloservice" >> ~/.bashrc
 
 
 
-CMD ["python", "worker.py"]
+# CMD ["python", "worker.py"]
+
+CMD ["sh", "-c", "/usr/local/bin/mount-cifs.sh && python worker.py"]

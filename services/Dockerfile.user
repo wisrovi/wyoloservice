@@ -1,0 +1,29 @@
+FROM ubuntu:22.04
+
+USER root
+
+# Actualizar e instalar dependencias (incluyendo cifs-utils)
+RUN apt-get update && apt-get install -y \
+    make \
+    cifs-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Crear directorios de montaje
+RUN mkdir -p /config_versions \
+    && mkdir -p /database \
+    && mkdir -p /datasets
+
+RUN chmod -R 777 /config_versions \
+    && chmod -R 777 /database \
+    && chmod -R 777 /datasets    
+
+# Copiar el archivo de configuración
+WORKDIR /usr/local/bin/
+COPY config.yaml .
+
+# Copiar el script para montar las unidades CIFS
+COPY mount-cifs.sh .
+RUN chmod +x /usr/local/bin/mount-cifs.sh
+
+# Comando por defecto
+CMD [ "tail", "-f", "/dev/null" ]

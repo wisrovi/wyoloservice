@@ -49,3 +49,20 @@ into_worker:
 logs_worker:
 	docker-compose -f docker-compose.services.yml logs -f  worker
 
+
+
+
+
+# ---------------------------------------------- SERVICES ----------------------------------------------
+
+
+start_user:
+	docker-compose -f docker-compose.user.yml build --no-cache
+	docker-compose -f docker-compose.user.yml --compatibility up -d --build --force-recreate --no-deps
+
+into_user:
+	docker-compose -f docker-compose.user.yml exec  user bash
+
+
+stop_user:
+	docker-compose -f docker-compose.user.yml down

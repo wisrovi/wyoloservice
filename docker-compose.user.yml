@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  user:
+    build:
+      context: ./services
+      dockerfile: Dockerfile.user
+    image: wisrovi/wyoloservice:user
+    privileged: true
+    env_file:
+      - control_host.env
+    volumes:
+      - /mnt/train_service_datasets:/mnt/train_service_datasets
+      - /mnt/train_service_config_models:/mnt/train_service_config_models
+      - /mnt/train_service_db:/mnt/train_service_db
+    command: ["sh", "-c", "/usr/local/bin/mount-cifs.sh && tail -f /dev/null"]
+    restart: always
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH

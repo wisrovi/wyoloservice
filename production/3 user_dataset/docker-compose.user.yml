@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  user:
+    image: wisrovi/wyoloservice:user
+    privileged: true
+    env_file:
+      - control_host.env
+    volumes:
+      - /mnt/train_service_datasets:/datasets
+      - /mnt/train_service_config_models:/config_versions
+      - /mnt/train_service_db:/database
+    command: ["sh", "-c", "/usr/local/bin/mount-cifs.sh && tail -f /dev/null"]
+    restart: always
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH

@@ -67,7 +67,10 @@ class TrainerWrapper:
 
     def __init__(self, config: dict):
         # Update a setting
-        settings.update({"mlflow": True})
+        if "minio" in self.config:
+            settings.update({"mlflow": False})
+        else:
+            settings.update({"mlflow": True})
 
         # Reset settings to default values
         settings.reset()
@@ -85,20 +88,27 @@ class TrainerWrapper:
         return optimal_batch
 
     def set_config_vars(self):
-        # Configurar las variables de entorno necesarias para MLflow
-        os.environ["MLFLOW_S3_ENDPOINT_URL"] = self.config["minio"]["MINIO_ENDPOINT"]
-        os.environ["AWS_ACCESS_KEY_ID"] = self.config["minio"]["MINIO_ID"]
-        os.environ["AWS_SECRET_ACCESS_KEY"] = self.config["minio"]["MINIO_SECRET_KEY"]
-        os.environ["MLFLOW_TRACKING_URI"] = self.config["mlflow"][
-            "MLFLOW_TRACKING_URI"
-        ]  # URI del servidor MLflow
-        os.environ["MLFLOW_ARTIFACT_URI"] = "s3://mlflow-artifacts/"  # Bucket en MinIO
+        if "minio" in self.config:
+            # Configurar las variables de entorno necesarias para MLflow
+            os.environ["MLFLOW_S3_ENDPOINT_URL"] = self.config["minio"][
+                "MINIO_ENDPOINT"
+            ]
+            os.environ["AWS_ACCESS_KEY_ID"] = self.config["minio"]["MINIO_ID"]
+            os.environ["AWS_SECRET_ACCESS_KEY"] = self.config["minio"][
+                "MINIO_SECRET_KEY"
+            ]
+            os.environ["MLFLOW_TRACKING_URI"] = self.config["mlflow"][
+                "MLFLOW_TRACKING_URI"
+            ]  # URI del servidor MLflow
+            os.environ["MLFLOW_ARTIFACT_URI"] = (
+                "s3://mlflow-artifacts/"  # Bucket en MinIO
+            )
 
-        # Configurar el nombre del experimento y el nombre de la ejecución
-        os.environ["MLFLOW_EXPERIMENT_NAME"] = self.config.get("sweeper").get(
-            "study_name"
-        )
-        os.environ["MLFLOW_RUN_NAME"] = self.config.get("task_id")
+            # Configurar el nombre del experimento y el nombre de la ejecución
+            os.environ["MLFLOW_EXPERIMENT_NAME"] = self.config.get("sweeper").get(
+                "study_name"
+            )
+            os.environ["MLFLOW_RUN_NAME"] = self.config.get("task_id")
 
         self.is_configured = True
 
@@ -111,63 +121,71 @@ class TrainerWrapper:
         self.config = new_config
 
     def on_train_end(self, trainer):
-        pytorch_model = trainer.model
-        mlflow.pytorch.log_model(pytorch_model, "model")
+        if "minio" in self.config:
+            pytorch_model = trainer.model
+            mlflow.pytorch.log_model(pytorch_model, "model")
 
-        metrics = {}
-        for key, value in trainer.metrics.items():
-            metrics[slugify(key)] = float(value)
+            metrics = {}
+            for key, value in trainer.metrics.items():
+                metrics[slugify(key)] = float(value)
 
-        mlflow.log_metrics(metrics)
+            mlflow.log_metrics(metrics)
 
     def on_train_start(self, trainer):
+        if "minio" in self.config:
+            dvc_path = self.config.get(
+                "dvc_data_path", None
+            )  # añade esta variable a tu config.
+            if dvc_path:
+                try:
+                    data_url = dvc.api.get_url(dvc_path)
+                    data_path = dvc.api.get_data_path(dvc_path)
+                    mlflow.log_input(
+                        mlflow.data.Dataset(source=data_url, name="dataset_dvc")
+                    )
+                    mlflow.log_input(
+                        mlflow.data.Dataset(source=data_path, name="dataset_dvc_local")
+                    )
+                except:
+                    pass
 
-        dvc_path = self.config.get(
-            "dvc_data_path", None
-        )  # añade esta variable a tu config.
-        if dvc_path:
+            # remove batch of self.config
+            config_copy = self.config.copy()
+            config_copy["train"].pop("batch")
+
             try:
-                data_url = dvc.api.get_url(dvc_path)
-                data_path = dvc.api.get_data_path(dvc_path)
-                mlflow.log_input(
-                    mlflow.data.Dataset(source=data_url, name="dataset_dvc")
-                )
-                mlflow.log_input(
-                    mlflow.data.Dataset(source=data_path, name="dataset_dvc_local")
-                )
+                gpu_json_list: List[dict] = obtener_info_gpu_json()
+                for gpu_json in gpu_json_list:
+                    for key, value in gpu_json.items():
+                        mlflow.set_tag(key, value)
             except:
                 pass
 
-        # remove batch of self.config
-        config_copy = self.config.copy()
-        config_copy["train"].pop("batch")
+            mlflow.log_params(config_copy["train"])
+            mlflow.set_tag(
+                "mlflow.note.content", self.config.get("metadata", {}).get("content")
+            )
+            mlflow.set_tag(
+                "documentation",
+                self.config.get("metadata", {}).get("documentation", "NA"),
+            )
 
-        try:
-            gpu_json_list: List[dict] = obtener_info_gpu_json()
-            for gpu_json in gpu_json_list:
-                for key, value in gpu_json.items():
-                    mlflow.set_tag(key, value)
-        except:
-            pass
+            mlflow.set_tag(
+                "author", self.config.get("metadata", {}).get("author", "NA")
+            )
 
-        mlflow.log_params(config_copy["train"])
-        mlflow.set_tag(
-            "mlflow.note.content", self.config.get("metadata", {}).get("content")
-        )
-        mlflow.set_tag(
-            "documentation", self.config.get("metadata", {}).get("documentation", "NA")
-        )
+            mlflow.set_tag("experiment_type", trainer.model._get_name())
+            mlflow.set_tag(
+                "version", self.config.get("sweeper", {}).get("version", "NA")
+            )
+            mlflow.log_artifact(self.config["config_path"])
 
-        mlflow.set_tag("author", self.config.get("metadata", {}).get("author", "NA"))
+            mlflow.set_tag(
+                "data_source", self.config.get("train", {}).get("data", "NA")
+            )
 
-        mlflow.set_tag("experiment_type", trainer.model._get_name())
-        mlflow.set_tag("version", self.config.get("sweeper", {}).get("version", "NA"))
-        mlflow.log_artifact(self.config["config_path"])
-
-        mlflow.set_tag("data_source", self.config.get("train", {}).get("data", "NA"))
-
-        # Subir 3 imágenes por clase
-        self.log_example_images(model_type=trainer.model._get_name())
+            # Subir 3 imágenes por clase
+            self.log_example_images(model_type=trainer.model._get_name())
 
     def log_example_images(self, model_type: str):
         images, labels = self.get_images_and_labels(model_type=model_type)
@@ -224,7 +242,8 @@ class TrainerWrapper:
         self.model = model
 
         # Configura los callbacks
-        self.model.add_callback("on_train_start", self.on_train_start)
-        self.model.add_callback("on_train_end", self.on_train_end)
+        if "minio" in self.config and "mlflow" in self.config:
+            self.model.add_callback("on_train_start", self.on_train_start)
+            self.model.add_callback("on_train_end", self.on_train_end)
 
         return model
