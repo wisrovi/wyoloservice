@@ -68,9 +68,9 @@ class TrainerWrapper:
     def __init__(self, config: dict):
         # Update a setting
         if "minio" in self.config:
-            settings.update({"mlflow": False})
-        else:
             settings.update({"mlflow": True})
+        else:
+            settings.update({"mlflow": False})
 
         # Reset settings to default values
         settings.reset()
