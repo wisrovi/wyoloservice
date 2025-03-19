@@ -30,8 +30,12 @@ services:
     image: wisrovi/wyoloservice:worker
     env_file:
       - control_host.env
+      - user.env
     restart: always
     privileged: true
+    hostname: ${USER}
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
+    command: tail -f /dev/null
+
