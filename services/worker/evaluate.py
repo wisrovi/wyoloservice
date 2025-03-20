@@ -1,17 +1,46 @@
-import mlflow
 import os
-from ultralytics import YOLO
+from train_yolo import train
+import hydra
+from omegaconf import OmegaConf
+import yaml
 
-def evaluate_model(model_path, test_data):
-    """Evalúa un modelo con nuevos datos y registra métricas en MLflow."""
-    model = YOLO(model_path)
-    results = model.val(data=test_data)
 
-    mlflow.log_metrics({
-        "precision": results.results["precision"],
-        "recall": results.results["recall"],
-        "map50": results.results["map50"],
-        "map50_95": results.results["map50_95"]
-    })
+CONTROL_HOST = os.getenv("CONTROL_HOST", None)
+if CONTROL_HOST is None:
+    raise Exception("CONTROL_HOST env var is not set")
 
-    return results.results
+
+@hydra.main(config_path="/app", config_name="config", version_base=None)
+def procesos(cfg: OmegaConf):
+    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
+        "localhost", CONTROL_HOST
+    )
+
+    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(
+        "localhost", CONTROL_HOST
+    )
+
+    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace("localhost", CONTROL_HOST)
+    cfg = OmegaConf.to_container(cfg, resolve=True)
+
+    config_path: str = "/demo/config_train.yaml"
+
+    with open(config_path, "r") as f:
+        user_config = yaml.safe_load(f)
+
+    user_config.update(cfg)
+
+    with open("/demo/config.yaml", "w") as f:
+        yaml.dump(user_config, f, allow_unicode=True, default_flow_style=False)
+
+    request_config = train.callback(
+        config_path=config_path,
+        fitness="metrics/accuracy_top1",
+        trial_number=1,
+    )
+
+    print(request_config)
+
+
+if __name__ == "__main__":
+    procesos()
