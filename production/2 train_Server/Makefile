@@ -28,7 +28,8 @@ docker-compose.services.yml:
 
 config.py:
 	pip install customtkinter
-	curl -o https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/config.py
+	wget https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/config.py
 
 clean:
 	rm -f user.env docker-compose.services.yml
+
