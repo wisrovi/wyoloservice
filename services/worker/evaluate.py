@@ -34,7 +34,7 @@ def procesos(cfg: OmegaConf):
         yaml.dump(user_config, f, allow_unicode=True, default_flow_style=False)
 
     request_config = train.callback(
-        config_path=config_path,
+        config_path="/demo/config.yaml",
         fitness="metrics/accuracy_top1",
         trial_number=1,
     )
