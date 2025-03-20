@@ -285,7 +285,16 @@ class TrainerWrapper:
                     tune = min(tune, 100)
                 else:
                     raise
-                return self.model.tune(**config_train, iterations=tune, use_ray=True)
+
+                grace_period = self.config.get("sweeper", {}).get("grace_period", False)
+                epochs = self.config.get("train", {}).get("epochs", False)
+
+                return self.model.tune(
+                    **config_train,
+                    iterations=tune,
+                    use_ray=True,
+                    grace_period=min(epochs, grace_period),
+                )
             else:
                 return self.model.train(**config_train)
 
