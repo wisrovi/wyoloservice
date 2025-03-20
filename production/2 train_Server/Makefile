@@ -1,7 +1,9 @@
 MAKEFLAGS += --always-make
 
+start_worker: user.env docker-compose.services.yml
+	docker-compose -f docker-compose.services.yml up -d --build --force-recreate --no-deps
 
-start_worker:
+user.env:
 	echo "USER=$$(whoami)" > user.env
 	echo "WORKER_HOST=$$(hostname -I | awk '{print $$1}')" >> user.env
 	echo "WORKER_HOSTNAME=$$(hostname)" >> user.env
@@ -19,4 +21,9 @@ start_worker:
 	echo "WORKER_GPU_COUNT=$$(nvidia-smi --query-gpu=count --format=csv,noheader)" >> user.env
 	echo "WORKER_GPU_MODEL=$$(nvidia-smi --query-gpu=name --format=csv,noheader | head -n 1)" >> user.env
 	echo "WORKER_GPU_MEMORY=$$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | head -n 1)" >> user.env
-	docker-compose -f docker-compose.services.yml up -d --build --force-recreate --no-deps
+
+docker-compose.services.yml:
+	curl -o docker-compose.services.yml "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/docker-compose.services.yml"
+
+clean:
+	rm -f user.env docker-compose.services.yml
