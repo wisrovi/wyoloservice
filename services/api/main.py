@@ -34,7 +34,7 @@ app = FastAPI()
 def start_training(user_code: str, file: UploadFile = File(...)):
     """Registra un entrenamiento y lo encola en Redis.
 
-    usa debug: "queue_name" para enviar a una cola específica.
+    usa debug: "queue_name" para enviar a una cola específica, siendo "queue_name" el nombre de la cola en la que un worker privado esta escuchando.
     """
 
     task_id = str(uuid.uuid4()).replace("-", "").replace("_", "")
