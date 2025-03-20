@@ -1,6 +1,7 @@
 MAKEFLAGS += --always-make
 
-start_worker: user.env docker-compose.services.yml
+start_worker: config.py user.env docker-compose.services.yml
+	python config.py
 	docker-compose -f docker-compose.services.yml up -d --build --force-recreate --no-deps
 
 user.env:
@@ -24,6 +25,10 @@ user.env:
 
 docker-compose.services.yml:
 	curl -o docker-compose.services.yml "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/docker-compose.services.yml"
+
+config.py:
+	pip install customtkinter
+	curl -o https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/config.py
 
 clean:
 	rm -f user.env docker-compose.services.yml
