@@ -66,6 +66,9 @@ class TrainerWrapper:
     model = None
 
     def __init__(self, config: dict):
+
+        self.config = config
+
         # Update a setting
         if "minio" in self.config and "mlflow" in self.config:
             settings.update({"mlflow": True})
@@ -74,8 +77,6 @@ class TrainerWrapper:
 
         # Reset settings to default values
         settings.reset()
-
-        self.config = config
 
     def get_better_batch(self, batch_to_use: int = -1):
         optimal_batch = autobatch(
@@ -284,7 +285,7 @@ class TrainerWrapper:
                     tune = min(tune, 100)
                 else:
                     raise
-                return self.model.tune(**config_train, iterations=tune)
+                return self.model.tune(**config_train, iterations=tune, use_ray=True)
             else:
                 return self.model.train(**config_train)
 
