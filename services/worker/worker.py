@@ -94,6 +94,7 @@ def main(cfg: OmegaConf):
         db=redis_config.get("REDIS_DB"),)
 
     queue_topic = os.environ.get("debug", redis_config.get("TOPIC"))
+    results_queue = os.environ.get("redis", {}).get("RESULT_TOPIC", redis_config.get("TOPIC"))
 
     @queue_manager.on_message(queue_topic)
     def worker(task_data: dict):
