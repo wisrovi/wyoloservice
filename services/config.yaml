@@ -27,7 +27,6 @@ train:
   batch: -1
   epochs: 1
 sweeper:
-  max_t: 100
   grace_period: 5
   max_concurrent: 1
 hydra:
