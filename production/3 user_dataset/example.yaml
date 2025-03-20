@@ -1,4 +1,5 @@
-debug: wrodriguez
+debug: wrodriguez  # [optional] for create debug mode
+
 model: "yolov8n-cls.pt"
 type: "yolo"
 dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
