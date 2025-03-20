@@ -142,12 +142,20 @@ class OptunaOptimize:
                 logger.error(f"Error executing objective: {e}")
                 raise optuna.TrialPruned("Error executing objective.")
 
+        chosen_strategy = sweeper_config.get("sampler", "TPESampler")
+        if chosen_strategy == "TPESampler":
+            sampler = optuna.samplers.TPESampler()
+        elif chosen_strategy == "RandomSampler":
+            sampler = optuna.samplers.RandomSampler()
+        elif chosen_strategy == "GridSampler":
+            sampler = optuna.samplers.GridSampler(
+                search_space={"lr0": [0.001, 0.01, 0.1], "momentum": [0.8, 0.9, 0.99]}
+            )
+
         study = optuna.create_study(
             direction=sweeper_config.get("direction", "minimize"),
             study_name=sweeper_config.get("study_name", "default_study"),
-            sampler=getattr(
-                optuna.samplers, sweeper_config.get("sampler", "TPESampler")
-            )(),
+            sampler=sampler,
         )
         study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
 

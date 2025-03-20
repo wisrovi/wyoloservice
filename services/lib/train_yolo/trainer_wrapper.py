@@ -140,14 +140,31 @@ class TrainerWrapper:
                 try:
                     data_url = dvc.api.get_url(dvc_path)
                     data_path = dvc.api.get_data_path(dvc_path)
-                    mlflow.log_input(
-                        mlflow.data.Dataset(source=data_url, name="dataset_dvc")
-                    )
-                    mlflow.log_input(
-                        mlflow.data.Dataset(source=data_path, name="dataset_dvc_local")
-                    )
                 except:
-                    pass
+                    dvc_path = (
+                        self.config.get("train", {})
+                        .get("data", None)
+                        .repalce("/datasets/", "")
+                    )
+                    data_url = f'http://{os.environ.get("WORKER_HOST", "localhost")}:23443/files/"{dvc_path}"'
+                    data_path = self.config.get("train", {}).get("data", None)
+
+                if data_url:
+                    try:
+                        mlflow.log_input(
+                            mlflow.data.Dataset(source=data_url, name="dataset_dvc")
+                        )
+                    except:
+                        logger.error(f"Error al cargar el dataset {data_url}")
+                if data_path:
+                    try:
+                        mlflow.log_input(
+                            mlflow.data.Dataset(
+                                source=data_path, name="dataset_dvc_local"
+                            )
+                        )
+                    except:
+                        logger.error(f"Error al cargar el dataset {data_path}")
 
             # remove batch of self.config
             config_copy = self.config.copy()
@@ -157,7 +174,10 @@ class TrainerWrapper:
                 gpu_json_list: List[dict] = obtener_info_gpu_json()
                 for gpu_json in gpu_json_list:
                     for key, value in gpu_json.items():
-                        mlflow.set_tag(key, value)
+                        try:
+                            mlflow.set_tag(key, value)
+                        except:
+                            pass
             except:
                 pass
 
@@ -183,6 +203,34 @@ class TrainerWrapper:
             mlflow.set_tag(
                 "data_source", self.config.get("train", {}).get("data", "NA")
             )
+
+            worker_metadata = [
+                "USER",
+                "WORKER_HOST",
+                "WORKER_HOSTNAME",
+                "WORKER_OS",
+                "WORKER_KERNEL_VERSION",
+                "WORKER_CPU_CORES",
+                "WORKER_GATEWAY",
+                "WORKER_NETWORK_INTERFACE",
+                "WORKER_DOCKER_VERSION",
+                "WORKER_APP_BASE_PATH",
+                "WORKER_APP_ENV",
+                "WORKER_HOME_DIR",
+                "WORKER_CURRENT_DATE",
+                "WORKER_CURRENT_TIME",
+                "WORKER_GPU_COUNT",
+                "WORKER_GPU_MODEL",
+                "WORKER_GPU_MEMORY",
+            ]
+
+            for other_metadata in worker_metadata:
+                tag_metadata = os.environ.get(other_metadata, None)
+                if tag_metadata:
+                    try:
+                        mlflow.set_tag(other_metadata, tag_metadata)
+                    except:
+                        pass
 
             # Subir 3 imágenes por clase
             self.log_example_images(model_type=trainer.model._get_name())
@@ -218,6 +266,8 @@ class TrainerWrapper:
                     for image in image_paths:
                         images.append(image)
                         labels.append(label)
+        else:
+            logger.warning(f"No se han implementado ejemplos para {model_type}.")
 
         return images, labels
 
@@ -225,7 +275,11 @@ class TrainerWrapper:
         self.set_config_vars()
 
         if self.model:
-            return self.model.train(**config_train)
+            tune = self.config.get("sweeper", {}).get("tune", False)
+            if tune:
+                return self.model.tune(**config_train)
+            else:
+                return self.model.train(**config_train)
 
         logger.warning(
             "No se puede entrenar sin antes configurar con 'set_config_vars'"

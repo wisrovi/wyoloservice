@@ -93,9 +93,9 @@ def main(cfg: OmegaConf):
         port=redis_config.get("REDIS_PORT"),
         db=redis_config.get("REDIS_DB"),)
 
-    results_queue = redis_config.get("RESULT_TOPIC")
+    queue_topic = os.environ.get("debug", redis_config.get("TOPIC"))
 
-    @queue_manager.on_message(redis_config.get("TOPIC"))
+    @queue_manager.on_message(queue_topic)
     def worker(task_data: dict):
         try:
             with tempfile.TemporaryDirectory() as temp_dir:
@@ -133,5 +133,5 @@ def main(cfg: OmegaConf):
     queue_manager.wait()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     main()

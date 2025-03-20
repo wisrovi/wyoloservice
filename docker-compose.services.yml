@@ -37,6 +37,7 @@ services:
     env_file:
       - control_host.env
     restart: always
+    command: tail -f /dev/null
     privileged: true
     cap_add:
       - SYS_ADMIN

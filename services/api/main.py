@@ -32,13 +32,19 @@ app = FastAPI()
 
 @app.post("/train/")
 def start_training(user_code: str, file: UploadFile = File(...)):
-    """Registra un entrenamiento y lo encola en Redis."""
+    """Registra un entrenamiento y lo encola en Redis.
+
+    usa debug: "queue_name" para enviar a una cola específica.
+    """
 
     task_id = str(uuid.uuid4()).replace("-", "").replace("_", "")
 
     config_path = os.path.join(CONFIG_DIR, f"{task_id}.yaml")
     with open(config_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
+
+    with open(config_path, "r") as f:
+        user_config = yaml.safe_load(f)
 
     try:
         count = len(db.get_all())
@@ -56,8 +62,10 @@ def start_training(user_code: str, file: UploadFile = File(...)):
         )
     )
 
+    queue_topic = user_config.get("debug", redis_config.get("TOPIC"))
+
     queue_manager.publish(
-        queue_name=redis_config.get("TOPIC"),
+        queue_name=queue_topic,
         data={
             "task_id": task_id,
             "config_path": config_path,
