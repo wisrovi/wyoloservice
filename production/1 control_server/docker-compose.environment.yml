@@ -22,6 +22,19 @@ services:
     networks:
       - nfs_network
 
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=redis
+      - HTTP_PASSWORD=wyoloservice
+    ports:
+      - "23439:8081"
+    depends_on:
+      - redis
+    networks:
+      - nfs_network
+
   mlflow-minio:
     image: minio/minio
     command: server /data --console-address ":9001"
