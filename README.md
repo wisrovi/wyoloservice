@@ -27,6 +27,7 @@ es importante que el ordenador a entrenar tenga al menos lo mismo de swap que de
     Utilizaremos el comando `fallocate` para crear un archivo de 32 GB. Ejecuta:
 
     ```bash
+    sudo swapoff -a
     sudo fallocate -l 32G /swapfile
     ```
 
