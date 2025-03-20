@@ -148,7 +148,7 @@ class TrainerWrapper:
                 dvc_path = (
                     self.config.get("train", {})
                     .get("data", None)
-                    .repalce("/datasets/", "")
+                    .replace("/datasets/", "")
                 )
                 data_url = f'http://{os.environ.get("WORKER_HOST", "localhost")}:23443/files/"{dvc_path}"'
                 data_path = self.config.get("train", {}).get("data", None)
