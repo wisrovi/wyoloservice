@@ -150,7 +150,7 @@ class TrainerWrapper:
                     .get("data", None)
                     .replace("/datasets/", "")
                 )
-                data_url = f'http://{os.environ.get("WORKER_HOST", "localhost")}:23443/files/"{dvc_path}"'
+                data_url = f'http://{os.environ.get("CONTROL_HOST", "localhost")}:23443/files/{dvc_path}'
                 data_path = self.config.get("train", {}).get("data", None)
 
             if data_url:
