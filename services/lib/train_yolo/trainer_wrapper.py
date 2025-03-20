@@ -137,35 +137,38 @@ class TrainerWrapper:
             dvc_path = self.config.get(
                 "dvc_data_path", None
             )  # añade esta variable a tu config.
-            if dvc_path:
-                try:
+
+            try:
+                if dvc_path:
                     data_url = dvc.api.get_url(dvc_path)
                     data_path = dvc.api.get_data_path(dvc_path)
-                except:
-                    dvc_path = (
-                        self.config.get("train", {})
-                        .get("data", None)
-                        .repalce("/datasets/", "")
-                    )
-                    data_url = f'http://{os.environ.get("WORKER_HOST", "localhost")}:23443/files/"{dvc_path}"'
-                    data_path = self.config.get("train", {}).get("data", None)
+                else:
+                    raise
+            except:
+                dvc_path = (
+                    self.config.get("train", {})
+                    .get("data", None)
+                    .repalce("/datasets/", "")
+                )
+                data_url = f'http://{os.environ.get("WORKER_HOST", "localhost")}:23443/files/"{dvc_path}"'
+                data_path = self.config.get("train", {}).get("data", None)
 
-                if data_url:
-                    try:
-                        mlflow.log_input(
-                            mlflow.data.Dataset(source=data_url, name="dataset_dvc")
+            if data_url:
+                try:
+                    mlflow.log_input(
+                        mlflow.data.Dataset(source=data_url, name="dataset_dvc")
+                    )
+                except:
+                    logger.error(f"Error al cargar el dataset {data_url}")
+            if data_path:
+                try:
+                    mlflow.log_input(
+                        mlflow.data.Dataset(
+                            source=data_path, name="dataset_dvc_local"
                         )
-                    except:
-                        logger.error(f"Error al cargar el dataset {data_url}")
-                if data_path:
-                    try:
-                        mlflow.log_input(
-                            mlflow.data.Dataset(
-                                source=data_path, name="dataset_dvc_local"
-                            )
-                        )
-                    except:
-                        logger.error(f"Error al cargar el dataset {data_path}")
+                    )
+                except:
+                    logger.error(f"Error al cargar el dataset {data_path}")
 
             # remove batch of self.config
             config_copy = self.config.copy()
