@@ -1,5 +1,5 @@
 import os
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from wsqlite import WSQLite
 from datetime import datetime
 
@@ -9,7 +9,7 @@ class TrainingHistory(BaseModel):
     task_id: str
     status: str
     user_code: str
-    timestamp: str = datetime.utcnow()
+    timestamp: str = datetime.utcnow().isoformat()
     config_path: str
     model_path: str = None
     cpu_usage: float = None
@@ -22,6 +22,8 @@ class TrainingHistory(BaseModel):
     map50_95: float = None
     recommended_model: str = None
     experiment_name: str = None
+
+    model_config = ConfigDict(protected_namespaces=())
 
 
 # Ruta donde se guardará la base de datos
