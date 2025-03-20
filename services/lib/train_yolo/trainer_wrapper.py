@@ -67,7 +67,7 @@ class TrainerWrapper:
 
     def __init__(self, config: dict):
         # Update a setting
-        if "minio" in self.config:
+        if "minio" in self.config and "mlflow" in self.config:
             settings.update({"mlflow": True})
         else:
             settings.update({"mlflow": False})
@@ -88,7 +88,7 @@ class TrainerWrapper:
         return optimal_batch
 
     def set_config_vars(self):
-        if "minio" in self.config:
+        if "minio" in self.config and "mlflow" in self.config:
             # Configurar las variables de entorno necesarias para MLflow
             os.environ["MLFLOW_S3_ENDPOINT_URL"] = self.config["minio"][
                 "MINIO_ENDPOINT"
@@ -121,7 +121,7 @@ class TrainerWrapper:
         self.config = new_config
 
     def on_train_end(self, trainer):
-        if "minio" in self.config:
+        if "minio" in self.config and "mlflow" in self.config:
             pytorch_model = trainer.model
             mlflow.pytorch.log_model(pytorch_model, "model")
 
@@ -132,7 +132,7 @@ class TrainerWrapper:
             mlflow.log_metrics(metrics)
 
     def on_train_start(self, trainer):
-        if "minio" in self.config:
+        if "minio" in self.config and "mlflow" in self.config:
             dvc_path = self.config.get(
                 "dvc_data_path", None
             )  # añade esta variable a tu config.
@@ -279,7 +279,7 @@ class TrainerWrapper:
             if tune:
                 if isinstance(tune, bool):
                     tune = 1
-                elif isintance(tune, int):
+                elif isinstance(tune, int):
                     tune = max(1, tune)
                     tune = min(tune, 100)
                 else:
