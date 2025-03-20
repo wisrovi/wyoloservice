@@ -277,7 +277,14 @@ class TrainerWrapper:
         if self.model:
             tune = self.config.get("sweeper", {}).get("tune", False)
             if tune:
-                return self.model.tune(**config_train)
+                if isinstance(tune, bool):
+                    tune = 1
+                elif isintance(tune, int):
+                    tune = max(1, tune)
+                    tune = min(tune, 100)
+                else:
+                    raise
+                return self.model.tune(**config_train, iterations=tune)
             else:
                 return self.model.train(**config_train)
 
