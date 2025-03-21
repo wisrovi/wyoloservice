@@ -9,6 +9,7 @@ from worker_utils.decorators import (
     get_optuna_suggestions,
     load_train_config,
     get_ray_suggestions,
+    ejecutar_en_hilo,
 )
 
 from states.optimize_optuna import OptunaOptimize
