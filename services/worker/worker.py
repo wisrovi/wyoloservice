@@ -142,7 +142,10 @@ def main(cfg: OmegaConf):
             )
             for metadata_key, metadata_value in metadata.items():
                 hash_manager.create_hash(
-                    key=redis_key, hash_name=metadata_key, value=metadata_value
+                    key=redis_key,
+                    hash_name=metadata_key,
+                    value=metadata_value,
+                    ttl=30,
                 )
 
             time.sleep(20)
