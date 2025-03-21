@@ -108,6 +108,9 @@ WORKDIR /app/worker/
 RUN echo "figlet wyoloservice" >> ~/.zshrc
 RUN echo "figlet wyoloservice" >> ~/.bashrc
 
+RUN echo "sh -c /usr/local/bin/mount-cifs.sh" >> ~/.zshrc
+RUN echo "sh -c /usr/local/bin/mount-cifs.sh" >> ~/.bashrc
+
 
 
 # CMD ["python", "worker.py"]
