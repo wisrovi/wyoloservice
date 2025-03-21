@@ -13,6 +13,7 @@ from omegaconf import OmegaConf
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
 from wredis.token import RedisTokenManager
+from wredis.hash import RedisHashManager
 
 from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
 
@@ -95,6 +96,13 @@ def main(cfg: OmegaConf):
         verbose=False,
     )
 
+    hash_manager = RedisHashManager(
+        host=redis_config.get("REDIS_HOST"),
+        port=redis_config.get("REDIS_PORT"),
+        db=redis_config.get("REDIS_DB"),
+        verbose=False,
+    )
+
     queue_topic = os.environ.get("debug", redis_config.get("TOPIC"))
     results_queue = os.environ.get("redis", {}).get(
         "RESULT_TOPIC", redis_config.get("TOPIC")
@@ -132,12 +140,10 @@ def main(cfg: OmegaConf):
                 + f":{metadata.get('WORKER_HOST', 'noIp')}"
                 + f":{metadata.get('USER', str(uuid.uuid4()))}"
             )
-
-            token_manager.write_token(
-                token=redis_key,
-                data=metadata,
-                ttl=30,
-            )
+            for metadata_key, metadata_value in metadata.items():
+                hash_manager.create_hash(
+                    key=redis_key, hash_name=metadata_key, value=metadata_value
+                )
 
             time.sleep(20)
 
