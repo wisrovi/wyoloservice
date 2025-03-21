@@ -1,6 +1,7 @@
 import os
 import sys
 import tempfile
+import time
 import traceback
 
 import hydra
@@ -14,7 +15,7 @@ from wredis.token import RedisTokenManager
 
 from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
 
-from worker_utils.minio import MinioS3Client
+from worker_utils import MinioS3Client, ejecutar_en_hilo
 
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
@@ -57,14 +58,12 @@ def main(cfg: OmegaConf):
     cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
         "localhost", CONTROL_HOST
     )
-    
+
     cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(
         "localhost", CONTROL_HOST
     )
-    
-    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace(
-        "localhost", CONTROL_HOST
-    )
+
+    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace("localhost", CONTROL_HOST)
 
     mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)
     logger.info(f"MLflow URI: {cfg.mlflow.MLFLOW_TRACKING_URI}")
@@ -87,14 +86,55 @@ def main(cfg: OmegaConf):
         port=redis_config.get("REDIS_PORT"),
         db=redis_config.get("REDIS_DB"),
     )
-    
+
     token_manager = RedisTokenManager(
         host=redis_config.get("REDIS_HOST"),
         port=redis_config.get("REDIS_PORT"),
-        db=redis_config.get("REDIS_DB"),)
+        db=redis_config.get("REDIS_DB"),
+        verbose=False
+    )
 
     queue_topic = os.environ.get("debug", redis_config.get("TOPIC"))
-    results_queue = os.environ.get("redis", {}).get("RESULT_TOPIC", redis_config.get("TOPIC"))
+    results_queue = os.environ.get("redis", {}).get(
+        "RESULT_TOPIC", redis_config.get("TOPIC")
+    )
+
+    @ejecutar_en_hilo
+    def health():
+        worker_metadata = [
+            "USER",
+            "WORKER_HOST",
+            "WORKER_HOSTNAME",
+            "WORKER_OS",
+            "WORKER_KERNEL_VERSION",
+            "WORKER_CPU_CORES",
+            "WORKER_GATEWAY",
+            "WORKER_NETWORK_INTERFACE",
+            "WORKER_DOCKER_VERSION",
+            "WORKER_APP_BASE_PATH",
+            "WORKER_APP_ENV",
+            "WORKER_HOME_DIR",
+            "WORKER_CURRENT_DATE",
+            "WORKER_CURRENT_TIME",
+            "WORKER_GPU_COUNT",
+            "WORKER_GPU_MODEL",
+            "WORKER_GPU_MEMORY",
+        ]
+        while True:
+            metadata = {
+                other_metadata: os.environ.get(other_metadata, None)
+                for other_metadata in worker_metadata
+            }
+
+            redis_key = f"workers:{metadata['WORKER_HOST']}:{metadata['USER']}"
+
+            token_manager.write_token(
+                token=redis_key,
+                data=metadata,
+                ttl=30,
+            )
+
+            time.sleep(20)
 
     @queue_manager.on_message(queue_topic)
     def worker(task_data: dict):
@@ -104,9 +144,9 @@ def main(cfg: OmegaConf):
                 results = pipeline.run(task_data)
         except Exception as e:
             traceback.print_exc()
-            
+
             token_manager.write_token(token=task_data["task_id"], data=e.args[0])
-            
+
             return
 
         try:
@@ -130,9 +170,10 @@ def main(cfg: OmegaConf):
         except Exception as e:
             logger.error("Can't report results")
 
+    health()
     queue_manager.start()
     queue_manager.wait()
 
 
-if __name__ == "__main__":    
+if __name__ == "__main__":
     main()
