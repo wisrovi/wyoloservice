@@ -17,7 +17,7 @@ from wredis.hash import RedisHashManager
 
 from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
 
-from worker_utils import MinioS3Client, ejecutar_en_hilo
+from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
@@ -103,7 +103,10 @@ def main(cfg: OmegaConf):
         verbose=False,
     )
 
-    queue_topic = os.environ.get("debug", redis_config.get("TOPIC"))
+    DEBUG_MODE = os.environ.get("debug", None)
+    public_topic = redis_config.get("TOPIC")
+    private_topic = os.environ.get("USER", None)
+
     results_queue = os.environ.get("redis", {}).get(
         "RESULT_TOPIC", redis_config.get("TOPIC")
     )
@@ -150,19 +153,9 @@ def main(cfg: OmegaConf):
 
             time.sleep(20)
 
-    @queue_manager.on_message(queue_topic)
-    def worker(task_data: dict):
-        try:
-            with tempfile.TemporaryDirectory() as temp_dir:
-                task_data["tempfile"] = temp_dir
-                results = pipeline.run(task_data)
-        except Exception as e:
-            traceback.print_exc()
+    shared_resource = SharedResource()
 
-            token_manager.write_token(token=task_data["task_id"], data=e.args[0])
-
-            return
-
+    def complete_requests(results):
         try:
             queue_manager.publish(
                 queue_name=results_queue,
@@ -183,6 +176,57 @@ def main(cfg: OmegaConf):
             )
         except Exception as e:
             logger.error("Can't report results")
+
+    def process_requests(task_data: dict):
+        try:
+            with tempfile.TemporaryDirectory() as temp_dir:
+                task_data["tempfile"] = temp_dir
+
+                results = shared_resource.execute_process(
+                    function=pipeline.run,
+                    args_dict=task_data,
+                )
+
+                return results
+
+                # results = pipeline.run(task_data)
+        except Exception as e:
+            traceback.print_exc()
+
+            token_manager.write_token(token=task_data["task_id"], data=e.args[0])
+
+            return None
+
+    def recreate_request(topic, args_dict):
+        queue_manager.publish(queue_name=topic, data=args_dict)
+        time.sleep(30)
+
+    if private_topic:
+
+        @queue_manager.on_message(private_topic)
+        def private_worker(task_data: dict):
+            # process_requests devuelve None cuando el semaforo esta ocupado
+            results = process_requests(task_data)
+
+            if results is None or shared_resource.elapsedtime() < 500:
+                recreate_request(topic=private_topic, args_dict=task_data)
+            else:
+                complete_requests(results)
+
+    @queue_manager.on_message(public_topic)
+    def public_worker(task_data: dict):
+
+        # si se ha levantado el worker en modo debug no se procesan las peticiones publicas
+        if DEBUG_MODE:
+            recreate_request(topic=public_topic, args_dict=task_data)
+        else:
+            # process_requests devuelve None cuando el semaforo esta ocupado
+            results = process_requests(task_data)
+
+            if results is None:
+                recreate_request(topic=public_topic, args_dict=task_data)
+            else:
+                complete_requests(results)
 
     health()
     queue_manager.start()
