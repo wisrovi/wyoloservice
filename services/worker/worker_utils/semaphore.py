@@ -17,34 +17,29 @@ class SharedResource:
         self.start_time = time.time()
         results = None
 
-        thread_name = "function"
-        if self.semaphore.acquire(
-            blocking=False
-        ):  # Attempt to acquire the semaphore without blocking
+        # Attempt to acquire the semaphore without blocking
+        if self.semaphore.acquire(blocking=False):
             if self.resource_available:
-
                 try:
-                    self.resource_available = False  # Mark the resource as unavailable
-                    logger.info(
-                        f"Thread {thread_name}: Resource acquired, executing process..."
-                    )
+                    # Mark the resource as unavailable
+                    self.resource_available = False
 
                     results = function(args_dict)
-                finally:
-                    self.resource_available = (
-                        True  # Mark the resource as available again
-                    )
+                except:
+                    # Mark the resource as available again
+                    self.resource_available = True
                     self.semaphore.release()  # Release the semaphore
-
+                    raise
+                finally:
+                    # Mark the resource as available again
+                    self.resource_available = True
+                    self.semaphore.release()  # Release the semaphore
             else:
                 self.semaphore.release()  # Release the semaphore if the resource was not available
-                logger.info(
-                    f"Thread {thread_name}: Resource busy, will try again in 30 seconds."
-                )
 
         else:
             logger.info(
-                f"Thread {thread_name}: Could not acquire semaphore, will try again in 30 seconds."
+                f"Train: Could not acquire semaphore, will try again in 30 seconds."
             )
 
         self.end_time = time.time()
