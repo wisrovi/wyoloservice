@@ -3,6 +3,7 @@ import sys
 import tempfile
 import time
 import traceback
+import uuid
 
 import hydra
 import mlflow
@@ -91,7 +92,7 @@ def main(cfg: OmegaConf):
         host=redis_config.get("REDIS_HOST"),
         port=redis_config.get("REDIS_PORT"),
         db=redis_config.get("REDIS_DB"),
-        verbose=False
+        verbose=False,
     )
 
     queue_topic = os.environ.get("debug", redis_config.get("TOPIC"))
@@ -126,7 +127,11 @@ def main(cfg: OmegaConf):
                 for other_metadata in worker_metadata
             }
 
-            redis_key = f"workers:{metadata['WORKER_HOST']}:{metadata['USER']}"
+            redis_key = (
+                "workers"
+                + f":{metadata.get('WORKER_HOST', 'noIp')}"
+                + f":{metadata.get('USER', str(uuid.uuid4()))}"
+            )
 
             token_manager.write_token(
                 token=redis_key,
