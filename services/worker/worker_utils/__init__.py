@@ -15,3 +15,4 @@ from worker_utils.decorators import (
 from states.optimize_optuna import OptunaOptimize
 
 from worker_utils.utils import merge_configs, copiar_archivo
+from worker_utils.semaphore import SharedResource
