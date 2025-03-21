@@ -4,6 +4,24 @@ import torch
 import yaml
 from loguru import logger
 
+import threading
+import functools
+
+
+def ejecutar_en_hilo(func):
+    """
+    Decorador para ejecutar una función en un hilo separado.
+    """
+
+    @functools.wraps(func)
+    def envoltorio(*args, **kwargs):
+        hilo = threading.Thread(target=func, args=args, kwargs=kwargs)
+        hilo.start()
+        return hilo
+
+    return envoltorio
+
+
 # from ray import tune
 
 
