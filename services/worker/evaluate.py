@@ -12,27 +12,38 @@ if CONTROL_HOST is None:
     raise Exception("CONTROL_HOST env var is not set")
 
 
-@hydra.main(config_path="/app", config_name="config", version_base=None)
-def procesos(cfg: OmegaConf):
-    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
+def complete_config(
+    worker_config: OmegaConf, config_path: str = "/demo/config_train.yaml"
+):
+
+    worker_config.mlflow.MLFLOW_TRACKING_URI = (
+        worker_config.mlflow.MLFLOW_TRACKING_URI.replace("localhost", CONTROL_HOST)
+    )
+
+    worker_config.minio.MINIO_ENDPOINT = worker_config.minio.MINIO_ENDPOINT.replace(
         "localhost", CONTROL_HOST
     )
 
-    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(
+    worker_config.redis.REDIS_HOST = worker_config.redis.REDIS_HOST.replace(
         "localhost", CONTROL_HOST
     )
-
-    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace("localhost", CONTROL_HOST)
-    cfg = OmegaConf.to_container(cfg, resolve=True)
-
-    config_path: str = "/demo/config_train.yaml"
+    worker_config = OmegaConf.to_container(worker_config, resolve=True)
 
     with open(config_path, "r") as f:
         user_config = yaml.safe_load(f)
 
     user_config = merge_configs(
-        default_config=cfg,
+        default_config=worker_config,
         user_config=user_config,
+    )
+
+
+@hydra.main(config_path="/app", config_name="config", version_base=None)
+def procesos(cfg: OmegaConf):
+
+    user_config = complete_config(
+        worker_config=cfg,
+        config_path="/demo/config_train.yaml",
     )
 
     with open("/demo/config.yaml", "w") as f:
