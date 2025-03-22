@@ -3,9 +3,9 @@ import shutil
 import uuid
 
 import yaml
-from app.database import TrainingHistory, db
+# from train_yolo import TrainingHistory, db
 
-# from api.minio import download_model, list_models
+from api.minio import download_model, list_models
 
 from fastapi import FastAPI, File, UploadFile
 from wredis.queue import RedisQueueManager
@@ -14,16 +14,16 @@ CONFIG_DIR = "/config_versions"
 os.makedirs(CONFIG_DIR, exist_ok=True)
 
 
-config_path = "/code/app/config.yaml"
+config_path = "/app/config.yaml"
 with open(config_path, "r") as f:
     cfg = yaml.safe_load(f)
 
 
 redis_config = cfg.get("redis", {})
 queue_manager = RedisQueueManager(
-    host="redis",
-    port=6379,
-    db=0,
+    host=redis_config.get("REDIS_HOST"),
+    port=redis_config.get("REDIS_PORT"),
+    db=redis_config.get("REDIS_DB"),
 )
 
 
@@ -32,19 +32,13 @@ app = FastAPI()
 
 @app.post("/train/")
 def start_training(user_code: str, file: UploadFile = File(...)):
-    """Registra un entrenamiento y lo encola en Redis.
-
-    usa debug: "queue_name" para enviar a una cola específica, siendo "queue_name" el nombre de la cola en la que un worker privado esta escuchando.
-    """
+    """Registra un entrenamiento y lo encola en Redis."""
 
     task_id = str(uuid.uuid4()).replace("-", "").replace("_", "")
 
     config_path = os.path.join(CONFIG_DIR, f"{task_id}.yaml")
     with open(config_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
-
-    with open(config_path, "r") as f:
-        user_config = yaml.safe_load(f)
 
     try:
         count = len(db.get_all())
@@ -62,14 +56,13 @@ def start_training(user_code: str, file: UploadFile = File(...)):
         )
     )
 
-    queue_topic = user_config.get("debug", redis_config.get("TOPIC"))
-
     queue_manager.publish(
-        queue_name=queue_topic,
+        queue_name=redis_config.get("TOPIC"),
         data={
             "task_id": task_id,
             "config_path": config_path,
             "user_code": user_code,
+            "db_count": count + 1,
         },
     )
 

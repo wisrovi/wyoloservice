@@ -2,9 +2,26 @@ import os
 import yaml
 import re
 import subprocess
+from wredis.streams import RedisStreamManager
+from loguru import logger
 
 
-def ejecutar_comando(args: dict, trial_number: int, verbose=True):
+def ejecutar_comando(args: dict, trial_number: int, verbose=True, config_path=None):
+
+    stream_manager = None
+    if config_path:
+        with open(config_path, "r") as f:
+            user_config = yaml.safe_load(f)
+
+        redis_config = user_config.get("redis", {})
+        task_id = user_config.get("task_id", None)
+
+        stream_manager = RedisStreamManager(
+            host=redis_config.get("REDIS_HOST"),
+            port=redis_config.get("REDIS_PORT"),
+            db=redis_config.get("REDIS_DB"),
+        )
+
     buffer = []  # Para almacenar toda la salida y parsear al final
     try:
         # Ejecutar el comando y redirigir stdout y stderr
@@ -21,7 +38,15 @@ def ejecutar_comando(args: dict, trial_number: int, verbose=True):
             for line in process.stdout:
                 buffer.append(line)  # Almacenar línea para parsear después
                 if verbose:
-                    print(line, end="")  # Mostrar en tiempo real
+                    logger.info(line, end="")  # Mostrar en tiempo real
+
+                if stream_manager:
+                    stream_manager.add_to_stream(
+                        key=task_id,
+                        data={
+                            "value": line,
+                        },
+                    )
 
             # Esperar a que el proceso termine
             process.wait()
@@ -68,7 +93,10 @@ def ejecutar_comando(args: dict, trial_number: int, verbose=True):
 
 
 def train_run(
-    config_path: str, trial_number: int, verbose: bool = False, fitness: str = "fitness"
+    config_path: str,
+    trial_number: int,
+    verbose: bool = False,
+    fitness: str = "fitness",
 ):
     train_yolo_path = "/lib/wyoloservice/train_yolo"
     os.chdir(train_yolo_path)
@@ -81,7 +109,12 @@ def train_run(
         f"--fitness={fitness}",
     ]
 
-    resultado = ejecutar_comando(args, trial_number, verbose=True)
+    resultado = ejecutar_comando(
+        args,
+        trial_number,
+        verbose=True,
+        config_path=config_path,
+    )
 
     return resultado
 

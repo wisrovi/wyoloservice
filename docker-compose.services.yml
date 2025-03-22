@@ -16,7 +16,7 @@ x-resources: &resources_gpu
   deploy:
     resources:
       limits:
-        cpus: "6.0"
+        cpus: "7.0"
         memory: 24g
       reservations:
         # cpus: "1.0"
@@ -36,9 +36,12 @@ services:
     image: wisrovi/wyoloservice:worker
     env_file:
       - control_host.env
+      - user.env
     restart: always
-    command: tail -f /dev/null
+    # command: tail -f /dev/null
     privileged: true
+    volumes:
+      - ./demo:/demo
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH

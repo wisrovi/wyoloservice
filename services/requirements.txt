@@ -21,6 +21,6 @@ loguru
 logbook
 python-slugify
 dvc
-ray[tune]
+# ray[tune]
 # dvclive  # not yet available
 

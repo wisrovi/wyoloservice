@@ -1,12 +1,12 @@
-debug: wrodriguez  # [optional] for create debug mode
+private: wisrovi  # [optional] for create private mode
 
 model: "yolov8n-cls.pt"
 type: "yolo"
 dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
-  batch: 2
+  batch: -1
   data: /datasets/clasificacion/colorball.v8i.multiclass/
-  epochs: 1
+  epochs: 20
   imgsz: 640
 # val:
 #   conf: 0.01
@@ -18,9 +18,9 @@ sweeper:
   direction: maximize
   study_name: "example_clasification"
   sampler: "TPESampler" # TPESampler, RandomSampler, GridSampler
-  tune: true # [opcional] para activar la busqueda de hiperparametros en modo de ajuste fino
+  # tune: true # [opcional] para activar la busqueda de hiperparametros en modo de ajuste fino
   fitness: "metrics/accuracy_top1"
-  n_trials: 2
+  n_trials: 5
   search_space:
     model: ["choice", "yolov8n-cls.pt"]
     train:

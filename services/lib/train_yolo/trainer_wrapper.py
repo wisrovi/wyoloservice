@@ -9,7 +9,14 @@ import GPUtil
 import mlflow
 from loguru import logger
 from PIL import Image
+import mlflow.data
+import mlflow.data
+import mlflow.data
+import mlflow.data.filesystem_dataset_source
+import mlflow.data.http_dataset_source
 from slugify import slugify
+
+from wredis.hash import RedisHashManager
 from ultralytics import RTDETR, YOLO, settings
 from ultralytics.utils.autobatch import autobatch
 
@@ -65,6 +72,27 @@ class TrainerWrapper:
     is_configured = False
     model = None
 
+    worker_metadata = [
+        "USER",
+        "WORKER_HOST",
+        "WORKER_HOSTNAME",
+        "WORKER_OS",
+        "WORKER_KERNEL_VERSION",
+        "WORKER_CPU_CORES",
+        "WORKER_GATEWAY",
+        "WORKER_NETWORK_INTERFACE",
+        "WORKER_DOCKER_VERSION",
+        "WORKER_APP_BASE_PATH",
+        "WORKER_APP_ENV",
+        "WORKER_HOME_DIR",
+        "WORKER_CURRENT_DATE",
+        "WORKER_CURRENT_TIME",
+        "WORKER_GPU_COUNT",
+        "WORKER_GPU_MODEL",
+        "WORKER_GPU_MEMORY",
+    ]
+    hash_manager = None
+
     def __init__(self, config: dict):
 
         self.config = config
@@ -77,6 +105,15 @@ class TrainerWrapper:
 
         # Reset settings to default values
         settings.reset()
+
+        if "redis" in self.config:
+            redis_config = self.config.get("redis", {})
+            self.hash_manager = RedisHashManager(
+                host=redis_config.get("REDIS_HOST"),
+                port=redis_config.get("REDIS_PORT"),
+                db=redis_config.get("REDIS_DB"),
+                verbose=False,
+            )
 
     def get_better_batch(self, batch_to_use: int = -1):
         optimal_batch = autobatch(
@@ -155,16 +192,25 @@ class TrainerWrapper:
 
             if data_url:
                 try:
+                    dataset_source: DatasetSource = HTTPDatasetSource(
+                        url=dataset_source_url
+                    )
+                    dataset_source = mlflow.data.filesystem_dataset_source.FileSystemDatasetSource.from_dict(
+                        {"path": data_url}
+                    )
                     mlflow.log_input(
-                        mlflow.data.Dataset(source=data_url, name="dataset_dvc")
+                        mlflow.data.Dataset(source=dataset_source, name="dataset_dvc")
                     )
                 except:
                     logger.error(f"Error al cargar el dataset {data_url}")
             if data_path:
                 try:
+                    dataset_source = mlflow.data.http_dataset_source.HttpDatasetSource(
+                        {"path": data_path}
+                    )
                     mlflow.log_input(
                         mlflow.data.Dataset(
-                            source=data_path, name="dataset_dvc_local"
+                            source=dataset_source, name="dataset_dvc_local"
                         )
                     )
                 except:
@@ -185,7 +231,12 @@ class TrainerWrapper:
             except:
                 pass
 
-            mlflow.log_params(config_copy["train"])
+            for key, value in config_copy["train"].items():
+                try:
+                    mlflow.log_param(key, value)
+                except:
+                    pass
+
             mlflow.set_tag(
                 "mlflow.note.content", self.config.get("metadata", {}).get("content")
             )
@@ -208,27 +259,7 @@ class TrainerWrapper:
                 "data_source", self.config.get("train", {}).get("data", "NA")
             )
 
-            worker_metadata = [
-                "USER",
-                "WORKER_HOST",
-                "WORKER_HOSTNAME",
-                "WORKER_OS",
-                "WORKER_KERNEL_VERSION",
-                "WORKER_CPU_CORES",
-                "WORKER_GATEWAY",
-                "WORKER_NETWORK_INTERFACE",
-                "WORKER_DOCKER_VERSION",
-                "WORKER_APP_BASE_PATH",
-                "WORKER_APP_ENV",
-                "WORKER_HOME_DIR",
-                "WORKER_CURRENT_DATE",
-                "WORKER_CURRENT_TIME",
-                "WORKER_GPU_COUNT",
-                "WORKER_GPU_MODEL",
-                "WORKER_GPU_MEMORY",
-            ]
-
-            for other_metadata in worker_metadata:
+            for other_metadata in self.worker_metadata:
                 tag_metadata = os.environ.get(other_metadata, None)
                 if tag_metadata:
                     try:
@@ -238,6 +269,41 @@ class TrainerWrapper:
 
             # Subir 3 imágenes por clase
             self.log_example_images(model_type=trainer.model._get_name())
+
+    def on_epoch_end(self, trainer):
+        if "minio" in self.config and "mlflow" in self.config:
+            metadata = {
+                other_metadata: os.environ.get(other_metadata, None)
+                for other_metadata in self.worker_metadata
+            }
+
+            trial_number = self.config.get("trial_number", 1)
+            total_trails = self.config.get("sweeper", 1).get("n_trials", 10)
+
+            total_epochs = self.config.get("train", {}).get("epochs", 10)
+
+            #
+            epoch = trainer.epoch + 1
+
+            task_id = self.config.get("task_id", "noTaskId")
+
+            metadata["TRIAL_NUMBER"] = trial_number
+            metadata["TOTAL_TRIALS"] = total_trails
+            metadata["TOTAL_EPOCHS"] = total_epochs
+            metadata["EPOCH"] = epoch
+            metadata["EPOCH_PROGRESS"] = epoch / total_epochs
+            metadata["TRIAL_PROGRESS"] = trial_number / total_trails
+
+            redis_key = "progress" + f":{task_id}"
+
+            if self.hash_manager:
+                for metadata_key, metadata_value in metadata.items():
+                    self.hash_manager.create_hash(
+                        key=redis_key,
+                        hash_name=metadata_key,
+                        value=metadata_value,
+                        ttl=120,
+                    )
 
     def log_example_images(self, model_type: str):
         images, labels = self.get_images_and_labels(model_type=model_type)
@@ -319,5 +385,6 @@ class TrainerWrapper:
         if "minio" in self.config and "mlflow" in self.config:
             self.model.add_callback("on_train_start", self.on_train_start)
             self.model.add_callback("on_train_end", self.on_train_end)
+            self.model.add_callback("on_fit_epoch_end", self.on_epoch_end)
 
         return model

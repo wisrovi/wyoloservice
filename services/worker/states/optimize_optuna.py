@@ -8,7 +8,7 @@ import torch
 import optuna
 import yaml
 from loguru import logger
-from train_yolo import train_run
+from train_yolo import train_run, train
 from ultralytics import YOLO
 from tqdm import tqdm
 
@@ -26,6 +26,7 @@ class OptunaOptimize:
 
     __VERSION__ = "0.1.0"
     __NAME__ = "model_train"
+    DEBUG_MODE = os.environ.get("debug", None)
 
     def search_best_model(self, request_config_user: dict):
         """Search for the best model based on hyperparameter optimization.
@@ -61,7 +62,7 @@ class OptunaOptimize:
         progress_rich = request_config_user.get("progress_rich", None)
 
         def progress_bar_generator():
-            if progress_rich is None:
+            if progress_rich is None or True:
                 with tqdm(
                     total=sweeper_config.get("n_trials", 10),
                     desc="Searching for best hyperparameters",
@@ -113,15 +114,28 @@ class OptunaOptimize:
                 # Create a temporary directory to store a temporary config file
                 with tempfile.TemporaryDirectory() as temp_dir:
                     temp_config_path = os.path.join(temp_dir, "config.yaml")
+                    config["trial_number"] = int(trial.number)
+
                     with open(temp_config_path, "w") as yaml_file:
                         yaml.dump(config, yaml_file)
 
-                    metric = train_run(
-                        config_path=temp_config_path,
-                        trial_number=int(trial.number),
-                        verbose=False,
-                        fitness=config.get("sweeper", {}).get("fitness", "fitness"),
-                    )
+                    if OptunaOptimize.DEBUG_MODE or True:
+                        metric = None
+                        request_config = train.callback(
+                            config_path=temp_config_path,
+                            fitness=config.get("sweeper", {}).get("fitness", "fitness"),
+                            trial_number=int(trial.number),
+                        )
+                        metric = request_config["train"]["results"][
+                            config.get("sweeper", {}).get("fitness", "fitness")
+                        ]
+                    else:
+                        metric = train_run(
+                            config_path=temp_config_path,
+                            trial_number=int(trial.number),
+                            verbose=False,
+                            fitness=config.get("sweeper", {}).get("fitness", "fitness"),
+                        )
 
                     best_model = f"{result_path}/{int(trial.number)}/train_{config['task_id']}/weights/best.pt"
                     if os.path.exists(best_model):
@@ -142,20 +156,12 @@ class OptunaOptimize:
                 logger.error(f"Error executing objective: {e}")
                 raise optuna.TrialPruned("Error executing objective.")
 
-        chosen_strategy = sweeper_config.get("sampler", "TPESampler")
-        if chosen_strategy == "TPESampler":
-            sampler = optuna.samplers.TPESampler()
-        elif chosen_strategy == "RandomSampler":
-            sampler = optuna.samplers.RandomSampler()
-        elif chosen_strategy == "GridSampler":
-            sampler = optuna.samplers.GridSampler(
-                search_space={"lr0": [0.001, 0.01, 0.1], "momentum": [0.8, 0.9, 0.99]}
-            )
-
         study = optuna.create_study(
             direction=sweeper_config.get("direction", "minimize"),
             study_name=sweeper_config.get("study_name", "default_study"),
-            sampler=sampler,
+            sampler=getattr(
+                optuna.samplers, sweeper_config.get("sampler", "TPESampler")
+            )(),
         )
         study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
 

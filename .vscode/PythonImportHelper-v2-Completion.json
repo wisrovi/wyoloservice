@@ -80,14 +80,6 @@
         "documentation": {}
     },
     {
-        "label": "YOLO",
-        "importPath": "ultralytics",
-        "description": "ultralytics",
-        "isExtraImport": true,
-        "detail": "ultralytics",
-        "documentation": {}
-    },
-    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -129,6 +121,22 @@
         "importPath": "cv2",
         "description": "cv2",
         "detail": "cv2",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
         "documentation": {}
     },
     {
@@ -329,6 +337,14 @@
         "documentation": {}
     },
     {
+        "label": "ConfigDict",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
         "label": "requests",
         "kind": 6,
         "isExtraImport": true,
@@ -370,12 +386,70 @@
         "documentation": {}
     },
     {
+        "label": "train",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
         "label": "mlflow",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "mlflow",
         "description": "mlflow",
         "detail": "mlflow",
+        "documentation": {}
+    },
+    {
+        "label": "customtkinter",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "customtkinter",
+        "description": "customtkinter",
+        "detail": "customtkinter",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "filedialog",
+        "importPath": "tkinter",
+        "description": "tkinter",
+        "isExtraImport": true,
+        "detail": "tkinter",
+        "documentation": {}
+    },
+    {
+        "label": "RedisStreamManager",
+        "importPath": "wredis.streams",
+        "description": "wredis.streams",
+        "isExtraImport": true,
+        "detail": "wredis.streams",
+        "documentation": {}
+    },
+    {
+        "label": "RedisStreamManager",
+        "importPath": "wredis.streams",
+        "description": "wredis.streams",
+        "isExtraImport": true,
+        "detail": "wredis.streams",
         "documentation": {}
     },
     {
@@ -397,19 +471,19 @@
         "documentation": {}
     },
     {
-        "label": "TrainingHistory",
-        "importPath": "app.database",
-        "description": "app.database",
+        "label": "download_model",
+        "importPath": "api.minio",
+        "description": "api.minio",
         "isExtraImport": true,
-        "detail": "app.database",
+        "detail": "api.minio",
         "documentation": {}
     },
     {
-        "label": "db",
-        "importPath": "app.database",
-        "description": "app.database",
+        "label": "list_models",
+        "importPath": "api.minio",
+        "description": "api.minio",
         "isExtraImport": true,
-        "detail": "app.database",
+        "detail": "api.minio",
         "documentation": {}
     },
     {
@@ -470,15 +544,6 @@
         "documentation": {}
     },
     {
-        "label": "subprocess",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "subprocess",
-        "description": "subprocess",
-        "detail": "subprocess",
-        "documentation": {}
-    },
-    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -523,11 +588,54 @@
         "documentation": {}
     },
     {
+        "label": "mlflow.data",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mlflow.data",
+        "description": "mlflow.data",
+        "detail": "mlflow.data",
+        "documentation": {}
+    },
+    {
+        "label": "mlflow.data.filesystem_dataset_source",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mlflow.data.filesystem_dataset_source",
+        "description": "mlflow.data.filesystem_dataset_source",
+        "detail": "mlflow.data.filesystem_dataset_source",
+        "documentation": {}
+    },
+    {
+        "label": "mlflow.data.http_dataset_source",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "mlflow.data.http_dataset_source",
+        "description": "mlflow.data.http_dataset_source",
+        "detail": "mlflow.data.http_dataset_source",
+        "documentation": {}
+    },
+    {
         "label": "slugify",
         "importPath": "slugify",
         "description": "slugify",
         "isExtraImport": true,
         "detail": "slugify",
+        "documentation": {}
+    },
+    {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
         "documentation": {}
     },
     {
@@ -638,12 +746,45 @@
         "documentation": {}
     },
     {
+        "label": "MinioS3Client",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "ejecutar_en_hilo",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "SharedResource",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
         "label": "math",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "math",
         "description": "math",
         "detail": "math",
+        "documentation": {}
+    },
+    {
+        "label": "functools",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "functools",
+        "description": "functools",
+        "detail": "functools",
         "documentation": {}
     },
     {
@@ -766,6 +907,30 @@
         "documentation": {}
     },
     {
+        "label": "OmegaConf",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "merge_configs",
+        "importPath": "states.read_user_config",
+        "description": "states.read_user_config",
+        "isExtraImport": true,
+        "detail": "states.read_user_config",
+        "documentation": {}
+    },
+    {
+        "label": "deepcopy",
+        "importPath": "copy",
+        "description": "copy",
+        "isExtraImport": true,
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
         "label": "sys",
         "kind": 6,
         "isExtraImport": true,
@@ -845,14 +1010,6 @@
         "description": "states",
         "isExtraImport": true,
         "detail": "states",
-        "documentation": {}
-    },
-    {
-        "label": "MinioS3Client",
-        "importPath": "worker_utils.minio",
-        "description": "worker_utils.minio",
-        "isExtraImport": true,
-        "detail": "worker_utils.minio",
         "documentation": {}
     },
     {
@@ -955,11 +1112,164 @@
         "documentation": {}
     },
     {
+        "label": "obtener_usuario",
+        "kind": 2,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "def obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(['whoami'], capture_output=True, text=True, check=True)\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"\ndef crear_archivo():\n    control_host = entry_control_host.get()\n    cifs_user = entry_cifs_user.get()",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "crear_archivo",
+        "kind": 2,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "def crear_archivo():\n    control_host = entry_control_host.get()\n    cifs_user = entry_cifs_user.get()\n    cifs_pass = entry_cifs_pass.get()\n    modo = menu_modo.get()\n    if control_host and cifs_user and cifs_pass:\n        with open(\"control_host.env\", \"w\") as f:\n            f.write(f\"CONTROL_HOST={control_host}\\n\")\n            f.write(f\"CIFS_USER={cifs_user}\\n\")\n            f.write(f\"CIFS_PASS={cifs_pass}\\n\")",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "ventana",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Configuración\")\nctk.CTkLabel(ventana, text=\"CONTROL_HOST:\").grid(row=0, column=0, padx=10, pady=10)\nentry_control_host = ctk.CTkEntry(ventana)\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_control_host",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "entry_control_host = ctk.CTkEntry(ventana)\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_cifs_user",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "entry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.grid(row=3, column=0, columnspan=2, pady=10)\nmenu_modo.set(\"Público\")  # Valor predeterminado\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_cifs_pass",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "entry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.grid(row=3, column=0, columnspan=2, pady=10)\nmenu_modo.set(\"Público\")  # Valor predeterminado\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=4, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "menu_modo",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "menu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.grid(row=3, column=0, columnspan=2, pady=10)\nmenu_modo.set(\"Público\")  # Valor predeterminado\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=4, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)\nventana.mainloop()",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "boton_crear",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "boton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=4, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)\nventana.mainloop()",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "label_error",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)\nventana.mainloop()",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_usuario",
+        "kind": 2,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "def obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"\ndef cargar_configuracion():",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "cargar_configuracion",
+        "kind": 2,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "def cargar_configuracion():\n    \"\"\"Carga la configuración desde control_host.env.\"\"\"\n    try:\n        with open(\"control_host.env\", \"r\") as f:\n            config = {}\n            for line in f:\n                key, value = line.strip().split(\"=\")\n                config[key] = value\n            return config\n    except FileNotFoundError:",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "seleccionar_archivo",
+        "kind": 2,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo():\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        label_error.configure(text=\"Archivo de configuración no encontrado.\")",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "enviar_archivo",
+        "kind": 2,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "def enviar_archivo():\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        label_error.configure(text=\"Archivo de configuración no encontrado.\")\n        return\n    filename = seleccionar_archivo()\n    if not filename:\n        return  # El usuario canceló la selección del archivo",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "GLOBAL_RESPONSE",
+        "kind": 5,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "GLOBAL_RESPONSE = None\ndef obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "ventana",
+        "kind": 5,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Envío de Archivo\")\nboton_enviar = ctk.CTkButton(\n    ventana, text=\"Seleccionar y Enviar Archivo\", command=enviar_archivo\n)\nboton_enviar.grid(row=0, column=0, padx=20, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "boton_enviar",
+        "kind": 5,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "boton_enviar = ctk.CTkButton(\n    ventana, text=\"Seleccionar y Enviar Archivo\", command=enviar_archivo\n)\nboton_enviar.grid(row=0, column=0, padx=20, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
+        "label": "label_error",
+        "kind": 5,
+        "importPath": "production.3 user_dataset.user_request",
+        "description": "production.3 user_dataset.user_request",
+        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
+        "detail": "production.3 user_dataset.user_request",
+        "documentation": {}
+    },
+    {
         "label": "start_training",
         "kind": 2,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\n    usa debug: \"queue_name\" para enviar a una cola específica.\n    \"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    with open(config_path, \"r\") as f:\n        user_config = yaml.safe_load(f)",
+        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:\n        count = 0",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -968,7 +1278,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\nconfig_path = \"/code/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=0,",
+        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\nconfig_path = \"/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -977,7 +1287,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "config_path = \"/code/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=0,\n)\napp = FastAPI()",
+        "peekOfCode": "config_path = \"/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -986,7 +1296,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "redis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=0,\n)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.",
+        "peekOfCode": "redis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -995,7 +1305,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "queue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=0,\n)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\n    usa debug: \"queue_name\" para enviar a una cola específica.",
+        "peekOfCode": "queue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1004,7 +1314,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\n    usa debug: \"queue_name\" para enviar a una cola específica.\n    \"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)",
+        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1013,7 +1323,7 @@
         "kind": 6,
         "importPath": "services.lib.train_yolo.database",
         "description": "services.lib.train_yolo.database",
-        "peekOfCode": "class TrainingHistory(BaseModel):\n    id: int = Field(primary_key=True)\n    task_id: str\n    status: str\n    user_code: str\n    timestamp: str = datetime.utcnow()\n    config_path: str\n    model_path: str = None\n    cpu_usage: float = None\n    ram_usage: float = None",
+        "peekOfCode": "class TrainingHistory(BaseModel):\n    id: int = Field(primary_key=True)\n    task_id: str\n    status: str\n    user_code: str\n    timestamp: str = datetime.utcnow().isoformat()\n    config_path: str\n    model_path: str = None\n    cpu_usage: float = None\n    ram_usage: float = None",
         "detail": "services.lib.train_yolo.database",
         "documentation": {}
     },
@@ -1040,7 +1350,7 @@
         "kind": 2,
         "importPath": "services.lib.train_yolo.executor",
         "description": "services.lib.train_yolo.executor",
-        "peekOfCode": "def ejecutar_comando(args: dict, trial_number: int, verbose=True):\n    buffer = []  # Para almacenar toda la salida y parsear al final\n    try:\n        # Ejecutar el comando y redirigir stdout y stderr\n        with subprocess.Popen(\n            args,\n            stdout=subprocess.PIPE,\n            stderr=subprocess.STDOUT,  # Combinar stderr con stdout\n            text=True,\n            bufsize=1,  # Line-buffered (1 línea a la vez)",
+        "peekOfCode": "def ejecutar_comando(args: dict, trial_number: int, verbose=True, config_path=None):\n    stream_manager = None\n    if config_path:\n        with open(config_path, \"r\") as f:\n            user_config = yaml.safe_load(f)\n        redis_config = user_config.get(\"redis\", {})\n        task_id = user_config.get(\"task_id\", None)\n        stream_manager = RedisStreamManager(\n            host=redis_config.get(\"REDIS_HOST\"),\n            port=redis_config.get(\"REDIS_PORT\"),",
         "detail": "services.lib.train_yolo.executor",
         "documentation": {}
     },
@@ -1049,7 +1359,7 @@
         "kind": 2,
         "importPath": "services.lib.train_yolo.executor",
         "description": "services.lib.train_yolo.executor",
-        "peekOfCode": "def train_run(\n    config_path: str, trial_number: int, verbose: bool = False, fitness: str = \"fitness\"\n):\n    train_yolo_path = \"/lib/wyoloservice/train_yolo\"\n    os.chdir(train_yolo_path)\n    args = [\n        \"python\",\n        f\"yolo_train.py\",\n        f\"--config_path={config_path}\",\n        f\"--trial_number={trial_number}\",",
+        "peekOfCode": "def train_run(\n    config_path: str,\n    trial_number: int,\n    verbose: bool = False,\n    fitness: str = \"fitness\",\n):\n    train_yolo_path = \"/lib/wyoloservice/train_yolo\"\n    os.chdir(train_yolo_path)\n    args = [\n        \"python\",",
         "detail": "services.lib.train_yolo.executor",
         "documentation": {}
     },
@@ -1058,7 +1368,7 @@
         "kind": 6,
         "importPath": "services.lib.train_yolo.trainer_wrapper",
         "description": "services.lib.train_yolo.trainer_wrapper",
-        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    def __init__(self, config: dict):\n        # Update a setting\n        if \"minio\" in self.config:\n            settings.update({\"mlflow\": True})",
+        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    worker_metadata = [\n        \"USER\",\n        \"WORKER_HOST\",\n        \"WORKER_HOSTNAME\",",
         "detail": "services.lib.train_yolo.trainer_wrapper",
         "documentation": {}
     },
@@ -1171,6 +1481,15 @@
         "documentation": {}
     },
     {
+        "label": "ejecutar_en_hilo",
+        "kind": 2,
+        "importPath": "services.worker.worker_utils.decorators",
+        "description": "services.worker.worker_utils.decorators",
+        "peekOfCode": "def ejecutar_en_hilo(func):\n    \"\"\"\n    Decorador para ejecutar una función en un hilo separado.\n    \"\"\"\n    @functools.wraps(func)\n    def envoltorio(*args, **kwargs):\n        hilo = threading.Thread(target=func, args=args, kwargs=kwargs)\n        hilo.start()\n        return hilo\n    return envoltorio",
+        "detail": "services.worker.worker_utils.decorators",
+        "documentation": {}
+    },
+    {
         "label": "catch_errors",
         "kind": 2,
         "importPath": "services.worker.worker_utils.decorators",
@@ -1270,6 +1589,15 @@
         "documentation": {}
     },
     {
+        "label": "SharedResource",
+        "kind": 6,
+        "importPath": "services.worker.worker_utils.semaphore",
+        "description": "services.worker.worker_utils.semaphore",
+        "peekOfCode": "class SharedResource:\n    def __init__(self):\n        self.semaphore = threading.Semaphore(1)  # Initialized to 1, acts like a lock\n        self.resource_available = True\n        self.end_time = 0\n        self.start_time = 0\n    def elapsedtime(self):\n        return self.end_time - self.start_time\n    def execute_process(self, function: callable, args_dict: dict):\n        self.start_time = time.time()",
+        "detail": "services.worker.worker_utils.semaphore",
+        "documentation": {}
+    },
+    {
         "label": "copiar_archivo",
         "kind": 2,
         "importPath": "services.worker.worker_utils.utils",
@@ -1306,11 +1634,29 @@
         "documentation": {}
     },
     {
-        "label": "evaluate_model",
+        "label": "complete_config",
         "kind": 2,
         "importPath": "services.worker.evaluate",
         "description": "services.worker.evaluate",
-        "peekOfCode": "def evaluate_model(model_path, test_data):\n    \"\"\"Evalúa un modelo con nuevos datos y registra métricas en MLflow.\"\"\"\n    model = YOLO(model_path)\n    results = model.val(data=test_data)\n    mlflow.log_metrics({\n        \"precision\": results.results[\"precision\"],\n        \"recall\": results.results[\"recall\"],\n        \"map50\": results.results[\"map50\"],\n        \"map50_95\": results.results[\"map50_95\"]\n    })",
+        "peekOfCode": "def complete_config(\n    worker_config: OmegaConf, config_path: str = \"/demo/config_train.yaml\"\n):\n    worker_config.mlflow.MLFLOW_TRACKING_URI = (\n        worker_config.mlflow.MLFLOW_TRACKING_URI.replace(\"localhost\", CONTROL_HOST)\n    )\n    worker_config.minio.MINIO_ENDPOINT = worker_config.minio.MINIO_ENDPOINT.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    worker_config.redis.REDIS_HOST = worker_config.redis.REDIS_HOST.replace(",
+        "detail": "services.worker.evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "procesos",
+        "kind": 2,
+        "importPath": "services.worker.evaluate",
+        "description": "services.worker.evaluate",
+        "peekOfCode": "def procesos(cfg: OmegaConf):\n    user_config = complete_config(\n        worker_config=cfg,\n        config_path=\"/demo/config_train.yaml\",\n    )\n    with open(\"/demo/config.yaml\", \"w\") as f:\n        yaml.dump(user_config, f, allow_unicode=True, default_flow_style=False)\n    request_config = train.callback(\n        config_path=\"/demo/config.yaml\",\n        fitness=\"metrics/accuracy_top1\",",
+        "detail": "services.worker.evaluate",
+        "documentation": {}
+    },
+    {
+        "label": "CONTROL_HOST",
+        "kind": 5,
+        "importPath": "services.worker.evaluate",
+        "description": "services.worker.evaluate",
+        "peekOfCode": "CONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\ndef complete_config(\n    worker_config: OmegaConf, config_path: str = \"/demo/config_train.yaml\"\n):\n    worker_config.mlflow.MLFLOW_TRACKING_URI = (\n        worker_config.mlflow.MLFLOW_TRACKING_URI.replace(\"localhost\", CONTROL_HOST)\n    )\n    worker_config.minio.MINIO_ENDPOINT = worker_config.minio.MINIO_ENDPOINT.replace(",
         "detail": "services.worker.evaluate",
         "documentation": {}
     },
@@ -1319,7 +1665,7 @@
         "kind": 2,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "def main(cfg: OmegaConf):\n    global DEFAULT_CONFIG\n    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace(\n        \"localhost\", CONTROL_HOST",
+        "peekOfCode": "def main(cfg: OmegaConf):\n    global DEFAULT_CONFIG\n    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace(\"localhost\", CONTROL_HOST)\n    mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)",
         "detail": "services.worker.worker",
         "documentation": {}
     },
