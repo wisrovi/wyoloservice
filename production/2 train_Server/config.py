@@ -13,7 +13,9 @@ def crear_archivo():
     control_host = entry_control_host.get()
     cifs_user = entry_cifs_user.get()
     cifs_pass = entry_cifs_pass.get()
-    modo = menu_modo.get()
+    modo = menu_modo.get() if opciones_avanzadas_visible else "Público"
+    num_current_train = entry_num_current_train.get() if opciones_avanzadas_visible else "1"
+    max_gpu = entry_max_gpu.get() if opciones_avanzadas_visible else "60"
 
     if control_host and cifs_user and cifs_pass:
         with open("control_host.env", "w") as f:
@@ -23,9 +25,27 @@ def crear_archivo():
             if modo == "Privado":
                 usuario = obtener_usuario()
                 f.write(f"debug={usuario}\n")
+            f.write(f"NUM_CURRENT_TRAIN={num_current_train}\n")
+            f.write(f"MAX_GPU={max_gpu}\n")
         ventana.destroy()
     else:
         label_error.configure(text="Por favor, completa todos los campos.")
+
+def toggle_opciones_avanzadas():
+    global opciones_avanzadas_visible
+    opciones_avanzadas_visible = not opciones_avanzadas_visible
+    if opciones_avanzadas_visible:
+        menu_modo.grid(row=4, column=0, columnspan=2, pady=10)
+        label_num_current_train.grid(row=5, column=0, padx=10, pady=10)
+        entry_num_current_train.grid(row=5, column=1, padx=10, pady=10)
+        label_max_gpu.grid(row=6, column=0, padx=10, pady=10)
+        entry_max_gpu.grid(row=6, column=1, padx=10, pady=10)
+    else:
+        menu_modo.grid_forget()
+        label_num_current_train.grid_forget()
+        entry_num_current_train.grid_forget()
+        label_max_gpu.grid_forget()
+        entry_max_gpu.grid_forget()
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -45,15 +65,29 @@ ctk.CTkLabel(ventana, text="CIFS_PASS:").grid(row=2, column=0, padx=10, pady=10)
 entry_cifs_pass = ctk.CTkEntry(ventana, show="*")
 entry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)
 
-# Menú desplegable para modo público/privado
+# Menú desplegable para modo público/privado (inicialmente oculto)
 menu_modo = ctk.CTkOptionMenu(ventana, values=["Público", "Privado"])
-menu_modo.grid(row=3, column=0, columnspan=2, pady=10)
-menu_modo.set("Público")  # Valor predeterminado
+menu_modo.set("Público")
+
+# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)
+label_num_current_train = ctk.CTkLabel(ventana, text="NUM CURRENT TRAIN:")
+entry_num_current_train = ctk.CTkEntry(ventana)
+entry_num_current_train.insert(0, "1")  # Valor predeterminado
+
+# Etiqueta y entrada para MAX GPU (inicialmente ocultos)
+label_max_gpu = ctk.CTkLabel(ventana, text="MAX GPU (%):")
+entry_max_gpu = ctk.CTkEntry(ventana)
+entry_max_gpu.insert(0, "60")  # Valor predeterminado
+
+# Botón para mostrar/ocultar opciones avanzadas
+opciones_avanzadas_visible = False
+boton_opciones_avanzadas = ctk.CTkButton(ventana, text="Opciones Avanzadas", command=toggle_opciones_avanzadas)
+boton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)
 
 boton_crear = ctk.CTkButton(ventana, text="Crear archivo", command=crear_archivo)
-boton_crear.grid(row=4, columnspan=2, pady=20)
+boton_crear.grid(row=7, columnspan=2, pady=20)
 
 label_error = ctk.CTkLabel(ventana, text="", fg_color="transparent", text_color="red")
-label_error.grid(row=5, columnspan=2)
+label_error.grid(row=8, columnspan=2)
 
 ventana.mainloop()
