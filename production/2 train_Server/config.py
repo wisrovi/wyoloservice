@@ -54,15 +54,15 @@ ventana = ctk.CTk()
 ventana.title("Configuración")
 
 ctk.CTkLabel(ventana, text="CONTROL_HOST:").grid(row=0, column=0, padx=10, pady=10)
-entry_control_host = ctk.CTkEntry(ventana)
+entry_control_host = ctk.CTkEntry(ventana, placeholder_text="ip del host")
 entry_control_host.grid(row=0, column=1, padx=10, pady=10)
 
 ctk.CTkLabel(ventana, text="CIFS_USER:").grid(row=1, column=0, padx=10, pady=10)
-entry_cifs_user = ctk.CTkEntry(ventana)
+entry_cifs_user = ctk.CTkEntry(ventana, placeholder_text="usuario")
 entry_cifs_user.grid(row=1, column=1, padx=10, pady=10)
 
 ctk.CTkLabel(ventana, text="CIFS_PASS:").grid(row=2, column=0, padx=10, pady=10)
-entry_cifs_pass = ctk.CTkEntry(ventana, show="*")
+entry_cifs_pass = ctk.CTkEntry(ventana, show="*", placeholder_text="contraseña")
 entry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)
 
 # Menú desplegable para modo público/privado (inicialmente oculto)

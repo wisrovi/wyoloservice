@@ -15,10 +15,18 @@ from wredis.queue import RedisQueueManager
 from wredis.token import RedisTokenManager
 from wredis.hash import RedisHashManager
 
-from states import DEFAULT_CONFIG, OptunaOptimize, read_user_config, results_up_to_minio
+from states import (
+    DEFAULT_CONFIG,
+    OptunaOptimize,
+    read_user_config,
+    results_up_to_minio,
+    Start_inform,
+)
 
 from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
+
+__VERSION__ = "v1.0.0"
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
@@ -47,6 +55,7 @@ pipeline = Pipeline()
 pipeline.set_steps(
     [
         (read_user_config, "read_config", "v1.0"),
+        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),
         (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),
         (results_up_to_minio, "result_to_minio", "v1.0"),
     ]
@@ -69,6 +78,7 @@ def main(cfg: OmegaConf):
 
     mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)
     logger.info(f"MLflow URI: {cfg.mlflow.MLFLOW_TRACKING_URI}")
+    logger.info(f"__VERSION__: {__VERSION__}")
 
     # convertir a dict
     cfg = OmegaConf.to_container(cfg, resolve=True)
@@ -107,13 +117,18 @@ def main(cfg: OmegaConf):
     public_topic = redis_config.get("TOPIC")
     private_topic = os.environ.get("USER", None)
 
-    results_queue = os.environ.get("redis", {}).get(
-        "RESULT_TOPIC", redis_config.get("TOPIC")
-    )
+    results_queue = redis_config.get("RESULT_TOPIC", redis_config.get("TOPIC"))
+
+    logger.info(f"Public topic: {public_topic}")
+    logger.info(f"Private topic: {private_topic}")
+    logger.info(f"Results queue: {results_queue}")
+    logger.info(f"Debug mode: {DEBUG_MODE}")
+    logger.info(f"DEFAULT_CONFIG: {DEFAULT_CONFIG}")
 
     @ejecutar_en_hilo
     def health():
         worker_metadata = [
+            "DEBUG",
             "USER",
             "WORKER_HOST",
             "WORKER_HOSTNAME",
@@ -137,6 +152,7 @@ def main(cfg: OmegaConf):
                 other_metadata: os.environ.get(other_metadata, None)
                 for other_metadata in worker_metadata
             }
+            metadata["__VERSION__"] = __VERSION__
 
             redis_key = (
                 "workers"
@@ -193,7 +209,25 @@ def main(cfg: OmegaConf):
         except Exception as e:
             traceback.print_exc()
 
-            token_manager.write_token(token=task_data["task_id"], data=e.args[0])
+            # token_manager.write_token(token=task_data["task_id"], data=e.args[0])
+            
+            queue_manager.publish(
+                queue_name=f"{results_queue}_error",
+                data={
+                    "task_id": results["task_id"],
+                    "user_code": results["user_code"],
+                    "fitness": results["sweeper"]["fitness"],
+                    "minio_url": results.get("minio_url", None),
+                    "imgsz": results["train"]["imgsz"],
+                    "n_trials": results["sweeper"]["n_trials"],
+                    "optimized_params": {
+                        "params": results["train"]["best_trial"].params,
+                        "best_model_path": results["train"]["best_model_path"],
+                        "metric": results["train"]["best_metric"],
+                    },
+                    "optimizer": results["sweeper"]["algorithm"],
+                },
+            )
 
             return None
 
@@ -208,7 +242,7 @@ def main(cfg: OmegaConf):
             # process_requests devuelve None cuando el semaforo esta ocupado
             results = process_requests(task_data)
 
-            if results is None or shared_resource.elapsedtime() < 500:
+            if results is None or shared_resource.elapsedtime() < 10:
                 recreate_request(topic=private_topic, args_dict=task_data)
             else:
                 complete_requests(results)

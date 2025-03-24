@@ -1,3 +1,8 @@
+# sudo apt install python3-tk
+# pip install requests
+# pip install wredis redis loguru
+
+
 import customtkinter as ctk
 import subprocess
 import requests
@@ -87,7 +92,7 @@ def enviar_archivo():
     task_id = GLOBAL_RESPONSE["task_id"]
 
     @stream_manager.on_message(
-        stream_name=f"stream:{task_id}", group_name="wyoloservice", consumer_name=f"stream:{task_id}"
+        stream_name=f"stream:{task_id}", group_name=f"stream:{task_id}", consumer_name=f"stream:{task_id}"
     )
     def process_message(data):
         print(data.get("value"))
@@ -100,7 +105,7 @@ ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
 ventana = ctk.CTk()
-ventana.title("Envío de Archivo")
+ventana.title("user - wyoloservice")
 
 boton_enviar = ctk.CTkButton(
     ventana, text="Seleccionar y Enviar Archivo", command=enviar_archivo

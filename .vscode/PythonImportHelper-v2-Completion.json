@@ -639,6 +639,14 @@
         "documentation": {}
     },
     {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
         "label": "autobatch",
         "importPath": "ultralytics.utils.autobatch",
         "description": "ultralytics.utils.autobatch",
@@ -1013,6 +1021,14 @@
         "documentation": {}
     },
     {
+        "label": "Start_inform",
+        "importPath": "states",
+        "description": "states",
+        "isExtraImport": true,
+        "detail": "states",
+        "documentation": {}
+    },
+    {
         "label": "tomli_w",
         "kind": 6,
         "isExtraImport": true,
@@ -1125,7 +1141,16 @@
         "kind": 2,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "def crear_archivo():\n    control_host = entry_control_host.get()\n    cifs_user = entry_cifs_user.get()\n    cifs_pass = entry_cifs_pass.get()\n    modo = menu_modo.get()\n    if control_host and cifs_user and cifs_pass:\n        with open(\"control_host.env\", \"w\") as f:\n            f.write(f\"CONTROL_HOST={control_host}\\n\")\n            f.write(f\"CIFS_USER={cifs_user}\\n\")\n            f.write(f\"CIFS_PASS={cifs_pass}\\n\")",
+        "peekOfCode": "def crear_archivo():\n    control_host = entry_control_host.get()\n    cifs_user = entry_cifs_user.get()\n    cifs_pass = entry_cifs_pass.get()\n    modo = menu_modo.get() if opciones_avanzadas_visible else \"Público\"\n    num_current_train = entry_num_current_train.get() if opciones_avanzadas_visible else \"1\"\n    max_gpu = entry_max_gpu.get() if opciones_avanzadas_visible else \"60\"\n    if control_host and cifs_user and cifs_pass:\n        with open(\"control_host.env\", \"w\") as f:\n            f.write(f\"CONTROL_HOST={control_host}\\n\")",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "toggle_opciones_avanzadas",
+        "kind": 2,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "def toggle_opciones_avanzadas():\n    global opciones_avanzadas_visible\n    opciones_avanzadas_visible = not opciones_avanzadas_visible\n    if opciones_avanzadas_visible:\n        menu_modo.grid(row=4, column=0, columnspan=2, pady=10)\n        label_num_current_train.grid(row=5, column=0, padx=10, pady=10)\n        entry_num_current_train.grid(row=5, column=1, padx=10, pady=10)\n        label_max_gpu.grid(row=6, column=0, padx=10, pady=10)\n        entry_max_gpu.grid(row=6, column=1, padx=10, pady=10)\n    else:",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1143,7 +1168,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "entry_control_host = ctk.CTkEntry(ventana)\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])",
+        "peekOfCode": "entry_control_host = ctk.CTkEntry(ventana)\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1152,7 +1177,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "entry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.grid(row=3, column=0, columnspan=2, pady=10)\nmenu_modo.set(\"Público\")  # Valor predeterminado\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)",
+        "peekOfCode": "entry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1161,7 +1186,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "entry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.grid(row=3, column=0, columnspan=2, pady=10)\nmenu_modo.set(\"Público\")  # Valor predeterminado\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=4, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)",
+        "peekOfCode": "entry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1170,7 +1195,61 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "menu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.grid(row=3, column=0, columnspan=2, pady=10)\nmenu_modo.set(\"Público\")  # Valor predeterminado\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=4, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)\nventana.mainloop()",
+        "peekOfCode": "menu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)\nlabel_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "label_num_current_train",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "label_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)\nlabel_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_num_current_train",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "entry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)\nlabel_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "label_max_gpu",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "label_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_max_gpu",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "entry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "opciones_avanzadas_visible",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "opciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
+        "detail": "production.2 train_Server.config",
+        "documentation": {}
+    },
+    {
+        "label": "boton_opciones_avanzadas",
+        "kind": 5,
+        "importPath": "production.2 train_Server.config",
+        "description": "production.2 train_Server.config",
+        "peekOfCode": "boton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1179,7 +1258,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "boton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=4, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)\nventana.mainloop()",
+        "peekOfCode": "boton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1188,7 +1267,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=5, columnspan=2)\nventana.mainloop()",
+        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1440,7 +1519,7 @@
         "kind": 2,
         "importPath": "services.worker.states.minio_up",
         "description": "services.worker.states.minio_up",
-        "peekOfCode": "def results_up_to_minio(task_data: dict):\n    the_new_model_is_better = True\n    try:\n        s3_minio: MinioS3Client = MinioS3Client(\n            endpoint_url=task_data.get(\"minio\", {}).get(\"MINIO_ENDPOINT\"),\n            aws_access_key_id=task_data.get(\"minio\", {}).get(\"MINIO_ID\"),\n            aws_secret_access_key=task_data.get(\"minio\", {}).get(\"MINIO_SECRET_KEY\"),\n        )\n        sweeper_config = task_data.get(\"sweeper\", {})\n        with tempfile.TemporaryDirectory() as temp_dir:",
+        "peekOfCode": "def results_up_to_minio(task_data: dict):\n    the_new_model_is_better = True\n    if not os.environ.get(\"SEARCH_BETTER\", False):\n        logger.info(\"🔍 No se busca el mejor modelo\")\n        return {\"minio_url\": None}\n    try:\n        s3_minio: MinioS3Client = MinioS3Client(\n            endpoint_url=task_data.get(\"minio\", {}).get(\"MINIO_ENDPOINT\"),\n            aws_access_key_id=task_data.get(\"minio\", {}).get(\"MINIO_ID\"),\n            aws_secret_access_key=task_data.get(\"minio\", {}).get(\"MINIO_SECRET_KEY\"),",
         "detail": "services.worker.states.minio_up",
         "documentation": {}
     },
@@ -1478,6 +1557,15 @@
         "description": "services.worker.states.read_user_config",
         "peekOfCode": "DEFAULT_CONFIG = {}\n# Función para actualizar y completar final_config\ndef merge_configs(default_config, user_config):\n    \"\"\"\n    Fusiona dos configuraciones: user_config tiene prioridad sobre default_config.\n    Los campos faltantes en user_config se completan con los valores de default_config.\n    Args:\n        default_config (dict): Configuración predeterminada.\n        user_config (dict): Configuración proporcionada por el usuario.\n    Returns:",
         "detail": "services.worker.states.read_user_config",
+        "documentation": {}
+    },
+    {
+        "label": "Start_inform",
+        "kind": 6,
+        "importPath": "services.worker.states.start_inform",
+        "description": "services.worker.states.start_inform",
+        "peekOfCode": "class Start_inform:\n    __NAME__ = \"start_inform\"\n    __VERSION__ = \"v1.0\"\n    def __call__(self, args_dict: dict):\n        config_path = args_dict.get(\"config_path\", None)\n        if config_path:\n            with open(config_path, \"r\") as f:\n                config = yaml.safe_load(f)\n        else:\n            config = {}",
+        "detail": "services.worker.states.start_inform",
         "documentation": {}
     },
     {
@@ -1593,7 +1681,7 @@
         "kind": 6,
         "importPath": "services.worker.worker_utils.semaphore",
         "description": "services.worker.worker_utils.semaphore",
-        "peekOfCode": "class SharedResource:\n    def __init__(self):\n        self.semaphore = threading.Semaphore(1)  # Initialized to 1, acts like a lock\n        self.resource_available = True\n        self.end_time = 0\n        self.start_time = 0\n    def elapsedtime(self):\n        return self.end_time - self.start_time\n    def execute_process(self, function: callable, args_dict: dict):\n        self.start_time = time.time()",
+        "peekOfCode": "class SharedResource:\n    def __init__(self):\n        # Initialized to 1, acts like a lock\n        NUM_CURRENT_TRAIN = max(int(os.environ.get(\"NUM_CURRENT_TRAIN\", 1)), 1)\n        self.semaphore = threading.Semaphore(NUM_CURRENT_TRAIN)\n        self.resource_available = True\n        self.end_time = 0\n        self.start_time = 0\n    def elapsedtime(self):\n        return self.end_time - self.start_time",
         "detail": "services.worker.worker_utils.semaphore",
         "documentation": {}
     },
@@ -1683,7 +1771,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "custom_logger = Logger(\"wyoloservice\")\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)\n@hydra.main(config_path=\"/app\", config_name=\"config\", version_base=None)",
+        "peekOfCode": "custom_logger = Logger(\"wyoloservice\")\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1692,7 +1780,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)\n@hydra.main(config_path=\"/app\", config_name=\"config\", version_base=None)\ndef main(cfg: OmegaConf):",
+        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)\n@hydra.main(config_path=\"/app\", config_name=\"config\", version_base=None)",
         "detail": "services.worker.worker",
         "documentation": {}
     },

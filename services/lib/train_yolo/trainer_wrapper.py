@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import os
 import random
@@ -73,6 +74,7 @@ class TrainerWrapper:
     model = None
 
     worker_metadata = [
+        "debug",
         "USER",
         "WORKER_HOST",
         "WORKER_HOSTNAME",
@@ -293,6 +295,7 @@ class TrainerWrapper:
             metadata["EPOCH"] = epoch
             metadata["EPOCH_PROGRESS"] = epoch / total_epochs
             metadata["TRIAL_PROGRESS"] = trial_number / total_trails
+            metadata["datetime"] = datetime.now().isoformat()
 
             redis_key = "progress" + f":{task_id}"
 

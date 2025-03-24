@@ -36,6 +36,8 @@ def complete_config(
         default_config=worker_config,
         user_config=user_config,
     )
+    
+    return user_config
 
 
 @hydra.main(config_path="/app", config_name="config", version_base=None)

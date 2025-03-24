@@ -2,7 +2,7 @@ MAKEFLAGS += --always-make
 
 start_worker: config.py user.env docker-compose.services.yml
 	python config.py
-	docker-compose -f docker-compose.services.yml up -d --build --force-recreate --no-deps
+	docker-compose -f docker-compose.services.yml up -d --build --pull --force-recreate --no-deps
 
 user.env:
 	echo "USER=$$(whoami)" > user.env
@@ -28,7 +28,7 @@ docker-compose.services.yml:
 
 config.py:
 	pip install customtkinter
-	wget https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/config.py
+	curl -o config.py "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/production/2%20train_Server/config.py"
 
 clean:
 	rm -f user.env docker-compose.services.yml

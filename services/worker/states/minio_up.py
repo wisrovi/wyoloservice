@@ -223,6 +223,10 @@ def save_best_model(
 def results_up_to_minio(task_data: dict):
     the_new_model_is_better = True
 
+    if not os.environ.get("SEARCH_BETTER", False):
+        logger.info("🔍 No se busca el mejor modelo")
+        return {"minio_url": None}
+
     try:
         s3_minio: MinioS3Client = MinioS3Client(
             endpoint_url=task_data.get("minio", {}).get("MINIO_ENDPOINT"),

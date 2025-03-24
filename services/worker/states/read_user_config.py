@@ -1,6 +1,7 @@
 from loguru import logger
 import json
 import yaml
+from copy import deepcopy
 
 
 DEFAULT_CONFIG = {}
@@ -20,7 +21,6 @@ def merge_configs(default_config, user_config):
         dict: Configuración final fusionada.
     """
     # Crear una copia profunda de default_config para evitar modificaciones inesperadas
-    from copy import deepcopy
 
     final_config = deepcopy(default_config)
 
@@ -38,6 +38,37 @@ def merge_configs(default_config, user_config):
             final_config[key] = deepcopy(value)
 
     return final_config
+
+
+# def merge_configs(default_config, user_config):
+#     """
+#     Combina dos diccionarios sin duplicar información y sin omitir nada.
+#     Si hay claves en común:
+#         - Si los valores son diccionarios, combina recursivamente.
+#         - En otros casos, el valor del segundo diccionario prevalece.
+#     Parámetros:
+#         dict1 (dict): El primer diccionario.
+#         dict2 (dict): El segundo diccionario.
+#     Retorna:
+#         dict: Un nuevo diccionario combinado.
+#     """
+#     # Creamos una copia del primer diccionario para no modificar el original
+#     final_config = default_config.copy()
+#     # Iteramos sobre las claves y valores del segundo diccionario
+#     for clave, valor in user_config.items():
+#         if clave in final_config:
+#             # Si la clave existe en ambos diccionarios
+#             if isinstance(final_config[clave], dict) and isinstance(valor, dict):
+#                 # Si ambos valores son diccionarios, combinamos recursivamente
+#                 final_config[clave] = merge_configs(final_config[clave], valor)
+#             else:
+#                 # Si no son diccionarios, el valor del segundo diccionario prevalece
+#                 final_config[clave] = valor
+#         else:
+#             # Si la clave no existe en el primer diccionario, la añadimos
+#             final_config[clave] = valor
+
+#     return final_config
 
 
 def read_user_config(task_data: dict):
@@ -73,7 +104,7 @@ def read_user_config(task_data: dict):
             final_config["config_path"] = config_path
             final_config["task_id"] = task_data["task_id"]
     except Exception as e:
-        logger.error(f"❌ Error al cargar YAML ({config_path}): {e}")
+        raise Exception(f"❌ Error al cargar YAML ({config_path}): {e}")
 
     try:
         tempfile = task_data["tempfile"]
@@ -83,6 +114,6 @@ def read_user_config(task_data: dict):
         with open(config_path, "w") as archivo:
             yaml.dump(final_config, archivo, default_flow_style=False)
     except Exception as e:
-        raise Exception(str(e))
+        raise Exception(f"❌ Error al guardar YAML ({config_path}): {e}")
 
     return final_config
