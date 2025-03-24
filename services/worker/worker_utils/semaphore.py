@@ -7,7 +7,7 @@ from loguru import logger
 class SharedResource:
     def __init__(self):
         # Initialized to 1, acts like a lock
-        NUM_CURRENT_TRAIN = max(os.environ.get("NUM_CURRENT_TRAIN", 1), 1)
+        NUM_CURRENT_TRAIN = max(int(os.environ.get("NUM_CURRENT_TRAIN", 1)), 1)
 
         self.semaphore = threading.Semaphore(NUM_CURRENT_TRAIN)
         self.resource_available = True
