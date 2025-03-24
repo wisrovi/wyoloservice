@@ -1,3 +1,4 @@
+import os
 import threading
 import time
 from loguru import logger
@@ -5,7 +6,10 @@ from loguru import logger
 
 class SharedResource:
     def __init__(self):
-        self.semaphore = threading.Semaphore(1)  # Initialized to 1, acts like a lock
+        # Initialized to 1, acts like a lock
+        NUM_CURRENT_TRAIN = os.environ.get("NUM_CURRENT_TRAIN", 1)
+
+        self.semaphore = threading.Semaphore(NUM_CURRENT_TRAIN)
         self.resource_available = True
         self.end_time = 0
         self.start_time = 0
