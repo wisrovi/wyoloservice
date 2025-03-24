@@ -1,3 +1,8 @@
+# sudo apt install python3-tk
+# pip install requests
+# pip install wredis redis loguru
+
+
 import customtkinter as ctk
 import subprocess
 import requests
@@ -100,7 +105,7 @@ ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
 ventana = ctk.CTk()
-ventana.title("Envío de Archivo")
+ventana.title("user - wyoloservice")
 
 boton_enviar = ctk.CTkButton(
     ventana, text="Seleccionar y Enviar Archivo", command=enviar_archivo
