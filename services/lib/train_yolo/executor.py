@@ -42,7 +42,7 @@ def ejecutar_comando(args: dict, trial_number: int, verbose=True, config_path=No
 
                 if stream_manager:
                     stream_manager.add_to_stream(
-                        key=task_id,
+                        key=f"stream:{task_id}",
                         data={
                             "value": line,
                         },
