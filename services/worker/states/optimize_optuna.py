@@ -119,7 +119,7 @@ class OptunaOptimize:
                     with open(temp_config_path, "w") as yaml_file:
                         yaml.dump(config, yaml_file)
 
-                    if OptunaOptimize.DEBUG_MODE or True:
+                    if OptunaOptimize.DEBUG_MODE:
                         metric = None
                         request_config = train.callback(
                             config_path=temp_config_path,
