@@ -1,5 +1,10 @@
 import customtkinter as ctk
 import subprocess
+import os
+
+if os.path.exists("control_host.env"):
+    exit()
+
 
 def obtener_usuario():
     """Obtiene el nombre de usuario usando 'whoami'."""
