@@ -1,11 +1,11 @@
 [
     {
-        "label": "customtkinter",
+        "label": "time",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "customtkinter",
-        "description": "customtkinter",
-        "detail": "customtkinter",
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
         "documentation": {}
     },
     {
@@ -27,11 +27,12 @@
         "documentation": {}
     },
     {
-        "label": "filedialog",
-        "importPath": "tkinter",
-        "description": "tkinter",
+        "label": "sys",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "tkinter",
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -40,6 +41,15 @@
         "description": "wredis.streams",
         "isExtraImport": true,
         "detail": "wredis.streams",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
         "documentation": {}
     },
     {
@@ -65,7 +75,7 @@
         "kind": 2,
         "importPath": "user_request",
         "description": "user_request",
-        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo():\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        label_error.configure(text=\"Archivo de configuración no encontrado.\")",
+        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")",
         "detail": "user_request",
         "documentation": {}
     },
@@ -74,7 +84,7 @@
         "kind": 2,
         "importPath": "user_request",
         "description": "user_request",
-        "peekOfCode": "def enviar_archivo():\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        label_error.configure(text=\"Archivo de configuración no encontrado.\")\n        return\n    filename = seleccionar_archivo()\n    if not filename:\n        return  # El usuario canceló la selección del archivo",
+        "peekOfCode": "def enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")\n        return\n    if not filename:\n        filename = seleccionar_archivo()\n        if not filename:",
         "detail": "user_request",
         "documentation": {}
     },
@@ -84,33 +94,6 @@
         "importPath": "user_request",
         "description": "user_request",
         "peekOfCode": "GLOBAL_RESPONSE = None\ndef obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"",
-        "detail": "user_request",
-        "documentation": {}
-    },
-    {
-        "label": "ventana",
-        "kind": 5,
-        "importPath": "user_request",
-        "description": "user_request",
-        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Envío de Archivo\")\nboton_enviar = ctk.CTkButton(\n    ventana, text=\"Seleccionar y Enviar Archivo\", command=enviar_archivo\n)\nboton_enviar.grid(row=0, column=0, padx=20, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
-        "detail": "user_request",
-        "documentation": {}
-    },
-    {
-        "label": "boton_enviar",
-        "kind": 5,
-        "importPath": "user_request",
-        "description": "user_request",
-        "peekOfCode": "boton_enviar = ctk.CTkButton(\n    ventana, text=\"Seleccionar y Enviar Archivo\", command=enviar_archivo\n)\nboton_enviar.grid(row=0, column=0, padx=20, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
-        "detail": "user_request",
-        "documentation": {}
-    },
-    {
-        "label": "label_error",
-        "kind": 5,
-        "importPath": "user_request",
-        "description": "user_request",
-        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
         "detail": "user_request",
         "documentation": {}
     }

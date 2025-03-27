@@ -112,6 +112,12 @@ def health():
                 ttl=30,
             )
 
+        gpu_0_memoryFree = metadata["gpu_0_memoryFree"]
+        gpu_0_memoryTotal = metadata["gpu_0_memoryTotal"]
+        NOT_TO_USE_GPU = 1 - int(os.environ.get("MAX_GPU", 60)) / 100
+        if gpu_0_memoryFree < (gpu_0_memoryTotal * NOT_TO_USE_GPU):
+            gpu_0_memoryFree = 0
+
         sorted_set_manager.add_to_sorted_set(
             key="available",
             score=metadata["gpu_0_memoryFree"],
