@@ -4,7 +4,7 @@ import yaml
 
 
 class Start_inform:
-    
+
     __NAME__ = "start_inform"
     __VERSION__ = "v1.0"
 
@@ -50,11 +50,14 @@ class Start_inform:
         redis_key = "progress" + f":{task_id}"
 
         for metadata_key, metadata_value in metadata.items():
-            hash_manager.create_hash(
-                key=redis_key,
-                hash_name=metadata_key,
-                value=metadata_value,
-                ttl=120,
-            )
+            try:
+                hash_manager.create_hash(
+                    key=redis_key,
+                    hash_name=metadata_key,
+                    value=metadata_value,
+                    ttl=120,
+                )
+            except:
+                pass
 
         return {}

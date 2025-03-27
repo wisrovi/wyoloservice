@@ -296,17 +296,27 @@ class TrainerWrapper:
             metadata["EPOCH_PROGRESS"] = epoch / total_epochs
             metadata["TRIAL_PROGRESS"] = trial_number / total_trails
             metadata["datetime"] = datetime.now().isoformat()
+            metadata["task_id"] = task_id
+            metadata["DEBUG_MODE"] = self.config.get("debug", "False")
+
+            gpu_json_list: List[dict] = obtener_info_gpu_json()
+            for gpu_json in gpu_json_list:
+                for key, value in gpu_json.items():
+                    metadata[key] = value
 
             redis_key = "progress" + f":{task_id}"
 
             if self.hash_manager:
                 for metadata_key, metadata_value in metadata.items():
-                    self.hash_manager.create_hash(
-                        key=redis_key,
-                        hash_name=metadata_key,
-                        value=metadata_value,
-                        ttl=120,
-                    )
+                    try:
+                        self.hash_manager.create_hash(
+                            key=redis_key,
+                            hash_name=metadata_key,
+                            value=metadata_value,
+                            ttl=1200,
+                        )
+                    except:
+                        pass
 
     def log_example_images(self, model_type: str):
         images, labels = self.get_images_and_labels(model_type=model_type)
@@ -368,6 +378,10 @@ class TrainerWrapper:
                     grace_period=min(epochs, grace_period),
                 )
             else:
+                MAX_GPU = float(os.environ.get("MAX_GPU", -5000.1))
+
+                config_train["batch"] = max(MAX_GPU / 100, -1)  # -1 = auto (60%)
+
                 return self.model.train(**config_train)
 
         logger.warning(

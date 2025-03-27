@@ -1,0 +1,41 @@
+version: "3.8"
+
+# Define reusable GPU resource constraints
+x-resources: &resources_gpu
+  # la shm_size es calculada de acuerdo al 80% de la memoria RAM como maximo
+  # es importante que el ordenador a entrenar tenga al menos lo mismo de swap que de RAM
+  shm_size: "24g"  
+  logging:
+    driver: "json-file"
+    options:
+      max-size: "10m"
+      max-file: "3"
+  environment:
+    - NVIDIA_VISIBLE_DEVICES=0
+    - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+  deploy:
+    resources:
+      limits:
+        cpus: "7.0"
+        memory: 24g
+      reservations:
+        devices:
+          - driver: nvidia
+            device_ids: ["0"]
+            capabilities: [gpu]
+
+services:
+  worker:
+    <<: *resources_gpu
+    image: wisrovi/wyoloservice:worker
+    env_file:
+      - control_host.env
+      - user.env
+    restart: always
+    privileged: true
+    hostname: ${USER}
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
+    # command: tail -f /dev/null
+

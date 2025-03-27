@@ -2,7 +2,7 @@ MAKEFLAGS += --always-make
 
 start_worker: config.py user.env docker-compose.services.yml
 	python config.py
-	docker-compose -f docker-compose.services.yml up -d --build --pull --force-recreate --no-deps
+	docker-compose -f docker-compose.services.yml up -d --build  --force-recreate --no-deps --pull always
 
 user.env:
 	echo "USER=$$(whoami)" > user.env
@@ -33,5 +33,3 @@ config.py:
 clean:
 	rm -f user.env docker-compose.services.yml
 
-log:
-	docker-compose -f docker-compose.services.yml logs -f --tail 100

@@ -113,6 +113,13 @@ RUN echo "sh -c /usr/local/bin/mount-cifs.sh" >> ~/.bashrc
 
 
 
-# CMD ["python", "worker.py"]
+RUN echo "alias train_service='python'" >> ~/.zshrc
+RUN echo "alias train_service='python'" >> ~/.bashrc
 
-CMD ["sh", "-c", "/usr/local/bin/mount-cifs.sh && python worker.py"]
+
+# Create the train_service script
+RUN echo '#!/bin/sh\nexec python "$@"' > /usr/local/bin/train_service && chmod +x /usr/local/bin/train_service
+
+
+
+CMD ["sh", "-c", "/usr/local/bin/mount-cifs.sh && train_service worker.py"]

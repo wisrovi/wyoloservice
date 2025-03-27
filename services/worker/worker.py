@@ -3,6 +3,7 @@ import sys
 import tempfile
 import time
 import traceback
+from typing import List
 import uuid
 
 import hydra
@@ -15,6 +16,7 @@ from wredis.queue import RedisQueueManager
 from wredis.token import RedisTokenManager
 from wredis.hash import RedisHashManager
 
+from train_yolo.trainer_wrapper import obtener_info_gpu_json
 from states import (
     DEFAULT_CONFIG,
     OptunaOptimize,
@@ -26,7 +28,7 @@ from states import (
 from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
 
-__VERSION__ = "v1.0.0"
+__VERSION__ = "v1.0.2"
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
@@ -97,12 +99,6 @@ def main(cfg: OmegaConf):
         host=redis_config.get("REDIS_HOST"),
         port=redis_config.get("REDIS_PORT"),
         db=redis_config.get("REDIS_DB"),
-    )
-
-    token_manager = RedisTokenManager(
-        host=redis_config.get("REDIS_HOST"),
-        port=redis_config.get("REDIS_PORT"),
-        db=redis_config.get("REDIS_DB"),
         verbose=False,
     )
 
@@ -128,7 +124,7 @@ def main(cfg: OmegaConf):
     @ejecutar_en_hilo
     def health():
         worker_metadata = [
-            "DEBUG",
+            "debug",
             "USER",
             "WORKER_HOST",
             "WORKER_HOSTNAME",
@@ -153,6 +149,22 @@ def main(cfg: OmegaConf):
                 for other_metadata in worker_metadata
             }
             metadata["__VERSION__"] = __VERSION__
+            metadata["DEBUG_MODE"] = DEBUG_MODE or "False"
+
+            gpu_json_list: List[dict] = obtener_info_gpu_json()
+            for gpu_json in gpu_json_list:
+                for key, value in gpu_json.items():
+                    if value is not None:
+                        if (
+                            isinstance(value, int)
+                            or isinstance(value, float)
+                            or isinstance(value, str)
+                            #
+                            or isinstance(key, int)
+                            or isinstance(key, float)
+                            or isinstance(key, str)
+                        ):
+                            metadata[key] = value
 
             redis_key = (
                 "workers"
@@ -160,12 +172,15 @@ def main(cfg: OmegaConf):
                 + f":{metadata.get('USER', str(uuid.uuid4()))}"
             )
             for metadata_key, metadata_value in metadata.items():
-                hash_manager.create_hash(
-                    key=redis_key,
-                    hash_name=metadata_key,
-                    value=metadata_value,
-                    ttl=30,
-                )
+                try:
+                    hash_manager.create_hash(
+                        key=redis_key,
+                        hash_name=metadata_key,
+                        value=metadata_value,
+                        ttl=30,
+                    )
+                except:
+                    pass
 
             time.sleep(20)
 
@@ -210,7 +225,7 @@ def main(cfg: OmegaConf):
             traceback.print_exc()
 
             # token_manager.write_token(token=task_data["task_id"], data=e.args[0])
-            
+
             queue_manager.publish(
                 queue_name=f"{results_queue}_error",
                 data={
