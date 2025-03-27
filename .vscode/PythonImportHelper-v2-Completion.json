@@ -244,6 +244,14 @@
         "documentation": {}
     },
     {
+        "label": "datetime",
+        "importPath": "datetime",
+        "description": "datetime",
+        "isExtraImport": true,
+        "detail": "datetime",
+        "documentation": {}
+    },
+    {
         "label": "fiftyone",
         "kind": 6,
         "isExtraImport": true,
@@ -429,11 +437,21 @@
         "documentation": {}
     },
     {
-        "label": "filedialog",
-        "importPath": "tkinter",
-        "description": "tkinter",
+        "label": "time",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "tkinter",
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -570,6 +588,14 @@
         "documentation": {}
     },
     {
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
         "label": "dvc",
         "kind": 6,
         "isExtraImport": true,
@@ -672,6 +698,14 @@
         "documentation": {}
     },
     {
+        "label": "obtener_info_gpu_json",
+        "importPath": "train_yolo.trainer_wrapper",
+        "description": "train_yolo.trainer_wrapper",
+        "isExtraImport": true,
+        "detail": "train_yolo.trainer_wrapper",
+        "documentation": {}
+    },
+    {
         "label": "Path",
         "importPath": "pathlib",
         "description": "pathlib",
@@ -726,15 +760,6 @@
         "importPath": "tempfile",
         "description": "tempfile",
         "detail": "tempfile",
-        "documentation": {}
-    },
-    {
-        "label": "time",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
         "documentation": {}
     },
     {
@@ -846,6 +871,22 @@
         "documentation": {}
     },
     {
+        "label": "deepcopy",
+        "importPath": "copy",
+        "description": "copy",
+        "isExtraImport": true,
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
+        "label": "deepcopy",
+        "importPath": "copy",
+        "description": "copy",
+        "isExtraImport": true,
+        "detail": "copy",
+        "documentation": {}
+    },
+    {
         "label": "threading",
         "kind": 6,
         "isExtraImport": true,
@@ -928,23 +969,6 @@
         "description": "states.read_user_config",
         "isExtraImport": true,
         "detail": "states.read_user_config",
-        "documentation": {}
-    },
-    {
-        "label": "deepcopy",
-        "importPath": "copy",
-        "description": "copy",
-        "isExtraImport": true,
-        "detail": "copy",
-        "documentation": {}
-    },
-    {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
         "documentation": {}
     },
     {
@@ -1159,7 +1183,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Configuración\")\nctk.CTkLabel(ventana, text=\"CONTROL_HOST:\").grid(row=0, column=0, padx=10, pady=10)\nentry_control_host = ctk.CTkEntry(ventana)\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")",
+        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Configuración\")\nctk.CTkLabel(ventana, text=\"CONTROL_HOST:\").grid(row=0, column=0, padx=10, pady=10)\nentry_control_host = ctk.CTkEntry(ventana, placeholder_text=\"ip del host\")\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana, placeholder_text=\"usuario\")\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1168,7 +1192,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "entry_control_host = ctk.CTkEntry(ventana)\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])",
+        "peekOfCode": "entry_control_host = ctk.CTkEntry(ventana, placeholder_text=\"ip del host\")\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana, placeholder_text=\"usuario\")\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1177,7 +1201,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "entry_cifs_user = ctk.CTkEntry(ventana)\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")",
+        "peekOfCode": "entry_cifs_user = ctk.CTkEntry(ventana, placeholder_text=\"usuario\")\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1186,7 +1210,7 @@
         "kind": 5,
         "importPath": "production.2 train_Server.config",
         "description": "production.2 train_Server.config",
-        "peekOfCode": "entry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)",
+        "peekOfCode": "entry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)",
         "detail": "production.2 train_Server.config",
         "documentation": {}
     },
@@ -1294,7 +1318,7 @@
         "kind": 2,
         "importPath": "production.3 user_dataset.user_request",
         "description": "production.3 user_dataset.user_request",
-        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo():\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        label_error.configure(text=\"Archivo de configuración no encontrado.\")",
+        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")",
         "detail": "production.3 user_dataset.user_request",
         "documentation": {}
     },
@@ -1303,7 +1327,7 @@
         "kind": 2,
         "importPath": "production.3 user_dataset.user_request",
         "description": "production.3 user_dataset.user_request",
-        "peekOfCode": "def enviar_archivo():\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        label_error.configure(text=\"Archivo de configuración no encontrado.\")\n        return\n    filename = seleccionar_archivo()\n    if not filename:\n        return  # El usuario canceló la selección del archivo",
+        "peekOfCode": "def enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")\n        return\n    if not filename:\n        filename = seleccionar_archivo()\n        if not filename:",
         "detail": "production.3 user_dataset.user_request",
         "documentation": {}
     },
@@ -1313,33 +1337,6 @@
         "importPath": "production.3 user_dataset.user_request",
         "description": "production.3 user_dataset.user_request",
         "peekOfCode": "GLOBAL_RESPONSE = None\ndef obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"",
-        "detail": "production.3 user_dataset.user_request",
-        "documentation": {}
-    },
-    {
-        "label": "ventana",
-        "kind": 5,
-        "importPath": "production.3 user_dataset.user_request",
-        "description": "production.3 user_dataset.user_request",
-        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Envío de Archivo\")\nboton_enviar = ctk.CTkButton(\n    ventana, text=\"Seleccionar y Enviar Archivo\", command=enviar_archivo\n)\nboton_enviar.grid(row=0, column=0, padx=20, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
-        "detail": "production.3 user_dataset.user_request",
-        "documentation": {}
-    },
-    {
-        "label": "boton_enviar",
-        "kind": 5,
-        "importPath": "production.3 user_dataset.user_request",
-        "description": "production.3 user_dataset.user_request",
-        "peekOfCode": "boton_enviar = ctk.CTkButton(\n    ventana, text=\"Seleccionar y Enviar Archivo\", command=enviar_archivo\n)\nboton_enviar.grid(row=0, column=0, padx=20, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
-        "detail": "production.3 user_dataset.user_request",
-        "documentation": {}
-    },
-    {
-        "label": "label_error",
-        "kind": 5,
-        "importPath": "production.3 user_dataset.user_request",
-        "description": "production.3 user_dataset.user_request",
-        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=1, column=0)\nventana.mainloop()",
         "detail": "production.3 user_dataset.user_request",
         "documentation": {}
     },
@@ -1447,7 +1444,7 @@
         "kind": 6,
         "importPath": "services.lib.train_yolo.trainer_wrapper",
         "description": "services.lib.train_yolo.trainer_wrapper",
-        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    worker_metadata = [\n        \"USER\",\n        \"WORKER_HOST\",\n        \"WORKER_HOSTNAME\",",
+        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    worker_metadata = [\n        \"debug\",\n        \"USER\",\n        \"WORKER_HOST\",",
         "detail": "services.lib.train_yolo.trainer_wrapper",
         "documentation": {}
     },
@@ -1754,6 +1751,15 @@
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
         "peekOfCode": "def main(cfg: OmegaConf):\n    global DEFAULT_CONFIG\n    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace(\"localhost\", CONTROL_HOST)\n    mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)",
+        "detail": "services.worker.worker",
+        "documentation": {}
+    },
+    {
+        "label": "__VERSION__",
+        "kind": 5,
+        "importPath": "services.worker.worker",
+        "description": "services.worker.worker",
+        "peekOfCode": "__VERSION__ = \"v1.0.2\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\nlogger.add(",
         "detail": "services.worker.worker",
         "documentation": {}
     },

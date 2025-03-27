@@ -13,10 +13,10 @@ from loguru import logger
 from omegaconf import OmegaConf
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
-from wredis.token import RedisTokenManager
 from wredis.hash import RedisHashManager
+from wredis.sortedset import RedisSortedSetManager
 
-from train_yolo.trainer_wrapper import obtener_info_gpu_json
+from train_yolo.trainer_wrapper import obtener_info_gpu_json, TrainerWrapper
 from states import (
     DEFAULT_CONFIG,
     OptunaOptimize,
@@ -28,11 +28,16 @@ from states import (
 from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
 
-__VERSION__ = "v1.0.2"
+__VERSION__ = "v1.0.3"
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
     raise Exception("CONTROL_HOST env var is not set")
+
+
+DEBUG_MODE = None
+hash_manager = None
+sorted_set_manager = None
 
 
 # Configura el primer logger: solo errores en un archivo
@@ -64,9 +69,65 @@ pipeline.set_steps(
 )
 
 
+@ejecutar_en_hilo
+def health():
+    global hash_manager
+    global sorted_set_manager
+    global DEBUG_MODE
+
+    while True:
+        metadata = {
+            other_metadata: os.environ.get(other_metadata, None)
+            for other_metadata in TrainerWrapper.worker_metadata
+        }
+        metadata["__VERSION__"] = __VERSION__
+        metadata["debug"] = DEBUG_MODE
+        metadata["debug"] = metadata["debug"] if DEBUG_MODE else "False"
+
+        gpu_json_list: List[dict] = obtener_info_gpu_json()
+        for gpu_json in gpu_json_list:
+            for key, value in gpu_json.items():
+                if value is not None:
+                    if (
+                        isinstance(value, int)
+                        or isinstance(value, float)
+                        or isinstance(value, str)
+                        #
+                        or isinstance(key, int)
+                        or isinstance(key, float)
+                        or isinstance(key, str)
+                    ):
+                        metadata[key] = value
+
+        redis_key = (
+            "workers"
+            + f":{metadata.get('WORKER_HOST', 'noIp')}"
+            + f":{metadata.get('USER', str(uuid.uuid4()))}"
+        )
+        for metadata_key, metadata_value in metadata.items():
+            hash_manager.create_hash(
+                key=redis_key,
+                hash_name=metadata_key,
+                value=metadata_value,
+                ttl=30,
+            )
+
+        sorted_set_manager.add_to_sorted_set(
+            key="available",
+            score=metadata["gpu_0_memoryFree"],
+            member=metadata["WORKER_HOST"],
+            ttl=30,
+        )
+
+        time.sleep(20)
+
+
 @hydra.main(config_path="/app", config_name="config", version_base=None)
 def main(cfg: OmegaConf):
     global DEFAULT_CONFIG
+    global hash_manager
+    global sorted_set_manager
+    global DEBUG_MODE
 
     cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
         "localhost", CONTROL_HOST
@@ -79,7 +140,6 @@ def main(cfg: OmegaConf):
     cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace("localhost", CONTROL_HOST)
 
     mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)
-    logger.info(f"MLflow URI: {cfg.mlflow.MLFLOW_TRACKING_URI}")
     logger.info(f"__VERSION__: {__VERSION__}")
 
     # convertir a dict
@@ -109,80 +169,25 @@ def main(cfg: OmegaConf):
         verbose=False,
     )
 
+    sorted_set_manager = RedisSortedSetManager(
+        host=redis_config.get("REDIS_HOST"),
+        port=redis_config.get("REDIS_PORT"),
+        db=redis_config.get("REDIS_DB"),
+        verbose=False,
+    )
+
     DEBUG_MODE = os.environ.get("debug", None)
-    public_topic = redis_config.get("TOPIC")
-    private_topic = os.environ.get("USER", None)
+    PUBLIC_TOPIC = redis_config.get("TOPIC")
+    USER_TOPIC = os.environ.get("USER", None)
+    WORKER_HOST_TOPIC = os.environ.get("WORKER_HOST", None)
 
     results_queue = redis_config.get("RESULT_TOPIC", redis_config.get("TOPIC"))
 
-    logger.info(f"Public topic: {public_topic}")
-    logger.info(f"Private topic: {private_topic}")
+    logger.info(f"Public topic: {PUBLIC_TOPIC}")
+    logger.info(f"Private topic: {USER_TOPIC}")
     logger.info(f"Results queue: {results_queue}")
     logger.info(f"Debug mode: {DEBUG_MODE}")
-    logger.info(f"DEFAULT_CONFIG: {DEFAULT_CONFIG}")
-
-    @ejecutar_en_hilo
-    def health():
-        worker_metadata = [
-            "debug",
-            "USER",
-            "WORKER_HOST",
-            "WORKER_HOSTNAME",
-            "WORKER_OS",
-            "WORKER_KERNEL_VERSION",
-            "WORKER_CPU_CORES",
-            "WORKER_GATEWAY",
-            "WORKER_NETWORK_INTERFACE",
-            "WORKER_DOCKER_VERSION",
-            "WORKER_APP_BASE_PATH",
-            "WORKER_APP_ENV",
-            "WORKER_HOME_DIR",
-            "WORKER_CURRENT_DATE",
-            "WORKER_CURRENT_TIME",
-            "WORKER_GPU_COUNT",
-            "WORKER_GPU_MODEL",
-            "WORKER_GPU_MEMORY",
-        ]
-        while True:
-            metadata = {
-                other_metadata: os.environ.get(other_metadata, None)
-                for other_metadata in worker_metadata
-            }
-            metadata["__VERSION__"] = __VERSION__
-            metadata["DEBUG_MODE"] = DEBUG_MODE or "False"
-
-            gpu_json_list: List[dict] = obtener_info_gpu_json()
-            for gpu_json in gpu_json_list:
-                for key, value in gpu_json.items():
-                    if value is not None:
-                        if (
-                            isinstance(value, int)
-                            or isinstance(value, float)
-                            or isinstance(value, str)
-                            #
-                            or isinstance(key, int)
-                            or isinstance(key, float)
-                            or isinstance(key, str)
-                        ):
-                            metadata[key] = value
-
-            redis_key = (
-                "workers"
-                + f":{metadata.get('WORKER_HOST', 'noIp')}"
-                + f":{metadata.get('USER', str(uuid.uuid4()))}"
-            )
-            for metadata_key, metadata_value in metadata.items():
-                try:
-                    hash_manager.create_hash(
-                        key=redis_key,
-                        hash_name=metadata_key,
-                        value=metadata_value,
-                        ttl=30,
-                    )
-                except:
-                    pass
-
-            time.sleep(20)
+    # logger.info(f"DEFAULT_CONFIG: {DEFAULT_CONFIG}")
 
     shared_resource = SharedResource()
 
@@ -250,32 +255,53 @@ def main(cfg: OmegaConf):
         queue_manager.publish(queue_name=topic, data=args_dict)
         time.sleep(30)
 
-    if private_topic:
+    if USER_TOPIC:
+        logger.info(f"Activate user topic: {USER_TOPIC}")
 
-        @queue_manager.on_message(private_topic)
+        @queue_manager.on_message(USER_TOPIC)
         def private_worker(task_data: dict):
+            logger.debug(f"Received data in {USER_TOPIC}, {task_data}")
+
             # process_requests devuelve None cuando el semaforo esta ocupado
             results = process_requests(task_data)
 
             if results is None or shared_resource.elapsedtime() < 10:
-                recreate_request(topic=private_topic, args_dict=task_data)
+                recreate_request(topic=USER_TOPIC, args_dict=task_data)
             else:
                 complete_requests(results)
 
-    @queue_manager.on_message(public_topic)
-    def public_worker(task_data: dict):
+    if WORKER_HOST_TOPIC:
+        logger.info(f"Activate worker topic: {WORKER_HOST_TOPIC}")
 
-        # si se ha levantado el worker en modo debug no se procesan las peticiones publicas
-        if DEBUG_MODE:
-            recreate_request(topic=public_topic, args_dict=task_data)
-        else:
+        @queue_manager.on_message(WORKER_HOST_TOPIC)
+        def private_worker_2(task_data: dict):
+            logger.debug(f"Received data in {WORKER_HOST_TOPIC}, {task_data}")
+
+            # process_requests devuelve None cuando el semaforo esta ocupado
+            results = process_requests(task_data)
+
+            if results is None or shared_resource.elapsedtime() < 10:
+                recreate_request(topic=WORKER_HOST_TOPIC, args_dict=task_data)
+            else:
+                complete_requests(results)
+
+    if DEBUG_MODE is None:
+        logger.info(f"Activate public topic: {PUBLIC_TOPIC}")
+
+        @queue_manager.on_message(PUBLIC_TOPIC)
+        def public_worker(task_data: dict):
+            logger.debug(f"Received data in {PUBLIC_TOPIC}, {task_data}")
+
             # process_requests devuelve None cuando el semaforo esta ocupado
             results = process_requests(task_data)
 
             if results is None:
-                recreate_request(topic=public_topic, args_dict=task_data)
+                recreate_request(topic=PUBLIC_TOPIC, args_dict=task_data)
             else:
                 complete_requests(results)
+
+    else:
+        logger.info(f"Not activate public topic ({PUBLIC_TOPIC}) in DEBUG_MODE")
 
     health()
     queue_manager.start()

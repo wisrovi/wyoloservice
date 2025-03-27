@@ -3,6 +3,7 @@ import json
 import os
 import random
 from glob import glob
+import time
 from typing import List
 
 import dvc
@@ -72,6 +73,9 @@ class TrainerWrapper:
 
     is_configured = False
     model = None
+
+    start_time = 0
+    end_time = 0
 
     worker_metadata = [
         "debug",
@@ -272,7 +276,13 @@ class TrainerWrapper:
             # Subir 3 imágenes por clase
             self.log_example_images(model_type=trainer.model._get_name())
 
+        self.start_time = time.time()
+
     def on_epoch_end(self, trainer):
+        self.end_time = time.time()
+
+        elapsed_time = self.end_time - self.start_time
+
         if "minio" in self.config and "mlflow" in self.config:
             metadata = {
                 other_metadata: os.environ.get(other_metadata, None)
@@ -298,6 +308,13 @@ class TrainerWrapper:
             metadata["datetime"] = datetime.now().isoformat()
             metadata["task_id"] = task_id
             metadata["DEBUG_MODE"] = self.config.get("debug", "False")
+            metadata["elapsed_time"] = round(elapsed_time, 3)
+
+            epoch_count_total = total_epochs * int(total_trails + 1)
+            epoch_total_now = int(trial_number + 1) * epoch
+            metadata["result_time"] = round(
+                elapsed_time * epoch_count_total / epoch_total_now, 3
+            )
 
             gpu_json_list: List[dict] = obtener_info_gpu_json()
             for gpu_json in gpu_json_list:
