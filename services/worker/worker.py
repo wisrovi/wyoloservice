@@ -125,7 +125,7 @@ def health():
 
         sorted_set_manager.add_to_sorted_set(
             key="available",
-            score=metadata["gpu_0_memoryFree"],
+            score=gpu_0_memoryFree,
             member=f'{metadata["WORKER_HOST"]} ({metadata["USER"]})' + '[debug]' if os.environ.get("debug", None) else "",
             ttl=30,
         )
