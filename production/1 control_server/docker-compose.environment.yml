@@ -1,5 +1,6 @@
 version: "3.8"
 
+
 services:
   # api
   api_user:
@@ -8,8 +9,8 @@ services:
     ports:
       - "23450:8000"
     volumes:
-      - /media/training/Train_service_an/config_versions:/config_versions
-      - /media/training/Train_service_an/api_database:/database
+      - ./config_versions:/config_versions
+      - ./api_database:/database
     networks:
       - nfs_network
 
@@ -26,7 +27,7 @@ services:
     image: rediscommander/redis-commander:latest
     environment:
       - REDIS_HOSTS=local:redis:6379
-      - HTTP_USER=redis
+      - HTTP_USER=wisrovi
       - HTTP_PASSWORD=wyoloservice
     ports:
       - "23439:8081"
@@ -40,13 +41,13 @@ services:
     command: server /data --console-address ":9001"
     restart: always
     environment:
-      - MINIO_ROOT_USER=mlflow
+      - MINIO_ROOT_USER=wisrovi
       - MINIO_ROOT_PASSWORD=wyoloservice
     ports:
       - "23444:9000"
       - "23442:9001" # web admin
     volumes:
-      - /media/training/Train_service_an/mlflow_minio:/data
+      - ./mlflow_minio:/data
     networks:
       - nfs_network
 
@@ -58,7 +59,7 @@ services:
       - MLFLOW_BACKEND_STORE_URI=postgresql+psycopg2://postgres:postgres@postgres:5432/wyoloservice # Conexión a PostgreSQL
       # minio
       - MLFLOW_S3_ENDPOINT_URL=http://mlflow-minio:9000 # URL del servidor MinIO
-      - AWS_ACCESS_KEY_ID=mlflow # Credenciales de MinIO
+      - AWS_ACCESS_KEY_ID=wisrovi # Credenciales de MinIO
       - AWS_SECRET_ACCESS_KEY=wyoloservice # Credenciales de MinIO
       #mlflow
       - MLFLOW_TRACKING_URI=http://mlflow:5000 # URI de seguimiento de MLflow

@@ -3,13 +3,19 @@ version: "3.8"
 services:
   dataset-filebrowser:
     image: hurlenko/filebrowser
+    privileged: true
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
     volumes:
-      - /media/training/Train_service_an/datasets:/data
+      - ./datasets:/data
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - FB_BASEURL=/
+      # - FB_PASSWORD=wyoloservice
+      # - FB_USERNAME=wisrovi
+      - FB_BASEURL=/datasets
       - VIRTUAL_HOST=wisrovi.com
       - VIRTUAL_PORT=8080
       - LETSENCRYPT_HOST=wisrovi.com
@@ -17,17 +23,18 @@ services:
     restart: always
     ports:
       - "23443:8080"
+
   dataset-samba:
     image: dperson/samba
     ports:
       - "23445:445/tcp"
     restart: always
     volumes:
-      - /media/training/Train_service_an/datasets:/data
+      - ./datasets:/data
     environment:
       - TZ=Europe/Madrid
-      - USERID=1000 
-      - GROUPID=1000 
+      - USERID=1000
+      - GROUPID=1000
       - SAMBA_USERS=wisrovi;wyoloservice
     command: >
       -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
@@ -36,7 +43,7 @@ services:
     image: dperson/samba
     restart: always
     volumes:
-      - /media/training/Train_service_an/config_versions:/data
+      - ./config_versions:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
@@ -51,14 +58,13 @@ services:
     image: dperson/samba
     restart: always
     volumes:
-      - /media/training/Train_service_an/api_database:/data
+      - ./api_database:/data
     environment:
       - TZ=Europe/Madrid
-      - USERID=1000 
-      - GROUPID=1000 
+      - USERID=1000
+      - GROUPID=1000
       - SAMBA_USERS=wisrovi;wyoloservice
     command: >
       -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
     ports:
-      - "23448:445/tcp" 
-
+      - "23448:445/tcp"
