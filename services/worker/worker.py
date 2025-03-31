@@ -28,7 +28,7 @@ from states import (
 from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
 
-__VERSION__ = "v1.0.3"
+__VERSION__ = "v1.0.4"
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
@@ -126,7 +126,7 @@ def health():
         sorted_set_manager.add_to_sorted_set(
             key="available",
             score=metadata["gpu_0_memoryFree"],
-            member=metadata["WORKER_HOST"],
+            member=f'{metadata["WORKER_HOST"]} ({metadata["USER"]})' + '[debug]' if os.environ.get("debug", None) else "",
             ttl=30,
         )
 
