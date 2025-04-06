@@ -21,3 +21,9 @@ start_control_server: config.py docker-compose.files.yml docker-compose.environm
 # create files system
 	docker-compose -f docker-compose.files.yml  up -d --build --force-recreate --no-deps
 
+certs:
+	mkdir -p ./nginx/certs/www.wyoloservice.com
+	docker-compose -f docker-compose.proxy.yaml up -d --build --force-recreate --no-deps
+	
+
+start_control_server_proxy: start_control_server certs

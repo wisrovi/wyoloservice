@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  openssl:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: openssl-container
+    volumes:
+      - ./nginx/certs/www.wyoloservice.com:/data
+    environment:
+      - DOMAIN_NAME=www.wyoloservice.com
+    command: >
+      openssl req -x509 -nodes -days 365 -newkey rsa:2048 
+      -keyout /data/privkey.pem 
+      -out /data/fullchain.pem
+      -subj "/C=US/ST=State/L=City/O=Company/OU=IT/CN=www.wyoloservice.com"
+
+  nginx-proxy:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs  # Directorio donde están los certificados SSL
+      # - ./nginx/vhost.d:/etc/nginx/vhost.d
+      # - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf  # Configuración personalizada de Nginx
+    networks:
+      - nfs_network
+
+networks:
+  nfs_network:
+    external: true

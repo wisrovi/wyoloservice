@@ -23,20 +23,20 @@ services:
     networks:
       - nfs_network
 
-  redis-commander:
+  redis_commander:
     image: rediscommander/redis-commander:latest
     environment:
       - REDIS_HOSTS=local:redis:6379
       - HTTP_USER=wisrovi
       - HTTP_PASSWORD=wyoloservice
-    ports:
-      - "23439:8081"
+    # ports:
+    #   - "23439:8081"
     depends_on:
       - redis
     networks:
       - nfs_network
 
-  mlflow-minio:
+  mlflow_minio:
     image: minio/minio
     command: server /data --console-address ":9001"
     restart: always
@@ -77,8 +77,8 @@ services:
         "--default-artifact-root",
         "s3://mlflow-artifacts/",
       ]
-    ports:
-      - "23435:5000"
+    # ports:
+    #   - "23435:5000"
     networks:
       - nfs_network
 

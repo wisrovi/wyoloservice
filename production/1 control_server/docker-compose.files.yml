@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  dataset-filebrowser:
+  dataset_filebrowser:
     image: hurlenko/filebrowser
     privileged: true
     cap_add:
@@ -21,10 +21,12 @@ services:
       - LETSENCRYPT_HOST=wisrovi.com
       - LETSENCRYPT_EMAIL=wisrovi.rodriguez@gmail.com
     restart: always
-    ports:
-      - "23443:8080"
+    # ports:
+    #   - "23443:8080"
+    networks:
+      - nfs_network
 
-  dataset-samba:
+  dataset_samba:
     image: dperson/samba
     ports:
       - "23445:445/tcp"
@@ -38,8 +40,10 @@ services:
       - SAMBA_USERS=wisrovi;wyoloservice
     command: >
       -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+    networks:
+      - nfs_network
 
-  config-samba:
+  config_samba:
     image: dperson/samba
     restart: always
     volumes:
@@ -53,8 +57,10 @@ services:
       -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
     ports:
       - "23447:445/tcp"
+    networks:
+      - nfs_network
 
-  db-samba:
+  db_samba:
     image: dperson/samba
     restart: always
     volumes:
@@ -68,3 +74,11 @@ services:
       -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
     ports:
       - "23448:445/tcp"
+    networks:
+      - nfs_network
+
+
+
+networks:
+  nfs_network:
+    external: true
