@@ -12,6 +12,7 @@ if os.path.exists("control_host.env"):
     print("No need to set environment variables, because they are already set.")
     exit()
 
+
 def get_ip():
     """Gets the host IP using 'hostname -I'."""
     try:
@@ -22,7 +23,9 @@ def get_ip():
             text=True,
             check=True,
         )
-        return result.stdout.strip().split()[0]  # Takes the first IP if there are multiple
+        return result.stdout.strip().split()[
+            0
+        ]  # Takes the first IP if there are multiple
     except subprocess.CalledProcessError:
         try:
             result = subprocess.run(
@@ -31,9 +34,12 @@ def get_ip():
                 text=True,
                 check=True,
             )
-            return result.stdout.strip().split()[0]  # Takes the first IP if there are multiple
+            return result.stdout.strip().split()[
+                0
+            ]  # Takes the first IP if there are multiple
         except subprocess.CalledProcessError:
             return "127.0.0.1"  # Default local IP if it fails
+
 
 def select_folder():
     """Opens a file explorer to select the folder."""
@@ -41,6 +47,7 @@ def select_folder():
     if selected_folder:
         entry_folder_path.delete(0, ctk.END)
         entry_folder_path.insert(0, selected_folder)
+
 
 def create_file():
     folder_path = entry_folder_path.get()
@@ -56,9 +63,18 @@ def create_file():
             f.write(f"PASSWORD={password}\n")
             f.write(f"REDIS_COMMANDER={redis_commander}\n")
             f.write(f"CONTROL_HOST={control_host}\n")  # Saves the host IP
+
+        subprocess.run(["export", f'FOLDER_SHARED="{folder_path}"'])
+        subprocess.run(["export", f'USERNAME="{username}"'])
+        subprocess.run(["export", f'PASSWORD="{password}"'])
+        subprocess.run(["export", f'REDIS_COMMANDER="{redis_commander}"'])
+        subprocess.run(["export", f'CONTROL_HOST="{control_host}"'])
+        subprocess.run(["chmod", "777", "control_host.env"])
+
         window.destroy()
     else:
         error_label.configure(text="Please complete all fields.")
+
 
 def toggle_advanced_options():
     global advanced_options_visible
@@ -67,6 +83,7 @@ def toggle_advanced_options():
         checkbox_redis_commander.grid(row=4, column=0, columnspan=2, pady=10)
     else:
         checkbox_redis_commander.grid_forget()
+
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -97,7 +114,9 @@ checkbox_redis_commander = ctk.CTkCheckBox(window, text="Activate Redis Commande
 
 # Button to show/hide advanced options
 advanced_options_visible = False
-advanced_options_button = ctk.CTkButton(window, text="Advanced Options", command=toggle_advanced_options)
+advanced_options_button = ctk.CTkButton(
+    window, text="Advanced Options", command=toggle_advanced_options
+)
 advanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)
 
 create_button = ctk.CTkButton(window, text="Create File", command=create_file)
