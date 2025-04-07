@@ -104,6 +104,48 @@ services:
     #     username: postgres
     #     password: postgres
 
+  backup:
+    image: postgres:13.2
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGHOST=postgres
+      - PGDATABASE=wyoloservice
+    volumes:
+      - ./backups:/backups
+    entrypoint: >
+      bash -c "
+      pg_dump -Fc --file=/backups/wyoloservice_backup_$(date +%Y%m%d%H%M%S).dump wyoloservice &&
+      echo 'Backup created successfully!'
+      "
+    depends_on:
+      - postgres
+    networks:
+      - nfs_network
+
+  restore:
+    image: postgres:13.2
+    environment:
+      - PGUSER=postgres
+      - PGPASSWORD=postgres
+      - PGHOST=postgres
+      - PGDATABASE=wyoloservice
+    volumes:
+      - ./backups:/backups
+    entrypoint: >
+      bash -c "
+      if [ -z \"$$FILE\" ]; then
+        echo 'No backup file specified. Please set the FILE environment variable.';
+        exit 1;
+      fi;
+      pg_restore -d wyoloservice -v /backups/$$FILE &&
+      echo 'Restore completed successfully!'
+      "
+    depends_on:
+      - postgres
+    networks:
+      - nfs_network
+
 
 networks:
   nfs_network:
