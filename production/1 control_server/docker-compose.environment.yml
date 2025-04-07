@@ -36,7 +36,7 @@ services:
     networks:
       - nfs_network
 
-  mlflow_minio:
+  mlflow-minio:
     image: minio/minio
     command: server /data --console-address ":9001"
     restart: always
