@@ -28,7 +28,7 @@ certs:
 
 	curl -o nginx/conf/nginx.conf https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/nginx/conf/nginx.conf
 	curl -o nginx/conf/openssl_wisrovi.cnf https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/nginx/conf/openssl_wisrovi.cnf
-	curl -o docker-compose.proxy.yml https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/docker-compose.proxy.yaml
+	curl -o docker-compose.proxy.yaml https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/docker-compose.proxy.yaml
 
 	docker-compose -f docker-compose.proxy.yaml up -d --build --force-recreate --no-deps
 
