@@ -24,11 +24,11 @@ user.env:
 	echo "WORKER_GPU_MEMORY=$$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | head -n 1)" >> user.env
 
 docker-compose.services.yml:
-	curl -o docker-compose.services.yml "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/wisrovi-patch-1/production/2%20train_Server/docker-compose.services.yml"
+	curl -o docker-compose.services.yml "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/2%20train_Server/docker-compose.services.yml"
 
 config.py:
 	pip install customtkinter
-	curl -o config.py "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/wisrovi-patch-1/production/2%20train_Server/config.py"
+	curl -o config.py "https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/2%20train_Server/config.py"
 
 clean:
 	rm -f user.env docker-compose.services.yml
