@@ -11,14 +11,15 @@ services:
     environment:
       - DOMAIN_NAME=www.wyoloservice.com
     command: >
-      openssl req -x509 -nodes -days 365 -newkey rsa:2048 
+      openssl req -x509 -nodes -days 825 -newkey rsa:4096 
       -keyout /data/privkey.pem 
-      -out /data/fullchain.pem
-      -subj "/C=US/ST=State/L=City/O=Company/OU=IT/CN=www.wyoloservice.com"
+      -out /data/fullchain.pem 
+      -config /conf/openssl_wisrovi.cnf 
+      -extensions v3_req
 
   nginx-proxy:
     image: nginx:latest
-    restart: always
+    # restart: always
     ports:
       - "80:80"
       - "443:443"
