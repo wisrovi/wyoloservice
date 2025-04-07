@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   dataset_filebrowser:
@@ -8,77 +8,38 @@ services:
       - SYS_ADMIN
       - DAC_READ_SEARCH
     volumes:
-      - ./datasets:/data
+      - ${FOLDER_SHARED}/datasets:/data
+    env_file:
+      - control_host.env
     environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Europe/Madrid
-      # - FB_PASSWORD=wyoloservice
-      # - FB_USERNAME=wisrovi
       - FB_BASEURL=/datasets
-      - VIRTUAL_HOST=wisrovi.com
-      - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=wisrovi.com
-      - LETSENCRYPT_EMAIL=wisrovi.rodriguez@gmail.com
     restart: always
-    # ports:
-    #   - "23443:8080"
+    ports:
+      - "23443:8080"
     networks:
       - nfs_network
 
-  dataset_samba:
+  combined_samba:
     image: dperson/samba
     ports:
-      - "23445:445/tcp"
+      - "23445:445/tcp" # Puerto único para el servicio combinado
     restart: always
+    env_file:
+      - control_host.env
     volumes:
-      - ./datasets:/data
-    environment:
-      - TZ=Europe/Madrid
-      - USERID=1000
-      - GROUPID=1000
-      - SAMBA_USERS=wisrovi;wyoloservice
+      - ${FOLDER_SHARED}/datasets:/data/datasets
+      - ${FOLDER_SHARED}/config_versions:/data/config_versions
+      - ${FOLDER_SHARED}/api_database:/data/api_database
     command: >
-      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
+      -u "${CIFS_USER};${CIFS_PASS}"
+      -s "datasets;/data/datasets;yes;no;yes;all"
+      -s "config_versions;/data/config_versions;yes;no;yes;all"
+      -s "api_database;/data/api_database;yes;no;yes;all"
     networks:
       - nfs_network
-
-  config_samba:
-    image: dperson/samba
-    restart: always
-    volumes:
-      - ./config_versions:/data
-    environment:
-      - TZ=Europe/Madrid
-      - USERID=1000
-      - GROUPID=1000
-      - SAMBA_USERS=wisrovi;wyoloservice
-    command: >
-      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
-    ports:
-      - "23447:445/tcp"
-    networks:
-      - nfs_network
-
-  db_samba:
-    image: dperson/samba
-    restart: always
-    volumes:
-      - ./api_database:/data
-    environment:
-      - TZ=Europe/Madrid
-      - USERID=1000
-      - GROUPID=1000
-      - SAMBA_USERS=wisrovi;wyoloservice
-    command: >
-      -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
-    ports:
-      - "23448:445/tcp"
-    networks:
-      - nfs_network
-
-
 
 networks:
   nfs_network:
-    external: true
+    driver: bridge
+
+# mkdir -p /home/wrodriguez/Descargas/PT/{datasets,config_versions,api_database}
