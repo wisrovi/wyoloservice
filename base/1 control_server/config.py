@@ -51,7 +51,7 @@ def create_file():
 
     if folder_path and username and password:
         with open("control_host.env", "w") as f:
-            f.write(f"FOLDER_PATH={folder_path}\n")
+            f.write(f"FOLDER_SHARED={folder_path}\n")
             f.write(f"USERNAME={username}\n")
             f.write(f"PASSWORD={password}\n")
             f.write(f"REDIS_COMMANDER={redis_commander}\n")
