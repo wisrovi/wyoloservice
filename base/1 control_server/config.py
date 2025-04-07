@@ -64,12 +64,15 @@ def create_file():
             f.write(f"REDIS_COMMANDER={redis_commander}\n")
             f.write(f"CONTROL_HOST={control_host}\n")  # Saves the host IP
 
-        subprocess.run(["export", f'FOLDER_SHARED="{folder_path}"'])
-        subprocess.run(["export", f'USERNAME="{username}"'])
-        subprocess.run(["export", f'PASSWORD="{password}"'])
-        subprocess.run(["export", f'REDIS_COMMANDER="{redis_commander}"'])
-        subprocess.run(["export", f'CONTROL_HOST="{control_host}"'])
-        subprocess.run(["chmod", "777", "control_host.env"])
+        commands = [
+            f'export FOLDER_SHARED="{folder_path}"',
+            f'export USERNAME="{username}"',
+            f'export PASSWORD="{password}"',
+            f'export REDIS_COMMANDER="{redis_commander}"',
+            f'export CONTROL_HOST="{control_host}"',
+        ]
+        command_str = " && ".join(commands)
+        subprocess.run(command_str, shell=True, executable="/bin/bash")
 
         window.destroy()
     else:
