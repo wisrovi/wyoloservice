@@ -8,7 +8,7 @@ services:
       - SYS_ADMIN
       - DAC_READ_SEARCH
     volumes:
-      - ./datasets:/data
+      - ${FOLDER_SHARED}/datasets:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -25,6 +25,8 @@ services:
     #   - "23443:8080"
     networks:
       - nfs_network
+    env_file:
+      - control_host.env
 
   dataset_samba:
     image: dperson/samba
@@ -32,7 +34,7 @@ services:
       - "23445:445/tcp"
     restart: always
     volumes:
-      - ./datasets:/data
+      - ${FOLDER_SHARED}/datasets:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
@@ -42,12 +44,14 @@ services:
       -u "wisrovi;wyoloservice" -s "shared;/data;yes;no;yes;all"
     networks:
       - nfs_network
+    env_file:
+      - control_host.env
 
   config_samba:
     image: dperson/samba
     restart: always
     volumes:
-      - ./config_versions:/data
+      - ${FOLDER_SHARED}/config_versions:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
@@ -59,12 +63,14 @@ services:
       - "23447:445/tcp"
     networks:
       - nfs_network
+    env_file:
+      - control_host.env
 
   db_samba:
     image: dperson/samba
     restart: always
     volumes:
-      - ./api_database:/data
+      - ${FOLDER_SHARED}/api_database:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
@@ -76,6 +82,8 @@ services:
       - "23448:445/tcp"
     networks:
       - nfs_network
+    env_file:
+      - control_host.env
 
 
 

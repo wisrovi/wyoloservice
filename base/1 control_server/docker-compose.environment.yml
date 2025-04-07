@@ -8,9 +8,11 @@ services:
     restart: always
     ports:
       - "23450:8000"
+    env_file:
+      - control_host.env
     volumes:
-      - ./config_versions:/config_versions
-      - ./api_database:/database
+      - ${FOLDER_SHARED}/config_versions:/config_versions
+      - ${FOLDER_SHARED}/api_database:/database
     networks:
       - nfs_network
 
@@ -46,8 +48,10 @@ services:
     ports:
       - "23444:9000"
       - "23442:9001" # web admin
+    env_file:
+      - control_host.env
     volumes:
-      - ./mlflow_minio:/data
+      - ${FOLDER_SHARED}/mlflow_minio:/data
     networks:
       - nfs_network
 
@@ -89,7 +93,9 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=wyoloservice
     volumes:
-      - /media/training/Train_service_an/postgres:/var/lib/postgresql/data
+      - ${FOLDER_SHARED}/postgres:/var/lib/postgresql/data
+    env_file:
+      - control_host.env
     ports:
       - "23436:5432"
     restart: always
@@ -112,7 +118,7 @@ services:
       - PGHOST=postgres
       - PGDATABASE=wyoloservice
     volumes:
-      - ./backups:/backups
+      - ${FOLDER_SHARED}/postgres_backups:/backups
     entrypoint: >
       bash -c "
       pg_dump -Fc --file=/backups/wyoloservice_backup_$(date +%Y%m%d%H%M%S).dump wyoloservice &&
@@ -122,6 +128,8 @@ services:
       - postgres
     networks:
       - nfs_network
+    env_file:
+      - control_host.env
 
   restore:
     image: postgres:13.2
@@ -131,7 +139,7 @@ services:
       - PGHOST=postgres
       - PGDATABASE=wyoloservice
     volumes:
-      - ./backups:/backups
+      - ${FOLDER_SHARED}/postgres_backups:/backups
     entrypoint: >
       bash -c "
       if [ -z \"$$FILE\" ]; then
@@ -145,6 +153,8 @@ services:
       - postgres
     networks:
       - nfs_network
+    env_file:
+      - control_host.env
 
 
 networks:
