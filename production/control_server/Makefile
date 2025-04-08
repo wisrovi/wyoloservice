@@ -26,6 +26,7 @@ certs:
 	mkdir -p ./nginx/certs/www.wyoloservice.com
 	mkdir -p ./nginx/conf
 
+	curl -o nginx/Dockerfile https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/wisrovi-patch-1/production/1%20control_server/nginx/Dockerfile
 	curl -o nginx/conf/nginx.conf https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/nginx/conf/nginx.conf
 	curl -o nginx/conf/openssl_wisrovi.cnf https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/nginx/conf/openssl_wisrovi.cnf
 	curl -o docker-compose.proxy.yaml https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/docker-compose.proxy.yaml

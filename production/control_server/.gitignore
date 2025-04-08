@@ -3,3 +3,5 @@ control_host.env
 Makefile
 docker-compose.environment.yml
 docker-compose.files.yml
+docker-compose.proxy.yaml
+nginx/*
