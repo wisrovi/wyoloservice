@@ -121,8 +121,12 @@ services:
       - ${FOLDER_SHARED}/wyoloservice_data/postgres_backups:/backups
     entrypoint: >
       bash -c "
-      pg_dump -Fc --file=/backups/wyoloservice_backup_$(date +%Y%m%d%H%M%S).dump wyoloservice &&
-      echo 'Backup created successfully!'
+      while true; do
+        echo 'Creating backup...'
+        pg_dump -Fc --file=/backups/wyoloservice_backup_$(date +%Y%m%d%H%M%S).dump wyoloservice &&
+        echo 'Backup created successfully!'
+        sleep 7200 # Espera 2 horas (7200 segundos)
+      done
       "
     depends_on:
       - postgres
@@ -155,6 +159,8 @@ services:
       - nfs_network
     env_file:
       - control_host.env
+    profiles:
+      - manual  # Este servicio solo se iniciará si se activa el perfil "manual"
 
 
 networks:
