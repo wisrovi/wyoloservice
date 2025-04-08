@@ -28,6 +28,25 @@ services:
     env_file:
       - control_host.env
 
+  combined_samba:
+    image: dperson/samba
+    ports:
+      - "23449:445/tcp" # Puerto único para el servicio combinado
+    restart: always
+    env_file:
+      - control_host.env
+    volumes:
+      - ${FOLDER_SHARED}/wyoloservice_data/datasets:/data/datasets
+      - ${FOLDER_SHARED}/wyoloservice_data/config_versions:/data/config_versions
+      - ${FOLDER_SHARED}/wyoloservice_data/api_database:/data/api_database
+    command: >
+      -u "${CIFS_USER};${CIFS_PASS}"
+      -s "datasets;/data/datasets;yes;no;yes;all"
+      -s "config_versions;/data/config_versions;yes;no;yes;all"
+      -s "api_database;/data/api_database;yes;no;yes;all"
+    networks:
+      - nfs_network
+
   dataset_samba:
     image: dperson/samba
     ports:
