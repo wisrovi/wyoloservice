@@ -8,7 +8,7 @@ services:
       - SYS_ADMIN
       - DAC_READ_SEARCH
     volumes:
-      - ${FOLDER_SHARED}/datasets:/data
+      - ${FOLDER_SHARED}/wyoloservice_data/datasets:/data
     environment:
       - PUID=1000
       - PGID=1000
@@ -34,7 +34,7 @@ services:
       - "23445:445/tcp"
     restart: always
     volumes:
-      - ${FOLDER_SHARED}/datasets:/data
+      - ${FOLDER_SHARED}/wyoloservice_data/datasets:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
@@ -51,7 +51,7 @@ services:
     image: dperson/samba
     restart: always
     volumes:
-      - ${FOLDER_SHARED}/config_versions:/data
+      - ${FOLDER_SHARED}/wyoloservice_data/config_versions:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
@@ -70,7 +70,7 @@ services:
     image: dperson/samba
     restart: always
     volumes:
-      - ${FOLDER_SHARED}/api_database:/data
+      - ${FOLDER_SHARED}/wyoloservice_data/api_database:/data
     environment:
       - TZ=Europe/Madrid
       - USERID=1000
