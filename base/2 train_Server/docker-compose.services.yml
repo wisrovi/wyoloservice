@@ -48,6 +48,6 @@ services:
     restart: always
     environment:
       - WATCHTOWER_LABEL_ENABLE=true # Habilita el control por etiquetas
-      - WATCHTOWER_SCHEDULE="0 0 4 * * *" # Ejemplo: Ejecutar a las 4 AM todos los días
+      # - WATCHTOWER_SCHEDULE="0 0 4 * * *" # Ejemplo: Ejecutar a las 4 AM todos los días
       - WATCHTOWER_CLEANUP=true # Elimina imágenes antiguas después de actualizar
 
