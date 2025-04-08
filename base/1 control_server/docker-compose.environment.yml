@@ -11,8 +11,8 @@ services:
     env_file:
       - control_host.env
     volumes:
-      - ${FOLDER_SHARED}/config_versions:/config_versions
-      - ${FOLDER_SHARED}/api_database:/database
+      - ${FOLDER_SHARED}/wyoloservice_data/config_versions:/config_versions
+      - ${FOLDER_SHARED}/wyoloservice_data/api_database:/database
     networks:
       - nfs_network
 
@@ -51,7 +51,7 @@ services:
     env_file:
       - control_host.env
     volumes:
-      - ${FOLDER_SHARED}/mlflow_minio:/data
+      - ${FOLDER_SHARED}/wyoloservice_data/mlflow_minio:/data
     networks:
       - nfs_network
 
@@ -93,7 +93,7 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=wyoloservice
     volumes:
-      - ${FOLDER_SHARED}/postgres:/var/lib/postgresql/data
+      - ${FOLDER_SHARED}/wyoloservice_data/postgres:/var/lib/postgresql/data
     env_file:
       - control_host.env
     ports:
@@ -118,7 +118,7 @@ services:
       - PGHOST=postgres
       - PGDATABASE=wyoloservice
     volumes:
-      - ${FOLDER_SHARED}/postgres_backups:/backups
+      - ${FOLDER_SHARED}/wyoloservice_data/postgres_backups:/backups
     entrypoint: >
       bash -c "
       pg_dump -Fc --file=/backups/wyoloservice_backup_$(date +%Y%m%d%H%M%S).dump wyoloservice &&
@@ -139,7 +139,7 @@ services:
       - PGHOST=postgres
       - PGDATABASE=wyoloservice
     volumes:
-      - ${FOLDER_SHARED}/postgres_backups:/backups
+      - ${FOLDER_SHARED}/wyoloservice_data/postgres_backups:/backups
     entrypoint: >
       bash -c "
       if [ -z \"$$FILE\" ]; then
