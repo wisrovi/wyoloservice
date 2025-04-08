@@ -34,3 +34,9 @@ certs:
 	docker-compose -f docker-compose.proxy.yaml up -d --build --force-recreate --no-deps
 
 start_control_server_proxy: start_control_server certs
+
+
+stop:
+	docker-compose -f docker-compose.proxy.yml down
+	docker-compose -f docker-compose.environment.yml down
+	docker-compose -f docker-compose.files.yml down
