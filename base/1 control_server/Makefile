@@ -18,9 +18,9 @@ docker-compose.environment.yml:
 
 start_control_server: config.py docker-compose.files.yml docker-compose.environment.yml
 # create environment
-	docker-compose -f docker-compose.environment.yml  up -d --build --force-recreate --no-deps
+	docker-compose -f docker-compose.environment.yml --env-file control_host.env  up -d --build --force-recreate --no-deps
 # create files system
-	docker-compose -f docker-compose.files.yml  up -d --build --force-recreate --no-deps
+	docker-compose -f docker-compose.files.yml --env-file control_host.env  up -d --build --force-recreate --no-deps
 
 certs:
 	mkdir -p ./nginx/certs/www.wyoloservice.com
