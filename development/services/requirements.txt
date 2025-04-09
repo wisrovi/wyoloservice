@@ -22,6 +22,10 @@ logbook
 python-slugify
 dvc
 tensorflow==2.12.0
+python-docx
+seaborn
+Pillow
+matplotlib
 # ray[tune]
 # dvclive  # not yet available
 
