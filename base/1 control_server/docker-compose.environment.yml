@@ -81,8 +81,8 @@ services:
         "--default-artifact-root",
         "s3://mlflow-artifacts/",
       ]
-    # ports:
-    #   - "23435:5000"
+    ports:
+      - "23435:5000"
     networks:
       - nfs_network
 
