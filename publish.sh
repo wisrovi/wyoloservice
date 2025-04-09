@@ -14,3 +14,5 @@ sudo docker push wisrovi/wyoloservice:mlflow
 sudo docker push wisrovi/wyoloservice:api
 sudo docker push wisrovi/wyoloservice:worker
 sudo docker push wisrovi/wyoloservice:user
+
+sudo docker push wisrovi/wyoloservice_worker:v1.0.5

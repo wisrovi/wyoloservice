@@ -1,0 +1,24 @@
+model: "yolov8n-cls.pt"
+# dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
+train:
+  data: /datasets/clasificacion/clasificador_example/
+  epochs: 100
+  imgsz: 640
+sweeper:
+  version: 2
+  study_name: "<project>_<model_name>"
+  fitness: "metrics/accuracy_top1"
+  n_trials: 5
+  search_space:
+    model: ["choice", "yolov8n-cls.pt", "yolov8s-cls.pt", "yolov8m-cls.pt"]
+    train:
+      imgsz: ["choice", 416, 640, 720]
+      lr0: ["loguniform", 1e-5, 1e-2]
+      # momentum: ["range", 0.85, 0.98, 0.01]
+      freeze: ["range", 1, 5, 1]
+      optimizer: ["choice", SGD, Adam, AdamW, NAdam, RMSProp]
+
+metadata:
+  content: "Este es un experimento de clasificación de imágenes para el proyecto xxx."
+  author: "William Steve Rodriguez Villamizar"
+  documentation: "Este modelo fue entrenado con datos de abril 2025."

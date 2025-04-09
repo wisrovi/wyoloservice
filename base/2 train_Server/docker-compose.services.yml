@@ -27,7 +27,8 @@ x-resources: &resources_gpu
 services:
   worker:
     <<: *resources_gpu
-    image: wisrovi/wyoloservice:worker
+    # image: wisrovi/wyoloservice:worker
+    image: wisrovi/wyoloservice_worker:v1.0.5
     env_file:
       - control_host.env
       - user.env
@@ -39,7 +40,14 @@ services:
       - DAC_READ_SEARCH
     # command: tail -f /dev/null
     labels:
+      - "autoheal=true"
       - "com.centurylinklabs.watchtower.enable=true" # Habilita Watchtower para este contenedor
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 20s
+      timeout: 2s
+      retries: 1
+      start_period: 20s
 
   watchtower:
     image: containrrr/watchtower
@@ -54,4 +62,14 @@ services:
       - 8080:8080
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
+
+  autoheal:
+    environment:
+      - AUTOHEAL_INTERVAL=10
+      - CURL_TIMEOUT=30
+      - AUTOHEAL_CONTAINER_LABEL=all
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    image: willfarrell/autoheal
+    restart: always
 

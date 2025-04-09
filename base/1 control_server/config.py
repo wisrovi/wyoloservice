@@ -4,9 +4,10 @@ try:
 except:
     pass
 
-import customtkinter as ctk
 import subprocess
 import os
+import hashlib
+
 
 if os.path.exists("control_host.env"):
     print("No need to set environment variables, because they are already set.")
@@ -49,12 +50,21 @@ def select_folder():
         entry_folder_path.insert(0, selected_folder)
 
 
+def get_hash_password(password):
+    """Generates a hash of the password using SHA-256."""
+
+    sha256_hash = hashlib.sha256()
+    sha256_hash.update(password.encode())
+    return sha256_hash.hexdigest()
+
+
 def create_file():
     folder_path = entry_folder_path.get()
     username = entry_username.get()
     password = entry_password.get()
     redis_commander = checkbox_redis_commander.get() if advanced_options_visible else 0
     control_host = get_ip()  # Gets the host IP
+    sha256_hash = get_hash_password(password)
 
     if folder_path and username and password:
         with open("control_host.env", "w") as f:
@@ -63,6 +73,8 @@ def create_file():
             f.write(f"PASSWORD={password}\n")
             f.write(f"REDIS_COMMANDER={redis_commander}\n")
             f.write(f"CONTROL_HOST={control_host}\n")  # Saves the host IP
+            f.write(f"APP_ENCRYPT_PASSWORD={sha256_hash}\n")  # Saves the password hash
+        print("File 'control_host.env' created successfully.")
 
         commands = [
             f'export FOLDER_SHARED="{folder_path}"',
@@ -70,6 +82,7 @@ def create_file():
             f'export PASSWORD="{password}"',
             f'export REDIS_COMMANDER="{redis_commander}"',
             f'export CONTROL_HOST="{control_host}"',
+            f'export APP_ENCRYPT_PASSWORD="{sha256_hash}"',
         ]
         command_str = " && ".join(commands)
         subprocess.run(command_str, shell=True, executable="/bin/bash")

@@ -4,7 +4,7 @@ version: "3.8"
 x-resources: &resources_gpu
   # la shm_size es calculada de acuerdo al 80% de la memoria RAM como maximo
   # es importante que el ordenador a entrenar tenga al menos lo mismo de swap que de RAM
-  shm_size: "24g"  
+  shm_size: "24g"
   logging:
     driver: "json-file"
     options:
@@ -33,20 +33,29 @@ services:
     build:
       context: ./services
       dockerfile: Dockerfile.worker
-    image: wisrovi/wyoloservice_worker:v1.0.5
+    image: wisrovi/wyoloservice_worker:v1.0.6
+    container_name: worker_demo
     env_file:
       - control_host.env
       - user.env
-    restart: always
-    # command: tail -f /dev/null
+    # restart: always
+    command: tail -f /dev/null
     privileged: true
     volumes:
       - ./demo:/demo
+      - ./services/worker/:/app/worker/
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
-
-
+    labels:
+      - "autoheal=true"
+      - "com.centurylinklabs.watchtower.enable=true" # Habilita Watchtower para este contenedor
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 20s
+      timeout: 2s
+      retries: 1
+      start_period: 20s
 
 
 # Para crear la red y el servidor NFS

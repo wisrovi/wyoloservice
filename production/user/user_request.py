@@ -90,6 +90,8 @@ def enviar_archivo(filename=None):
         port=23438,
     )
     task_id = GLOBAL_RESPONSE["task_id"]
+    
+    print("Streaming activated in", f"stream:{task_id}")
 
     @stream_manager.on_message(
         stream_name=f"stream:{task_id}", group_name=f"stream:{task_id}", consumer_name=f"stream:{task_id}"

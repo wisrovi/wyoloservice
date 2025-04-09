@@ -1,0 +1,100 @@
+[
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
+        "label": "RedisStreamManager",
+        "importPath": "wredis.streams",
+        "description": "wredis.streams",
+        "isExtraImport": true,
+        "detail": "wredis.streams",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_usuario",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"\ndef cargar_configuracion():",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "cargar_configuracion",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def cargar_configuracion():\n    \"\"\"Carga la configuración desde control_host.env.\"\"\"\n    try:\n        with open(\"control_host.env\", \"r\") as f:\n            config = {}\n            for line in f:\n                key, value = line.strip().split(\"=\")\n                config[key] = value\n            return config\n    except FileNotFoundError:",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "seleccionar_archivo",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "enviar_archivo",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")\n        return\n    if not filename:\n        filename = seleccionar_archivo()\n        if not filename:",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "GLOBAL_RESPONSE",
+        "kind": 5,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "GLOBAL_RESPONSE = None\ndef obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"",
+        "detail": "user_request",
+        "documentation": {}
+    }
+]

@@ -1,8 +1,12 @@
+debug: wisrovi
+
 model: "yolov8n-cls.pt"
-type: "yolo"
+
+
+#type: "yolo"
 dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
-  batch: -1
+  #batch: -1
   data: /datasets/clasificacion/colorball.v8i.multiclass/
   epochs: 2
   imgsz: 640
@@ -12,10 +16,10 @@ train:
 #   conf: 0.01
 sweeper:
   version: 2
-  algorithm: optuna
-  direction: maximize
+  #algorithm: optuna
+  #direction: maximize
   study_name: "example_clasification"
-  sampler: "TPESampler"
+  #sampler: "TPESampler"
   fitness: "metrics/accuracy_top1"
   n_trials: 2
   search_space:
@@ -23,10 +27,10 @@ sweeper:
     train:
       imgsz: ["choice", 416, 512, 640, 720, 920, 1024]
       lr0: ["loguniform", 1e-5, 1e-2]
-extras:
-  gpu:
-    id: 0
-    limit: 0.95
+#extras:
+#  gpu:
+#    id: 0
+#    limit: 0.95
 metadata:
   content: "Este es un experimento de clasificación de imágenes."
   author: "William Rodriguez"

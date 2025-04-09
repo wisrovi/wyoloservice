@@ -8,7 +8,8 @@ import uuid
 
 import hydra
 import mlflow
-from logbook import FileHandler, Logger
+
+# from logbook import FileHandler, Logger
 from loguru import logger
 from omegaconf import OmegaConf
 from wpipe.pipe import Pipeline
@@ -23,12 +24,18 @@ from states import (
     read_user_config,
     results_up_to_minio,
     Start_inform,
+    Eda_calculate,
 )
+
+import uvicorn
+from fastapi import FastAPI
+
+app = FastAPI()
 
 from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
 
-__VERSION__ = "v1.0.4"
+__VERSION__ = "v1.0.5"
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
@@ -46,16 +53,99 @@ logger.add(
 )
 
 # Configura el segundo logger: mensajes normales en la consola
-logger.add(
-    sys.stdout,
-    level="INFO",
-    format="<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>",
-)
+# logger.add(
+#     sys.stdout,
+#     level="INFO",
+#     format="<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>",
+# )
+
+
+@app.get("/")
+async def read_version():
+
+    global hash_manager
+    global sorted_set_manager
+    global DEBUG_MODE
+
+    """Devuelve la versión de la API."""
+
+    metadata = {
+        other_metadata: os.environ.get(other_metadata, None)
+        for other_metadata in TrainerWrapper.worker_metadata
+    }
+    metadata["__VERSION__"] = __VERSION__
+    metadata["debug"] = DEBUG_MODE
+    metadata["debug"] = metadata["debug"] if DEBUG_MODE else "False"
+
+    gpu_json_list: List[dict] = obtener_info_gpu_json()
+    for gpu_json in gpu_json_list:
+        for key, value in gpu_json.items():
+            if value is not None:
+                if (
+                    isinstance(value, int)
+                    or isinstance(value, float)
+                    or isinstance(value, str)
+                    #
+                    or isinstance(key, int)
+                    or isinstance(key, float)
+                    or isinstance(key, str)
+                ):
+                    metadata[key] = value
+
+    redis_key = (
+        "workers"
+        + f":{metadata.get('WORKER_HOST', 'noIp')}"
+        + f":{metadata.get('USER', str(uuid.uuid4()))}"
+    )
+    for metadata_key, metadata_value in metadata.items():
+        hash_manager.create_hash(
+            key=redis_key,
+            hash_name=metadata_key,
+            value=metadata_value,
+            ttl=30,
+        )
+
+    gpu_0_memoryFree = int(metadata["gpu_0_memoryFree"])
+    gpu_0_memoryTotal = int(metadata["gpu_0_memoryTotal"])
+    gpu_0_memoryUsed = int(metadata["gpu_0_memoryUsed"])
+
+    NOT_TO_USE_GPU = 1 - int(os.environ.get("MAX_GPU", 60)) / 100
+    if gpu_0_memoryFree > (gpu_0_memoryTotal * NOT_TO_USE_GPU):
+        gpu_0_memoryFree = gpu_0_memoryTotal * NOT_TO_USE_GPU
+    else:
+        available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
+        gpu_0_memoryFree = max(available - gpu_0_memoryUsed, 0)
+
+    member_name = f'{metadata["WORKER_HOST"]} ({metadata["USER"]})'
+    if os.environ.get("debug", None):
+        member_name += "[debug]"
+
+    try:
+        sorted_set_manager.redis_client.ping()
+    except Exception as e:
+        pass
+        # Detener la aplicación si ocurre un error
+        # os._exit(1)  # Fuerza la salida del proceso
+
+    sorted_set_manager.add_to_sorted_set(
+        key="available",
+        score=gpu_0_memoryFree,
+        member=member_name,
+        ttl=30,
+    )
+
+    return {"version": __VERSION__}
+
+
+@ejecutar_en_hilo
+def health():
+    logger.info("Starting health check...")
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning")
 
 
 # Configura el tercer logger: todos los niveles en un archivo separado (completamente independiente)
-FileHandler("/var/log/worker/full_log.log").push_application()
-custom_logger = Logger("wyoloservice")
+# FileHandler("/var/log/worker/full_log.log").push_application()
+# custom_logger = Logger("wyoloservice")
 
 
 pipeline = Pipeline()
@@ -63,74 +153,11 @@ pipeline.set_steps(
     [
         (read_user_config, "read_config", "v1.0"),
         (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),
+        # (Eda_calculate(), Eda_calculate.__NAME__, Eda_calculate.__VERSION__),
         (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),
         (results_up_to_minio, "result_to_minio", "v1.0"),
     ]
 )
-
-
-@ejecutar_en_hilo
-def health():
-    global hash_manager
-    global sorted_set_manager
-    global DEBUG_MODE
-
-    while True:
-        metadata = {
-            other_metadata: os.environ.get(other_metadata, None)
-            for other_metadata in TrainerWrapper.worker_metadata
-        }
-        metadata["__VERSION__"] = __VERSION__
-        metadata["debug"] = DEBUG_MODE
-        metadata["debug"] = metadata["debug"] if DEBUG_MODE else "False"
-
-        gpu_json_list: List[dict] = obtener_info_gpu_json()
-        for gpu_json in gpu_json_list:
-            for key, value in gpu_json.items():
-                if value is not None:
-                    if (
-                        isinstance(value, int)
-                        or isinstance(value, float)
-                        or isinstance(value, str)
-                        #
-                        or isinstance(key, int)
-                        or isinstance(key, float)
-                        or isinstance(key, str)
-                    ):
-                        metadata[key] = value
-
-        redis_key = (
-            "workers"
-            + f":{metadata.get('WORKER_HOST', 'noIp')}"
-            + f":{metadata.get('USER', str(uuid.uuid4()))}"
-        )
-        for metadata_key, metadata_value in metadata.items():
-            hash_manager.create_hash(
-                key=redis_key,
-                hash_name=metadata_key,
-                value=metadata_value,
-                ttl=30,
-            )
-
-        gpu_0_memoryFree = int(metadata["gpu_0_memoryFree"])
-        gpu_0_memoryTotal = int(metadata["gpu_0_memoryTotal"])
-        gpu_0_memoryUsed = int(metadata["gpu_0_memoryUsed"])
-
-        NOT_TO_USE_GPU = 1 - int(os.environ.get("MAX_GPU", 60)) / 100
-        if gpu_0_memoryFree > (gpu_0_memoryTotal * NOT_TO_USE_GPU):
-            gpu_0_memoryFree = 0
-        else:
-            available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
-            gpu_0_memoryFree = max(available - gpu_0_memoryUsed, 0)
-
-        sorted_set_manager.add_to_sorted_set(
-            key="available",
-            score=gpu_0_memoryFree,
-            member=f'{metadata["WORKER_HOST"]} ({metadata["USER"]})' + '[debug]' if os.environ.get("debug", None) else "",
-            ttl=30,
-        )
-
-        time.sleep(20)
 
 
 @hydra.main(config_path="/app", config_name="config", version_base=None)
@@ -158,13 +185,19 @@ def main(cfg: OmegaConf):
 
     DEFAULT_CONFIG.update(cfg)
 
+    DEFAULT_CONFIG["minio"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
+    DEFAULT_CONFIG["minio"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
+
+    DEFAULT_CONFIG["dvc"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
+    DEFAULT_CONFIG["dvc"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
+
     MinioS3Client(
-        endpoint_url=cfg.get("minio", {}).get("MINIO_ENDPOINT"),
-        aws_access_key_id=cfg.get("minio", {}).get("MINIO_ID"),
-        aws_secret_access_key=cfg.get("minio", {}).get("MINIO_SECRET_KEY"),
+        endpoint_url=DEFAULT_CONFIG.get("minio", {}).get("MINIO_ENDPOINT"),
+        aws_access_key_id=DEFAULT_CONFIG.get("minio", {}).get("MINIO_ID"),
+        aws_secret_access_key=DEFAULT_CONFIG.get("minio", {}).get("MINIO_SECRET_KEY"),
     )
 
-    redis_config = cfg.get("redis", {})
+    redis_config = DEFAULT_CONFIG.get("redis", {})
 
     queue_manager = RedisQueueManager(
         host=redis_config.get("REDIS_HOST"),
@@ -194,8 +227,8 @@ def main(cfg: OmegaConf):
 
     results_queue = redis_config.get("RESULT_TOPIC", redis_config.get("TOPIC"))
 
-    logger.info(f"Public topic: {PUBLIC_TOPIC}")
-    logger.info(f"Private topic: {USER_TOPIC}")
+    # logger.info(f"Public topic: {PUBLIC_TOPIC}")
+    # logger.info(f"Private topic: {USER_TOPIC}")
     logger.info(f"Results queue: {results_queue}")
     logger.info(f"Debug mode: {DEBUG_MODE}")
     # logger.info(f"DEFAULT_CONFIG: {DEFAULT_CONFIG}")
@@ -225,6 +258,19 @@ def main(cfg: OmegaConf):
             logger.error("Can't report results")
 
     def process_requests(task_data: dict):
+        
+        # validar la cantidad de GPU disponible, si es menor a 2GB, no se ejecuta
+        gpu_json_list: List[dict] = obtener_info_gpu_json()
+        free = 0
+        for gpu_id, gpu in enumerate(gpu_json_list):
+            free_memory = int(gpu[f'gpu_{gpu_id}_memoryFree'])
+            
+            free += free_memory
+
+        if free < 2 * 1024:
+            logger.error("Not enough GPU memory available")
+            return None
+
         try:
             with tempfile.TemporaryDirectory() as temp_dir:
                 task_data["tempfile"] = temp_dir
@@ -267,7 +313,7 @@ def main(cfg: OmegaConf):
         time.sleep(30)
 
     if USER_TOPIC:
-        logger.info(f"Activate user topic: {USER_TOPIC}")
+        logger.info(f"Activate Private topic: {USER_TOPIC}")
 
         @queue_manager.on_message(USER_TOPIC)
         def private_worker(task_data: dict):

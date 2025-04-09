@@ -1,14 +1,5 @@
 [
     {
-        "label": "customtkinter",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "customtkinter",
-        "description": "customtkinter",
-        "detail": "customtkinter",
-        "documentation": {}
-    },
-    {
         "label": "subprocess",
         "kind": 6,
         "isExtraImport": true,
@@ -27,6 +18,15 @@
         "documentation": {}
     },
     {
+        "label": "hashlib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "hashlib",
+        "description": "hashlib",
+        "detail": "hashlib",
+        "documentation": {}
+    },
+    {
         "label": "get_ip",
         "kind": 2,
         "importPath": "config",
@@ -40,7 +40,16 @@
         "kind": 2,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "def select_folder():\n    \"\"\"Opens a file explorer to select the folder.\"\"\"\n    selected_folder = filedialog.askdirectory()\n    if selected_folder:\n        entry_folder_path.delete(0, ctk.END)\n        entry_folder_path.insert(0, selected_folder)\ndef create_file():\n    folder_path = entry_folder_path.get()\n    username = entry_username.get()\n    password = entry_password.get()",
+        "peekOfCode": "def select_folder():\n    \"\"\"Opens a file explorer to select the folder.\"\"\"\n    selected_folder = filedialog.askdirectory()\n    if selected_folder:\n        entry_folder_path.delete(0, ctk.END)\n        entry_folder_path.insert(0, selected_folder)\ndef get_hash_password(password):\n    \"\"\"Generates a hash of the password using SHA-256.\"\"\"\n    sha256_hash = hashlib.sha256()\n    sha256_hash.update(password.encode())",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "get_hash_password",
+        "kind": 2,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "def get_hash_password(password):\n    \"\"\"Generates a hash of the password using SHA-256.\"\"\"\n    sha256_hash = hashlib.sha256()\n    sha256_hash.update(password.encode())\n    return sha256_hash.hexdigest()\ndef create_file():\n    folder_path = entry_folder_path.get()\n    username = entry_username.get()\n    password = entry_password.get()\n    redis_commander = checkbox_redis_commander.get() if advanced_options_visible else 0",
         "detail": "config",
         "documentation": {}
     },
@@ -49,7 +58,7 @@
         "kind": 2,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "def create_file():\n    folder_path = entry_folder_path.get()\n    username = entry_username.get()\n    password = entry_password.get()\n    redis_commander = checkbox_redis_commander.get() if advanced_options_visible else 0\n    control_host = get_ip()  # Gets the host IP\n    if folder_path and username and password:\n        with open(\"control_host.env\", \"w\") as f:\n            f.write(f\"FOLDER_SHARED={folder_path}\\n\")\n            f.write(f\"USERNAME={username}\\n\")",
+        "peekOfCode": "def create_file():\n    folder_path = entry_folder_path.get()\n    username = entry_username.get()\n    password = entry_password.get()\n    redis_commander = checkbox_redis_commander.get() if advanced_options_visible else 0\n    control_host = get_ip()  # Gets the host IP\n    sha256_hash = get_hash_password(password)\n    if folder_path and username and password:\n        with open(\"control_host.env\", \"w\") as f:\n            f.write(f\"FOLDER_SHARED={folder_path}\\n\")",
         "detail": "config",
         "documentation": {}
     },
@@ -103,7 +112,7 @@
         "kind": 5,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "entry_password = ctk.CTkEntry(window, show=\"*\", placeholder_text=\"wyoloservice\")\nentry_password.grid(row=2, column=1, padx=10, pady=10)\nentry_password.insert(0, \"wyoloservice\")  # Default value\n# Checkbox for Redis Commander (initially hidden)\ncheckbox_redis_commander = ctk.CTkCheckBox(window, text=\"Activate Redis Commander\")\n# Button to show/hide advanced options\nadvanced_options_visible = False\nadvanced_options_button = ctk.CTkButton(window, text=\"Advanced Options\", command=toggle_advanced_options)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)",
+        "peekOfCode": "entry_password = ctk.CTkEntry(window, show=\"*\", placeholder_text=\"wyoloservice\")\nentry_password.grid(row=2, column=1, padx=10, pady=10)\nentry_password.insert(0, \"wyoloservice\")  # Default value\n# Checkbox for Redis Commander (initially hidden)\ncheckbox_redis_commander = ctk.CTkCheckBox(window, text=\"Activate Redis Commander\")\n# Button to show/hide advanced options\nadvanced_options_visible = False\nadvanced_options_button = ctk.CTkButton(\n    window, text=\"Advanced Options\", command=toggle_advanced_options\n)",
         "detail": "config",
         "documentation": {}
     },
@@ -112,7 +121,7 @@
         "kind": 5,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "checkbox_redis_commander = ctk.CTkCheckBox(window, text=\"Activate Redis Commander\")\n# Button to show/hide advanced options\nadvanced_options_visible = False\nadvanced_options_button = ctk.CTkButton(window, text=\"Advanced Options\", command=toggle_advanced_options)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)\ncreate_button.grid(row=5, columnspan=3, pady=20)\nerror_label = ctk.CTkLabel(window, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nerror_label.grid(row=6, columnspan=3)\nwindow.mainloop()",
+        "peekOfCode": "checkbox_redis_commander = ctk.CTkCheckBox(window, text=\"Activate Redis Commander\")\n# Button to show/hide advanced options\nadvanced_options_visible = False\nadvanced_options_button = ctk.CTkButton(\n    window, text=\"Advanced Options\", command=toggle_advanced_options\n)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)\ncreate_button.grid(row=5, columnspan=3, pady=20)\nerror_label = ctk.CTkLabel(window, text=\"\", fg_color=\"transparent\", text_color=\"red\")",
         "detail": "config",
         "documentation": {}
     },
@@ -121,7 +130,7 @@
         "kind": 5,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "advanced_options_visible = False\nadvanced_options_button = ctk.CTkButton(window, text=\"Advanced Options\", command=toggle_advanced_options)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)\ncreate_button.grid(row=5, columnspan=3, pady=20)\nerror_label = ctk.CTkLabel(window, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nerror_label.grid(row=6, columnspan=3)\nwindow.mainloop()",
+        "peekOfCode": "advanced_options_visible = False\nadvanced_options_button = ctk.CTkButton(\n    window, text=\"Advanced Options\", command=toggle_advanced_options\n)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)\ncreate_button.grid(row=5, columnspan=3, pady=20)\nerror_label = ctk.CTkLabel(window, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nerror_label.grid(row=6, columnspan=3)\nwindow.mainloop()",
         "detail": "config",
         "documentation": {}
     },
@@ -130,7 +139,7 @@
         "kind": 5,
         "importPath": "config",
         "description": "config",
-        "peekOfCode": "advanced_options_button = ctk.CTkButton(window, text=\"Advanced Options\", command=toggle_advanced_options)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)\ncreate_button.grid(row=5, columnspan=3, pady=20)\nerror_label = ctk.CTkLabel(window, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nerror_label.grid(row=6, columnspan=3)\nwindow.mainloop()",
+        "peekOfCode": "advanced_options_button = ctk.CTkButton(\n    window, text=\"Advanced Options\", command=toggle_advanced_options\n)\nadvanced_options_button.grid(row=3, column=0, columnspan=2, pady=10)\ncreate_button = ctk.CTkButton(window, text=\"Create File\", command=create_file)\ncreate_button.grid(row=5, columnspan=3, pady=20)\nerror_label = ctk.CTkLabel(window, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nerror_label.grid(row=6, columnspan=3)\nwindow.mainloop()",
         "detail": "config",
         "documentation": {}
     },

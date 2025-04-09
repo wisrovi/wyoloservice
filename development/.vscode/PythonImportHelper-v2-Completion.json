@@ -85,6 +85,14 @@
         "documentation": {}
     },
     {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "RedisQueueManager",
         "importPath": "wredis.queue",
         "description": "wredis.queue",
@@ -544,6 +552,40 @@
         "documentation": {}
     },
     {
+        "label": "functools",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "functools",
+        "description": "functools",
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "threading",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "threading",
+        "description": "threading",
+        "detail": "threading",
+        "documentation": {}
+    },
+    {
         "label": "tempfile",
         "kind": 6,
         "isExtraImport": true,
@@ -651,31 +693,6 @@
         "documentation": {}
     },
     {
-        "label": "functools",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "functools",
-        "description": "functools",
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "wraps",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
-        "label": "wraps",
-        "importPath": "functools",
-        "description": "functools",
-        "isExtraImport": true,
-        "detail": "functools",
-        "documentation": {}
-    },
-    {
         "label": "torch",
         "kind": 6,
         "isExtraImport": true,
@@ -723,15 +740,6 @@
         "description": "copy",
         "isExtraImport": true,
         "detail": "copy",
-        "documentation": {}
-    },
-    {
-        "label": "threading",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "threading",
-        "description": "threading",
-        "detail": "threading",
         "documentation": {}
     },
     {
@@ -872,14 +880,6 @@
         "documentation": {}
     },
     {
-        "label": "convert",
-        "importPath": "docx2pdf",
-        "description": "docx2pdf",
-        "isExtraImport": true,
-        "detail": "docx2pdf",
-        "documentation": {}
-    },
-    {
         "label": "merge_configs",
         "importPath": "states.read_user_config",
         "description": "states.read_user_config",
@@ -903,22 +903,6 @@
         "importPath": "traceback",
         "description": "traceback",
         "detail": "traceback",
-        "documentation": {}
-    },
-    {
-        "label": "FileHandler",
-        "importPath": "logbook",
-        "description": "logbook",
-        "isExtraImport": true,
-        "detail": "logbook",
-        "documentation": {}
-    },
-    {
-        "label": "Logger",
-        "importPath": "logbook",
-        "description": "logbook",
-        "isExtraImport": true,
-        "detail": "logbook",
         "documentation": {}
     },
     {
@@ -975,6 +959,23 @@
         "description": "states",
         "isExtraImport": true,
         "detail": "states",
+        "documentation": {}
+    },
+    {
+        "label": "Eda_calculate",
+        "importPath": "states",
+        "description": "states",
+        "isExtraImport": true,
+        "detail": "states",
+        "documentation": {}
+    },
+    {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
         "documentation": {}
     },
     {
@@ -1086,11 +1087,20 @@
         "documentation": {}
     },
     {
+        "label": "StatusEDA",
+        "kind": 6,
+        "importPath": "services.lib.train_yolo.trainer_wrapper",
+        "description": "services.lib.train_yolo.trainer_wrapper",
+        "peekOfCode": "class StatusEDA:\n    PENDING = 0\n    SAVED = 2\nclass TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    start_time = 0",
+        "detail": "services.lib.train_yolo.trainer_wrapper",
+        "documentation": {}
+    },
+    {
         "label": "TrainerWrapper",
         "kind": 6,
         "importPath": "services.lib.train_yolo.trainer_wrapper",
         "description": "services.lib.train_yolo.trainer_wrapper",
-        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    start_time = 0\n    end_time = 0\n    worker_metadata = [\n        \"debug\",",
+        "peekOfCode": "class TrainerWrapper:\n    # https://github.com/ultralytics/ultralytics/issues/8214\n    config = {}\n    GPU_USE = 0.6  # procentaje de uso de GPU\n    is_configured = False\n    model = None\n    start_time = 0\n    end_time = 0\n    firts_epoch = True\n    worker_metadata = [",
         "detail": "services.lib.train_yolo.trainer_wrapper",
         "documentation": {}
     },
@@ -1128,6 +1138,24 @@
         "description": "services.lib.train_yolo.yolo_train",
         "peekOfCode": "def train(config_path: str, fitness: str, trial_number: int):\n    request_config = load_config(config_path=config_path)\n    request_config[\"config_path\"] = config_path\n    trainer = TrainerWrapper(config=request_config)\n    trainer.create_model(\n        model_name=request_config[\"model\"],\n        model_type=request_config[\"type\"],\n    )\n    if \"task_id\" not in request_config:\n        request_config[\"task_id\"] = str(uuid.uuid4())",
         "detail": "services.lib.train_yolo.yolo_train",
+        "documentation": {}
+    },
+    {
+        "label": "Eda_calculate",
+        "kind": 6,
+        "importPath": "services.worker.states.eda_calculate",
+        "description": "services.worker.states.eda_calculate",
+        "peekOfCode": "class Eda_calculate:\n    __NAME__ = \"Eda_calculate\"\n    __VERSION__ = \"v1.0\"\n    @ejecutar_en_hilo\n    def eda(self):\n        dataset = os.path.dirname(self.config.get(\"train\", {}).get(\"data\"))\n        project = self.config.get(\"sweeper\", {}).get(\"study_name\")\n        author = self.config.get(\"metadata\", {}).get(\"author\")\n        content = self.config.get(\"metadata\", {}).get(\"content\")\n        args = [",
+        "detail": "services.worker.states.eda_calculate",
+        "documentation": {}
+    },
+    {
+        "label": "ejecutar_en_hilo",
+        "kind": 2,
+        "importPath": "services.worker.states.eda_calculate",
+        "description": "services.worker.states.eda_calculate",
+        "peekOfCode": "def ejecutar_en_hilo(func):\n    \"\"\"\n    Decorador para ejecutar una función en un hilo separado.\n    \"\"\"\n    @functools.wraps(func)\n    def envoltorio(*args, **kwargs):\n        hilo = threading.Thread(\n            target=func,\n            args=args,\n            kwargs=kwargs,",
+        "detail": "services.worker.states.eda_calculate",
         "documentation": {}
     },
     {
@@ -1369,7 +1397,7 @@
         "kind": 6,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "class YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.data_yaml = data_yaml\n        self.dataset_type = dataset_type\n        self.project_name = project_name\n        self.author_name = author_name\n        self.content_description = content_description\n        self.report_folder = f\"{dataset_path}/reports\"",
+        "peekOfCode": "class YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,\n        label_folder,\n        data_yaml,\n        dataset_type,\n        dataset_path,\n        project_name,\n        author_name,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1378,7 +1406,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "CLASSIFICATION = \"Clasificación\"\nDETECTION = \"Detección\"\nSEGMENTATION = \"Segmentación\"\nCLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related",
+        "peekOfCode": "CLASSIFICATION = \"Clasificación\"\nDETECTION = \"Detección\"\nSEGMENTATION = \"Segmentación\"\nCLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1387,7 +1415,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "DETECTION = \"Detección\"\nSEGMENTATION = \"Segmentación\"\nCLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:",
+        "peekOfCode": "DETECTION = \"Detección\"\nSEGMENTATION = \"Segmentación\"\nCLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1396,7 +1424,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "SEGMENTATION = \"Segmentación\"\nCLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):",
+        "peekOfCode": "SEGMENTATION = \"Segmentación\"\nCLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1405,7 +1433,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "CLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder",
+        "peekOfCode": "CLASS_IMBALANCE_RATIO = 1.5  # Max ratio between most and least common class\nIMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1414,7 +1442,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "IMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder",
+        "peekOfCode": "IMAGE_SIZE_VARIATION_THRESHOLD = 400  # px difference in width or height\nBBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1423,7 +1451,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "BBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.data_yaml = data_yaml",
+        "peekOfCode": "BBOX_AREA_VARIATION_RATIO = 20  # Ratio of largest to smallest bounding box area\nASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,\n        label_folder,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1432,7 +1460,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "ASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.data_yaml = data_yaml\n        self.dataset_type = dataset_type",
+        "peekOfCode": "ASPECT_RATIO_DIVERSITY_THRESHOLD = 50  # Number of unique aspect ratios (rounded)\nBBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,\n        label_folder,\n        data_yaml,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1441,7 +1469,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "BBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.data_yaml = data_yaml\n        self.dataset_type = dataset_type\n        self.project_name = project_name",
+        "peekOfCode": "BBOX_ASPECT_RATIO_VARIANCE = 2.0  # Difference between max and min aspect ratio\nCENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,\n        label_folder,\n        data_yaml,\n        dataset_type,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1450,7 +1478,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "CENTER_POSITION_BIN_COUNT = 75 # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.data_yaml = data_yaml\n        self.dataset_type = dataset_type\n        self.project_name = project_name\n        self.author_name = author_name",
+        "peekOfCode": "CENTER_POSITION_BIN_COUNT = 75  # Min number of unique rounded x or y positions\nBBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,\n        label_folder,\n        data_yaml,\n        dataset_type,\n        dataset_path,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1459,7 +1487,7 @@
         "kind": 5,
         "importPath": "services.worker.eda",
         "description": "services.worker.eda",
-        "peekOfCode": "BBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(self, image_folder, label_folder, data_yaml, dataset_type, dataset_path, project_name, author_name, content_description, verbose=False):\n        self.image_folder = image_folder\n        self.label_folder = label_folder\n        self.data_yaml = data_yaml\n        self.dataset_type = dataset_type\n        self.project_name = project_name\n        self.author_name = author_name\n        self.content_description = content_description",
+        "peekOfCode": "BBOX_WH_CORRELATION_THRESHOLD = 0.3  # Min correlation to consider width/height related\nclass YOLODataValidator:\n    def __init__(\n        self,\n        image_folder,\n        label_folder,\n        data_yaml,\n        dataset_type,\n        dataset_path,\n        project_name,",
         "detail": "services.worker.eda",
         "documentation": {}
     },
@@ -1495,7 +1523,7 @@
         "kind": 2,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "def health():\n    global hash_manager\n    global sorted_set_manager\n    global DEBUG_MODE\n    while True:\n        metadata = {\n            other_metadata: os.environ.get(other_metadata, None)\n            for other_metadata in TrainerWrapper.worker_metadata\n        }\n        metadata[\"__VERSION__\"] = __VERSION__",
+        "peekOfCode": "def health():\n    logger.info(\"Starting health check...\")\n    uvicorn.run(app, host=\"0.0.0.0\", port=8000, log_level=\"warning\")\n# Configura el tercer logger: todos los niveles en un archivo separado (completamente independiente)\n# FileHandler(\"/var/log/worker/full_log.log\").push_application()\n# custom_logger = Logger(\"wyoloservice\")\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1509,11 +1537,20 @@
         "documentation": {}
     },
     {
+        "label": "app",
+        "kind": 5,
+        "importPath": "services.worker.worker",
+        "description": "services.worker.worker",
+        "peekOfCode": "app = FastAPI()\nfrom worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource\n__VERSION__ = \"v1.0.5\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo",
+        "detail": "services.worker.worker",
+        "documentation": {}
+    },
+    {
         "label": "__VERSION__",
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "__VERSION__ = \"v1.0.4\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"",
+        "peekOfCode": "__VERSION__ = \"v1.0.5\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1531,7 +1568,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "DEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\nlogger.add(\n    sys.stdout,",
+        "peekOfCode": "DEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\n# logger.add(\n#     sys.stdout,",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1540,7 +1577,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\nlogger.add(\n    sys.stdout,\n    level=\"INFO\",",
+        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\n# logger.add(\n#     sys.stdout,\n#     level=\"INFO\",",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1549,16 +1586,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "sorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\nlogger.add(\n    sys.stdout,\n    level=\"INFO\",\n    format=\"<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>\",",
-        "detail": "services.worker.worker",
-        "documentation": {}
-    },
-    {
-        "label": "custom_logger",
-        "kind": 5,
-        "importPath": "services.worker.worker",
-        "description": "services.worker.worker",
-        "peekOfCode": "custom_logger = Logger(\"wyoloservice\")\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)",
+        "peekOfCode": "sorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\n# logger.add(\n#     sys.stdout,\n#     level=\"INFO\",\n#     format=\"<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>\",",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1567,7 +1595,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)\n@ejecutar_en_hilo",
+        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        # (Eda_calculate(), Eda_calculate.__NAME__, Eda_calculate.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)",
         "detail": "services.worker.worker",
         "documentation": {}
     }

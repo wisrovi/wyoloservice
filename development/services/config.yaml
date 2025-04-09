@@ -26,9 +26,17 @@ model: yolov8n.pt
 train:
   batch: -1
   epochs: 1
+type: "yolo"
 sweeper:
   grace_period: 5
   max_concurrent: 1
+  algorithm: optuna
+  direction: maximize
+  sampler: "TPESampler"
+extras:
+  gpu:
+    id: 0
+    limit: 0.60
 hydra:
   run:
     dir: /var/log/worker/hydra/individual

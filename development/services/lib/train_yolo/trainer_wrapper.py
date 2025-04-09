@@ -66,6 +66,11 @@ def obtener_info_gpu_json():
         return {"error": f"Ocurrió un error al obtener la información de la GPU: {e}"}
 
 
+class StatusEDA:
+    PENDING = 0
+    SAVED = 2
+
+
 class TrainerWrapper:
     # https://github.com/ultralytics/ultralytics/issues/8214
     config = {}
@@ -76,6 +81,8 @@ class TrainerWrapper:
 
     start_time = 0
     end_time = 0
+
+    firts_epoch = True
 
     worker_metadata = [
         "debug",
@@ -98,6 +105,7 @@ class TrainerWrapper:
         "WORKER_GPU_MEMORY",
     ]
     hash_manager = None
+    status_eda_completed = StatusEDA.PENDING
 
     def __init__(self, config: dict):
 
@@ -130,6 +138,18 @@ class TrainerWrapper:
         )
 
         return optimal_batch
+
+    def save_eda(self):
+        if self.status_eda_completed == StatusEDA.SAVED:
+            return
+
+        dataset = os.path.dirname(self.config.get("train", {}).get("data"))
+        hay_folder_report = os.path.exists(f"{dataset}/reports")
+        hay_archivos_en_reporte_eda = len(os.listdir(f"{dataset}/reports")) > 0
+
+        if hay_folder_report and hay_archivos_en_reporte_eda:
+            mlflow.log_artifacts(f"{dataset}/reports", artifact_path="eda")
+            self.status_eda_completed = StatusEDA.SAVED
 
     def set_config_vars(self):
         if "minio" in self.config and "mlflow" in self.config:
@@ -174,6 +194,8 @@ class TrainerWrapper:
                 metrics[slugify(key)] = float(value)
 
             mlflow.log_metrics(metrics)
+            
+            self.save_eda()
 
     def on_train_start(self, trainer):
         if "minio" in self.config and "mlflow" in self.config:
@@ -279,6 +301,15 @@ class TrainerWrapper:
         self.start_time = time.time()
 
     def on_epoch_end(self, trainer):
+        if self.firts_epoch:
+            self.firts_epoch = False
+            try:
+                mlflow.log_artifacts(
+                    self.config["train"]["project"] + "train_" + self.config["task_id"]
+                )
+            except:
+                pass
+
         self.end_time = time.time()
 
         elapsed_time = self.end_time - self.start_time
@@ -334,6 +365,8 @@ class TrainerWrapper:
                         )
                     except:
                         pass
+                    
+            self.save_eda()
 
     def log_example_images(self, model_type: str):
         images, labels = self.get_images_and_labels(model_type=model_type)

@@ -1,0 +1,173 @@
+[
+    {
+        "label": "customtkinter",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "customtkinter",
+        "description": "customtkinter",
+        "detail": "customtkinter",
+        "documentation": {}
+    },
+    {
+        "label": "subprocess",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "subprocess",
+        "description": "subprocess",
+        "detail": "subprocess",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "obtener_usuario",
+        "kind": 2,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "def obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(['whoami'], capture_output=True, text=True, check=True)\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"\ndef crear_archivo():\n    control_host = entry_control_host.get()\n    cifs_user = entry_cifs_user.get()",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "crear_archivo",
+        "kind": 2,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "def crear_archivo():\n    control_host = entry_control_host.get()\n    cifs_user = entry_cifs_user.get()\n    cifs_pass = entry_cifs_pass.get()\n    modo = menu_modo.get() if opciones_avanzadas_visible else \"Público\"\n    num_current_train = entry_num_current_train.get() if opciones_avanzadas_visible else \"1\"\n    max_gpu = entry_max_gpu.get() if opciones_avanzadas_visible else \"60\"\n    if control_host and cifs_user and cifs_pass:\n        with open(\"control_host.env\", \"w\") as f:\n            f.write(f\"CONTROL_HOST={control_host}\\n\")",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "toggle_opciones_avanzadas",
+        "kind": 2,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "def toggle_opciones_avanzadas():\n    global opciones_avanzadas_visible\n    opciones_avanzadas_visible = not opciones_avanzadas_visible\n    if opciones_avanzadas_visible:\n        menu_modo.grid(row=4, column=0, columnspan=2, pady=10)\n        label_num_current_train.grid(row=5, column=0, padx=10, pady=10)\n        entry_num_current_train.grid(row=5, column=1, padx=10, pady=10)\n        label_max_gpu.grid(row=6, column=0, padx=10, pady=10)\n        entry_max_gpu.grid(row=6, column=1, padx=10, pady=10)\n    else:",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "ventana",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "ventana = ctk.CTk()\nventana.title(\"Configuración\")\nctk.CTkLabel(ventana, text=\"CONTROL_HOST:\").grid(row=0, column=0, padx=10, pady=10)\nentry_control_host = ctk.CTkEntry(ventana, placeholder_text=\"ip del host\")\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana, placeholder_text=\"usuario\")\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nentry_cifs_user.insert(0, \"wisrovi\")  # Default value\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_control_host",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "entry_control_host = ctk.CTkEntry(ventana, placeholder_text=\"ip del host\")\nentry_control_host.grid(row=0, column=1, padx=10, pady=10)\nctk.CTkLabel(ventana, text=\"CIFS_USER:\").grid(row=1, column=0, padx=10, pady=10)\nentry_cifs_user = ctk.CTkEntry(ventana, placeholder_text=\"usuario\")\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nentry_cifs_user.insert(0, \"wisrovi\")  # Default value\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\nentry_cifs_pass.insert(0, \"wyoloservice\")  # Default value",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_cifs_user",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "entry_cifs_user = ctk.CTkEntry(ventana, placeholder_text=\"usuario\")\nentry_cifs_user.grid(row=1, column=1, padx=10, pady=10)\nentry_cifs_user.insert(0, \"wisrovi\")  # Default value\nctk.CTkLabel(ventana, text=\"CIFS_PASS:\").grid(row=2, column=0, padx=10, pady=10)\nentry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\nentry_cifs_pass.insert(0, \"wyoloservice\")  # Default value\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_cifs_pass",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "entry_cifs_pass = ctk.CTkEntry(ventana, show=\"*\", placeholder_text=\"contraseña\")\nentry_cifs_pass.grid(row=2, column=1, padx=10, pady=10)\nentry_cifs_pass.insert(0, \"wyoloservice\")  # Default value\n# Menú desplegable para modo público/privado (inicialmente oculto)\nmenu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "menu_modo",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "menu_modo = ctk.CTkOptionMenu(ventana, values=[\"Público\", \"Privado\"])\nmenu_modo.set(\"Público\")\n# Etiqueta y entrada para NUM CURRENT TRAIN (inicialmente ocultos)\nlabel_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)\nlabel_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "label_num_current_train",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "label_num_current_train = ctk.CTkLabel(ventana, text=\"NUM CURRENT TRAIN:\")\nentry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)\nlabel_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_num_current_train",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "entry_num_current_train = ctk.CTkEntry(ventana)\nentry_num_current_train.insert(0, \"1\")  # Valor predeterminado\n# Etiqueta y entrada para MAX GPU (inicialmente ocultos)\nlabel_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "label_max_gpu",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "label_max_gpu = ctk.CTkLabel(ventana, text=\"MAX GPU (%):\")\nentry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "entry_max_gpu",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "entry_max_gpu = ctk.CTkEntry(ventana)\nentry_max_gpu.insert(0, \"60\")  # Valor predeterminado\n# Botón para mostrar/ocultar opciones avanzadas\nopciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "opciones_avanzadas_visible",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "opciones_avanzadas_visible = False\nboton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "boton_opciones_avanzadas",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "boton_opciones_avanzadas = ctk.CTkButton(ventana, text=\"Opciones Avanzadas\", command=toggle_opciones_avanzadas)\nboton_opciones_avanzadas.grid(row=3, column=0, columnspan=2, pady=10)\nboton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "boton_crear",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "boton_crear = ctk.CTkButton(ventana, text=\"Crear archivo\", command=crear_archivo)\nboton_crear.grid(row=7, columnspan=2, pady=20)\nlabel_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
+        "detail": "config",
+        "documentation": {}
+    },
+    {
+        "label": "label_error",
+        "kind": 5,
+        "importPath": "config",
+        "description": "config",
+        "peekOfCode": "label_error = ctk.CTkLabel(ventana, text=\"\", fg_color=\"transparent\", text_color=\"red\")\nlabel_error.grid(row=8, columnspan=2)\nventana.mainloop()",
+        "detail": "config",
+        "documentation": {}
+    }
+]
