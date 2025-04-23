@@ -51,7 +51,7 @@ def ejecutar_comando(args: dict, trial_number: int, verbose=True, config_path=No
                         data={
                             "value": line,
                         },
-                        ttl=20,
+                        ttl=60*60,
                     )
 
             # Esperar a que el proceso termine
