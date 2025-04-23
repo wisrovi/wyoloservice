@@ -30,12 +30,17 @@ from states import (
 import uvicorn
 from fastapi import FastAPI
 
-app = FastAPI()
 
 from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
 
+from setproctitle import setproctitle  # Para cambiar el nombre del proceso
 
-__VERSION__ = "v1.0.5"
+# Cambiar el nombre del proceso
+setproctitle("train_service")
+
+
+app = FastAPI()
+__VERSION__ = "v1.0.6"
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
@@ -110,15 +115,19 @@ async def read_version():
     gpu_0_memoryUsed = int(metadata["gpu_0_memoryUsed"])
 
     NOT_TO_USE_GPU = 1 - int(os.environ.get("MAX_GPU", 60)) / 100
-    if gpu_0_memoryFree > (gpu_0_memoryTotal * NOT_TO_USE_GPU):
-        gpu_0_memoryFree = gpu_0_memoryTotal * NOT_TO_USE_GPU
-    else:
-        available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
-        gpu_0_memoryFree = max(available - gpu_0_memoryUsed, 0)
+    # if gpu_0_memoryFree > (gpu_0_memoryTotal * NOT_TO_USE_GPU):
+    #     gpu_0_memoryFree = gpu_0_memoryTotal * NOT_TO_USE_GPU
+    # else:
+    #     available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
+    #     gpu_0_memoryFree = max(available - gpu_0_memoryUsed, 0)
+    
+    available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
+    gpu_0_memoryFree = min(available, gpu_0_memoryFree)
 
     member_name = f'{metadata["WORKER_HOST"]} ({metadata["USER"]})'
     if os.environ.get("debug", None):
         member_name += "[debug]"
+    member_name += f" -> {__VERSION__}"
 
     try:
         sorted_set_manager.redis_client.ping()
@@ -129,7 +138,7 @@ async def read_version():
 
     sorted_set_manager.add_to_sorted_set(
         key="available",
-        score=gpu_0_memoryFree,
+        score=int(gpu_0_memoryFree),
         member=member_name,
         ttl=30,
     )
@@ -153,7 +162,7 @@ pipeline.set_steps(
     [
         (read_user_config, "read_config", "v1.0"),
         (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),
-        # (Eda_calculate(), Eda_calculate.__NAME__, Eda_calculate.__VERSION__),
+        (Eda_calculate(), Eda_calculate.__NAME__, Eda_calculate.__VERSION__),
         (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),
         (results_up_to_minio, "result_to_minio", "v1.0"),
     ]
@@ -185,8 +194,8 @@ def main(cfg: OmegaConf):
 
     DEFAULT_CONFIG.update(cfg)
 
-    DEFAULT_CONFIG["minio"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
-    DEFAULT_CONFIG["minio"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
+    # DEFAULT_CONFIG["minio"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
+    # DEFAULT_CONFIG["minio"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
 
     DEFAULT_CONFIG["dvc"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
     DEFAULT_CONFIG["dvc"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
@@ -258,13 +267,13 @@ def main(cfg: OmegaConf):
             logger.error("Can't report results")
 
     def process_requests(task_data: dict):
-        
+
         # validar la cantidad de GPU disponible, si es menor a 2GB, no se ejecuta
         gpu_json_list: List[dict] = obtener_info_gpu_json()
         free = 0
         for gpu_id, gpu in enumerate(gpu_json_list):
-            free_memory = int(gpu[f'gpu_{gpu_id}_memoryFree'])
-            
+            free_memory = int(gpu[f"gpu_{gpu_id}_memoryFree"])
+
             free += free_memory
 
         if free < 2 * 1024:
@@ -312,6 +321,8 @@ def main(cfg: OmegaConf):
         queue_manager.publish(queue_name=topic, data=args_dict)
         time.sleep(30)
 
+    # Receptores de colas de redis
+
     if USER_TOPIC:
         logger.info(f"Activate Private topic: {USER_TOPIC}")
 
@@ -342,6 +353,7 @@ def main(cfg: OmegaConf):
             else:
                 complete_requests(results)
 
+    # NOTA: cuando se levanta el worker en modo debug, no funciona la cola "PUBLIC_TOPIC"
     if DEBUG_MODE is None:
         logger.info(f"Activate public topic: {PUBLIC_TOPIC}")
 

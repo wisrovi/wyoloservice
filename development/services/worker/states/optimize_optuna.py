@@ -27,6 +27,10 @@ class OptunaOptimize:
     __VERSION__ = "0.1.0"
     __NAME__ = "model_train"
     DEBUG_MODE = os.environ.get("debug", None)
+    verbose = False
+
+    def __init__(self, verbose: bool = False):
+        self.verbose = verbose
 
     def search_best_model(self, request_config_user: dict):
         """Search for the best model based on hyperparameter optimization.
@@ -115,12 +119,13 @@ class OptunaOptimize:
                 with tempfile.TemporaryDirectory() as temp_dir:
                     temp_config_path = os.path.join(temp_dir, "config.yaml")
                     config["trial_number"] = int(trial.number)
+                    config["tempfile"] = tempfolder
 
                     with open(temp_config_path, "w") as yaml_file:
                         yaml.dump(config, yaml_file)
 
                     # borrar
-                    # OptunaOptimize.DEBUG_MODE = True
+                    OptunaOptimize.DEBUG_MODE = False
 
                     if OptunaOptimize.DEBUG_MODE:
                         metric = None
@@ -136,7 +141,7 @@ class OptunaOptimize:
                         metric = train_run(
                             config_path=temp_config_path,
                             trial_number=int(trial.number),
-                            verbose=False,
+                            verbose=self.verbose,
                             fitness=config.get("sweeper", {}).get("fitness", "fitness"),
                         )
 
@@ -205,9 +210,11 @@ class OptunaOptimize:
                 )
                 return onnx_path, model_task
             except Exception as e:
-                logger.error(f"Error exporting model: {str(e)}")
+                if self.verbose:
+                    logger.error(f"Error exporting model: {str(e)}")
         except Exception as e:
-            logger.error(f"Error loading model for conversion: {str(e)}")
+            if self.verbose:
+                logger.error(f"Error loading model for conversion: {str(e)}")
         return None, model_task
 
     def __call__(self, request_config_user: dict):

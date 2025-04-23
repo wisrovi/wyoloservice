@@ -5,6 +5,11 @@ import subprocess
 from wredis.streams import RedisStreamManager
 from loguru import logger
 
+from setproctitle import setproctitle  # Para cambiar el nombre del proceso
+
+# Cambiar el nombre del proceso
+setproctitle("train_service")
+
 
 def ejecutar_comando(args: dict, trial_number: int, verbose=True, config_path=None):
 

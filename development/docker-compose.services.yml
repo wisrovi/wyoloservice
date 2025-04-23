@@ -39,7 +39,7 @@ services:
       - control_host.env
       - user.env
     # restart: always
-    command: tail -f /dev/null
+    # command: tail -f /dev/null
     privileged: true
     volumes:
       - ./demo:/demo

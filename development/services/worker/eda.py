@@ -21,6 +21,12 @@ try:
 except:
     pass
 
+from setproctitle import setproctitle  # Para cambiar el nombre del proceso
+
+# Cambiar el nombre del proceso
+setproctitle("EDA_train_service")
+
+
 random.seed(33)
 
 CLASSIFICATION = "Clasificación"
@@ -1327,7 +1333,7 @@ if __name__ == "__main__":
     validator.run_validation(data_yaml)
 
     print(
-        f"El informe EDA se ha guardado en: {validator.word_path} y {validator.pdf_path}"
+        f"El informe EDA se ha guardado en: {validator.word_path}"
     )
 
 

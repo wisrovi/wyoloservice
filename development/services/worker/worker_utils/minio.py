@@ -4,15 +4,17 @@ import boto3
 import botocore
 import hydra  # pip install hydra-core
 from botocore.exceptions import ClientError
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError, ClientError
 from omegaconf import DictConfig
 from tqdm import tqdm
+from loguru import logger
 
 
 class MinioS3Client:
     MINIO_ENDPOINT = "http://minio:9000"
     BUCKET_NAME = "models"
     MLFLOW_ARTIFACTS_BUCKET = "mlflow-artifacts"
-    
+
     s3: boto3.client
 
     def __init__(
@@ -41,7 +43,43 @@ class MinioS3Client:
 
         if not self.bucket_exists(self.BUCKET_NAME):
             self.create_bucket(self.BUCKET_NAME)
-            
+
+        if not self.validate_connection():
+            os._exit(1)  # Fuerza la salida del proceso
+
+    def validate_connection(self):
+        """
+        Valida si la conexión al servicio S3 es exitosa.
+        Retorna True si la conexión es válida, False en caso contrario.
+        """
+        try:
+            # Intenta listar los buckets disponibles
+            self.s3.list_buckets()
+            print("Conexión exitosa: Se puede acceder al servicio S3.")
+            return True
+        except NoCredentialsError:
+            print("Error: No se encontraron credenciales válidas.")
+        except PartialCredentialsError:
+            print("Error: Las credenciales están incompletas.")
+        except ClientError as e:
+            # Captura errores específicos del cliente S3
+            error_code = e.response.get("Error", {}).get("Code")
+            if error_code == "InvalidAccessKeyId":
+                logger.error("Error: La clave de acceso MinIO (Access Key ID) no es válida.")
+            elif error_code == "SignatureDoesNotMatch":
+                logger.error("Error: La clave secreta MinIO (Secret Access Key) no coincide.")
+            elif error_code == "AuthorizationHeaderMalformed":
+                logger.error(
+                    "Error: El endpoint o las credenciales están mal configurados."
+                )
+            else:
+                logger.error(f"Error desconocido: {e}")
+        except Exception as e:
+            # Captura cualquier otro error inesperado
+            logger.error(f"Error inesperado: {e}")
+
+        return False
+
     def object_exists(self, bucket_name: str, object_key: str) -> bool:
         """Verifica si un objeto existe en el bucket."""
         try:
@@ -49,12 +87,16 @@ class MinioS3Client:
             return True
         except botocore.exceptions.ClientError as e:
             if e.response["Error"]["Code"] == "404":
-                print(f"❌ El archivo '{object_key}' no existe en el bucket '{bucket_name}'.")
+                print(
+                    f"❌ El archivo '{object_key}' no existe en el bucket '{bucket_name}'."
+                )
             else:
                 print(f"⚠️ Error desconocido: {e}")
             return False
 
-    def download_file(self, bucket_name: str, object_key: str, local_file_path: str) -> bool:
+    def download_file(
+        self, bucket_name: str, object_key: str, local_file_path: str
+    ) -> bool:
         """
         Descarga un archivo de un bucket de S3.
 
@@ -68,7 +110,7 @@ class MinioS3Client:
         """
         if not self.object_exists(bucket_name, object_key):
             return False  # No descargar si no existe
-        
+
         try:
             self.s3.download_file(bucket_name, object_key, local_file_path)
             print(f"Archivo descargado exitosamente en: {local_file_path}")
@@ -78,7 +120,9 @@ class MinioS3Client:
         except botocore.exceptions.PartialCredentialsError:
             print("Error: Credenciales incompletas.")
         except self.s3.exceptions.NoSuchKey:
-            print(f"Error: El archivo '{object_key}' no existe en el bucket '{bucket_name}'.")
+            print(
+                f"Error: El archivo '{object_key}' no existe en el bucket '{bucket_name}'."
+            )
         except Exception as e:
             print(f"Error desconocido: {e}")
         return False

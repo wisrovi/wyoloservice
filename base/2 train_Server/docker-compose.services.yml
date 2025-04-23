@@ -28,7 +28,7 @@ services:
   worker:
     <<: *resources_gpu
     # image: wisrovi/wyoloservice:worker
-    image: wisrovi/wyoloservice_worker:v1.0.5
+    image: wisrovi/wyoloservice_worker:v1.0.6
     env_file:
       - control_host.env
       - user.env
