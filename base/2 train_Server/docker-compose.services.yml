@@ -27,8 +27,7 @@ x-resources: &resources_gpu
 services:
   worker:
     <<: *resources_gpu
-    # image: wisrovi/wyoloservice:worker
-    image: wisrovi/wyoloservice_worker:v1.0.5
+    image: wisrovi/wyoloservice_worker
     env_file:
       - control_host.env
       - user.env
@@ -56,7 +55,7 @@ services:
     restart: always
     environment:
       - WATCHTOWER_LABEL_ENABLE=true # Habilita el control por etiquetas
-      # - WATCHTOWER_SCHEDULE="0 0 4 * * *" # Ejemplo: Ejecutar a las 4 AM todos los días
+      - WATCHTOWER_SCHEDULE="0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * *" # todos los segundos, minutos, dias, semanas, meses, a las horas 0,2,...,22
       - WATCHTOWER_CLEANUP=true # Elimina imágenes antiguas después de actualizar
     ports:
       - 8080:8080
