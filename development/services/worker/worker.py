@@ -1,10 +1,9 @@
+import datetime
 import os
-import sys
 import tempfile
 import time
 import traceback
 from typing import List
-import uuid
 
 import hydra
 import mlflow
@@ -12,35 +11,30 @@ import mlflow
 # from logbook import FileHandler, Logger
 from loguru import logger
 from omegaconf import OmegaConf
-from wpipe.pipe import Pipeline
-from wredis.queue import RedisQueueManager
-from wredis.hash import RedisHashManager
-from wredis.sortedset import RedisSortedSetManager
-
-from train_yolo.trainer_wrapper import obtener_info_gpu_json, TrainerWrapper
-from states import (
-    DEFAULT_CONFIG,
-    OptunaOptimize,
-    read_user_config,
-    results_up_to_minio,
-    Start_inform,
-    Eda_calculate,
-)
-
-import uvicorn
-from fastapi import FastAPI
-
-
-from worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource
-
-from setproctitle import setproctitle  # Para cambiar el nombre del proceso
 
 # Cambiar el nombre del proceso
+from setproctitle import setproctitle
+from train_yolo.trainer_wrapper import obtener_info_gpu_json
+from wpipe.pipe import Pipeline
+from wredis.hash import RedisHashManager
+from wredis.queue import RedisQueueManager
+from wredis.sortedset import RedisSortedSetManager
+
+from states import (
+    DEFAULT_CONFIG,
+    Eda_calculate,
+    OptunaOptimize,
+    Start_inform,
+    read_user_config,
+    results_up_to_minio,
+)
+from worker_utils import MinioS3Client, SharedResource, health
+
 setproctitle("train_service")
 
 
-app = FastAPI()
-__VERSION__ = "v1.0.6"
+__VERSION__ = "v1.0.8"
+
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
 if CONTROL_HOST is None:
@@ -48,113 +42,12 @@ if CONTROL_HOST is None:
 
 
 DEBUG_MODE = None
-hash_manager = None
-sorted_set_manager = None
 
 
 # Configura el primer logger: solo errores en un archivo
 logger.add(
     "/var/log/worker/error_log.log", level="ERROR", rotation="10 MB", retention="7 days"
 )
-
-# Configura el segundo logger: mensajes normales en la consola
-# logger.add(
-#     sys.stdout,
-#     level="INFO",
-#     format="<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>",
-# )
-
-
-@app.get("/")
-async def read_version():
-
-    global hash_manager
-    global sorted_set_manager
-    global DEBUG_MODE
-
-    """Devuelve la versión de la API."""
-
-    metadata = {
-        other_metadata: os.environ.get(other_metadata, None)
-        for other_metadata in TrainerWrapper.worker_metadata
-    }
-    metadata["__VERSION__"] = __VERSION__
-    metadata["debug"] = DEBUG_MODE
-    metadata["debug"] = metadata["debug"] if DEBUG_MODE else "False"
-
-    gpu_json_list: List[dict] = obtener_info_gpu_json()
-    for gpu_json in gpu_json_list:
-        for key, value in gpu_json.items():
-            if value is not None:
-                if (
-                    isinstance(value, int)
-                    or isinstance(value, float)
-                    or isinstance(value, str)
-                    #
-                    or isinstance(key, int)
-                    or isinstance(key, float)
-                    or isinstance(key, str)
-                ):
-                    metadata[key] = value
-
-    redis_key = (
-        "workers"
-        + f":{metadata.get('WORKER_HOST', 'noIp')}"
-        + f":{metadata.get('USER', str(uuid.uuid4()))}"
-    )
-    for metadata_key, metadata_value in metadata.items():
-        hash_manager.create_hash(
-            key=redis_key,
-            hash_name=metadata_key,
-            value=metadata_value,
-            ttl=30,
-        )
-
-    gpu_0_memoryFree = int(metadata["gpu_0_memoryFree"])
-    gpu_0_memoryTotal = int(metadata["gpu_0_memoryTotal"])
-    gpu_0_memoryUsed = int(metadata["gpu_0_memoryUsed"])
-
-    NOT_TO_USE_GPU = 1 - int(os.environ.get("MAX_GPU", 60)) / 100
-    # if gpu_0_memoryFree > (gpu_0_memoryTotal * NOT_TO_USE_GPU):
-    #     gpu_0_memoryFree = gpu_0_memoryTotal * NOT_TO_USE_GPU
-    # else:
-    #     available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
-    #     gpu_0_memoryFree = max(available - gpu_0_memoryUsed, 0)
-    
-    available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
-    gpu_0_memoryFree = min(available, gpu_0_memoryFree)
-
-    member_name = f'{metadata["WORKER_HOST"]} ({metadata["USER"]})'
-    if os.environ.get("debug", None):
-        member_name += "[debug]"
-    member_name += f" -> {__VERSION__}"
-
-    try:
-        sorted_set_manager.redis_client.ping()
-    except Exception as e:
-        pass
-        # Detener la aplicación si ocurre un error
-        # os._exit(1)  # Fuerza la salida del proceso
-
-    sorted_set_manager.add_to_sorted_set(
-        key="available",
-        score=int(gpu_0_memoryFree),
-        member=member_name,
-        ttl=30,
-    )
-
-    return {"version": __VERSION__}
-
-
-@ejecutar_en_hilo
-def health():
-    logger.info("Starting health check...")
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning")
-
-
-# Configura el tercer logger: todos los niveles en un archivo separado (completamente independiente)
-# FileHandler("/var/log/worker/full_log.log").push_application()
-# custom_logger = Logger("wyoloservice")
 
 
 pipeline = Pipeline()
@@ -172,8 +65,6 @@ pipeline.set_steps(
 @hydra.main(config_path="/app", config_name="config", version_base=None)
 def main(cfg: OmegaConf):
     global DEFAULT_CONFIG
-    global hash_manager
-    global sorted_set_manager
     global DEBUG_MODE
 
     cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
@@ -200,6 +91,10 @@ def main(cfg: OmegaConf):
     DEFAULT_CONFIG["dvc"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
     DEFAULT_CONFIG["dvc"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
 
+    os.makedirs("/config", exist_ok=True)
+    with open("/config/config.yaml", "w") as f:
+        f.write(OmegaConf.to_yaml(DEFAULT_CONFIG))
+
     MinioS3Client(
         endpoint_url=DEFAULT_CONFIG.get("minio", {}).get("MINIO_ENDPOINT"),
         aws_access_key_id=DEFAULT_CONFIG.get("minio", {}).get("MINIO_ID"),
@@ -215,20 +110,6 @@ def main(cfg: OmegaConf):
         verbose=False,
     )
 
-    hash_manager = RedisHashManager(
-        host=redis_config.get("REDIS_HOST"),
-        port=redis_config.get("REDIS_PORT"),
-        db=redis_config.get("REDIS_DB"),
-        verbose=False,
-    )
-
-    sorted_set_manager = RedisSortedSetManager(
-        host=redis_config.get("REDIS_HOST"),
-        port=redis_config.get("REDIS_PORT"),
-        db=redis_config.get("REDIS_DB"),
-        verbose=False,
-    )
-
     DEBUG_MODE = os.environ.get("debug", None)
     PUBLIC_TOPIC = redis_config.get("TOPIC")
     USER_TOPIC = os.environ.get("USER", None)
@@ -236,11 +117,8 @@ def main(cfg: OmegaConf):
 
     results_queue = redis_config.get("RESULT_TOPIC", redis_config.get("TOPIC"))
 
-    # logger.info(f"Public topic: {PUBLIC_TOPIC}")
-    # logger.info(f"Private topic: {USER_TOPIC}")
     logger.info(f"Results queue: {results_queue}")
     logger.info(f"Debug mode: {DEBUG_MODE}")
-    # logger.info(f"DEFAULT_CONFIG: {DEFAULT_CONFIG}")
 
     shared_resource = SharedResource()
 
@@ -264,7 +142,8 @@ def main(cfg: OmegaConf):
                 },
             )
         except Exception as e:
-            logger.error("Can't report results")
+            logger.error(f"Can't report results: {e}")
+            logger.error(traceback.format_exc())
 
     def process_requests(task_data: dict):
 
@@ -322,6 +201,30 @@ def main(cfg: OmegaConf):
         time.sleep(30)
 
     # Receptores de colas de redis
+
+    # MODE STOP
+    if DEBUG_MODE is None:
+        logger.info(f"Activate stop topic: stop_{WORKER_HOST_TOPIC}")
+
+        @queue_manager.on_message(f"stop_{WORKER_HOST_TOPIC}")
+        def stop_worker(task_data: dict):
+            logger.debug(f"Received data in stop, {task_data}")
+
+            if task_data.get("stop", None) == USER_TOPIC:
+                logger.info("Stopping worker...")
+                queue_manager.publish(
+                    queue_name="stop_worker",
+                    data={
+                        "stop": task_data,
+                        "datetime": datetime.datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S"
+                        ),
+                    },
+                )
+
+                logger.info("Stopping worker...")
+                # Detener la aplicación si ocurre un error
+                os._exit(0)
 
     if USER_TOPIC:
         logger.info(f"Activate Private topic: {USER_TOPIC}")

@@ -1,16 +1,16 @@
 import math
 import os
 import shutil
-from functools import wraps
 import tempfile
+from functools import wraps
 
-import torch
 import optuna
+import torch
 import yaml
 from loguru import logger
-from train_yolo import train_run, train
-from ultralytics import YOLO
 from tqdm import tqdm
+from train_yolo import train, train_run
+from ultralytics import YOLO
 
 
 class OptunaOptimize:
@@ -57,32 +57,23 @@ class OptunaOptimize:
 
         tempfolder = request_config_user["tempfile"]
 
+        task_id = request_config_user.get("task_id")
+
         result_path = (
             f'{tempfolder}/models/{sweeper_config.get("study_name", "default_study")}/'
             f'{request_config_user["type"]}/{request_config_user["task_id"]}'
         )
         os.makedirs(f"{result_path}/trail_history/", exist_ok=True)
 
-        progress_rich = request_config_user.get("progress_rich", None)
-
         def progress_bar_generator():
-            if progress_rich is None or True:
-                with tqdm(
-                    total=sweeper_config.get("n_trials", 10),
-                    desc="Searching for best hyperparameters",
-                    dynamic_ncols=True,
-                ) as progress_bar:
-                    for _ in range(sweeper_config.get("n_trials", 10)):
-                        progress_bar.update(1)
-                        yield progress_bar, None
-            else:
-                task = progress_rich.add_task(
-                    f"[cyan]Searching for best hyperparameters",
-                    total=sweeper_config.get("n_trials", 10),
-                )
+            with tqdm(
+                total=sweeper_config.get("n_trials", 10),
+                desc="Searching for best hyperparameters",
+                dynamic_ncols=True,
+            ) as progress_bar:
                 for _ in range(sweeper_config.get("n_trials", 10)):
-                    progress_rich.update(task, advance=1)
-                    yield progress_rich, task
+                    progress_bar.update(1)
+                    yield progress_bar, None
 
         @OptunaOptimize.clean_gpu
         @OptunaOptimize.load_train_config(
@@ -125,8 +116,14 @@ class OptunaOptimize:
                         yaml.dump(config, yaml_file)
 
                     # borrar
-                    OptunaOptimize.DEBUG_MODE = False
+                    OptunaOptimize.DEBUG_MODE = True
 
+                    task_id = config.get("task_id")
+                    stop_training_file = f"/config/stop_training_{task_id}.txt"
+                    if os.path.exists(stop_training_file):
+                        raise optuna.TrialPruned("Condition to stop training met.")
+
+                    # Run the training process
                     if OptunaOptimize.DEBUG_MODE:
                         metric = None
                         request_config = train.callback(
@@ -172,6 +169,15 @@ class OptunaOptimize:
             )(),
         )
         study.optimize(objective, n_trials=sweeper_config.get("n_trials", 10))
+
+        # Stop training if the stop file exists
+        # This is a workaround to stop the training process
+        # when the user sends a stop signal
+        # to the worker
+        stop_training_file = f"/config/stop_training_{task_id}.txt"
+        if os.path.exists(stop_training_file):
+            os.remove(stop_training_file)
+            logger.info("Training stopped successfully.")
 
         try:
             best_trial = study.best_trial

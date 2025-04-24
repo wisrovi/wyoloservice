@@ -8,7 +8,7 @@ dvc_data_path: /datasets/clasificacion//colorball.v8i.multiclass.dvc
 train:
   #batch: -1
   data: /datasets/clasificacion/colorball.v8i.multiclass/
-  epochs: 2
+  epochs: 20
   imgsz: 640
 # val:
 #   conf: 0.01
@@ -21,7 +21,7 @@ sweeper:
   study_name: "example_clasification"
   #sampler: "TPESampler"
   fitness: "metrics/accuracy_top1"
-  n_trials: 2
+  n_trials: 5
   search_space:
     model: ["choice", "yolov8n-cls.pt"]
     train:

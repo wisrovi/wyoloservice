@@ -1,26 +1,23 @@
-from datetime import datetime
 import json
 import os
 import random
-from glob import glob
 import time
+from datetime import datetime
+from glob import glob
 from typing import List
 
 import dvc
 import GPUtil
 import mlflow
-from loguru import logger
-from PIL import Image
-import mlflow.data
-import mlflow.data
 import mlflow.data
 import mlflow.data.filesystem_dataset_source
 import mlflow.data.http_dataset_source
+from loguru import logger
+from PIL import Image
 from slugify import slugify
-
-from wredis.hash import RedisHashManager
 from ultralytics import RTDETR, YOLO, settings
 from ultralytics.utils.autobatch import autobatch
+from wredis.hash import RedisHashManager
 
 
 def obtener_info_gpu_json():
@@ -194,7 +191,7 @@ class TrainerWrapper:
                 metrics[slugify(key)] = float(value)
 
             mlflow.log_metrics(metrics)
-            
+
             self.save_eda()
 
     def on_train_start(self, trainer):
@@ -365,8 +362,48 @@ class TrainerWrapper:
                         )
                     except:
                         pass
-                    
+
             self.save_eda()
+
+        self.check_stop_training(trainer)
+
+    def check_stop_training(self, trainer):
+        # stop training if exists the file: /config/stop_training.txt
+
+        # example for to force stop training
+        # if task_id == "_744db150e7514609a7aac96bf459a08d",
+        # so, create the file /config/stop_training_744db150e7514609a7aac96bf459a08d.txt
+        # touch /config/stop_training_744db150e7514609a7aac96bf459a08d.txt
+
+        task_id = self.config.get("task_id")
+
+        stop_training_file = f"/config/stop_training_{task_id}.txt"
+        if os.path.exists(stop_training_file):
+            # os.remove(stop_training_file)
+
+            if self.model:
+                self.model.stop_training = True
+                self.model.stop_training = False
+                # self.model = None
+
+            if "minio" in self.config and "mlflow" in self.config:
+                # Log the final model in MLflow
+                self.on_train_end(trainer)
+
+                # Log the artifacts
+                try:
+                    mlflow.log_artifacts(
+                        self.config["train"]["project"]
+                        + "train_"
+                        + self.config["task_id"]
+                    )
+                except:
+                    pass
+
+                # End the MLflow run
+                mlflow.end_run(status="FINISHED")
+
+            raise StopIteration("Entrenamiento detenido por condición de callback.")
 
     def log_example_images(self, model_type: str):
         images, labels = self.get_images_and_labels(model_type=model_type)
@@ -428,9 +465,12 @@ class TrainerWrapper:
                     grace_period=min(epochs, grace_period),
                 )
             else:
+                # read env var MAX_GPU (user defined) for max gpu (value between 0 and 100)
+                # if not set, use default value (60%),
+                # if set to -1, use 60% of the gpu
                 MAX_GPU = float(os.environ.get("MAX_GPU", -5000.1))
 
-                config_train["batch"] = max(MAX_GPU / 100, -1)  # -1 = auto (60%)
+                config_train["batch"] = max(MAX_GPU / 100, -1)
 
                 return self.model.train(**config_train)
 

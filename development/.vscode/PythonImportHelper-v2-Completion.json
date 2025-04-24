@@ -45,6 +45,62 @@
         "documentation": {}
     },
     {
+        "label": "TrainingHistory",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "TrainingHistory",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train_run",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
         "label": "download_model",
         "importPath": "api.minio",
         "description": "api.minio",
@@ -138,6 +194,15 @@
         "description": "wsqlite",
         "isExtraImport": true,
         "detail": "wsqlite",
+        "documentation": {}
+    },
+    {
+        "label": "datetime",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "datetime",
+        "description": "datetime",
+        "detail": "datetime",
         "documentation": {}
     },
     {
@@ -271,6 +336,54 @@
         "documentation": {}
     },
     {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
+        "label": "setproctitle",
+        "importPath": "setproctitle",
+        "description": "setproctitle",
+        "isExtraImport": true,
+        "detail": "setproctitle",
+        "documentation": {}
+    },
+    {
+        "label": "setproctitle",
+        "importPath": "setproctitle",
+        "description": "setproctitle",
+        "isExtraImport": true,
+        "detail": "setproctitle",
+        "documentation": {}
+    },
+    {
+        "label": "setproctitle",
+        "importPath": "setproctitle",
+        "description": "setproctitle",
+        "isExtraImport": true,
+        "detail": "setproctitle",
+        "documentation": {}
+    },
+    {
+        "label": "setproctitle",
+        "importPath": "setproctitle",
+        "description": "setproctitle",
+        "isExtraImport": true,
+        "detail": "setproctitle",
+        "documentation": {}
+    },
+    {
         "label": "json",
         "kind": 6,
         "isExtraImport": true,
@@ -289,6 +402,15 @@
         "documentation": {}
     },
     {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
         "label": "glob",
         "importPath": "glob",
         "description": "glob",
@@ -297,12 +419,11 @@
         "documentation": {}
     },
     {
-        "label": "time",
-        "kind": 6,
+        "label": "List",
+        "importPath": "typing",
+        "description": "typing",
         "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
+        "detail": "typing",
         "documentation": {}
     },
     {
@@ -340,22 +461,6 @@
         "documentation": {}
     },
     {
-        "label": "Image",
-        "importPath": "PIL",
-        "description": "PIL",
-        "isExtraImport": true,
-        "detail": "PIL",
-        "documentation": {}
-    },
-    {
-        "label": "Image",
-        "importPath": "PIL",
-        "description": "PIL",
-        "isExtraImport": true,
-        "detail": "PIL",
-        "documentation": {}
-    },
-    {
         "label": "mlflow.data",
         "kind": 6,
         "isExtraImport": true,
@@ -383,35 +488,27 @@
         "documentation": {}
     },
     {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
+        "label": "Image",
+        "importPath": "PIL",
+        "description": "PIL",
+        "isExtraImport": true,
+        "detail": "PIL",
+        "documentation": {}
+    },
+    {
         "label": "slugify",
         "importPath": "slugify",
         "description": "slugify",
         "isExtraImport": true,
         "detail": "slugify",
-        "documentation": {}
-    },
-    {
-        "label": "RedisHashManager",
-        "importPath": "wredis.hash",
-        "description": "wredis.hash",
-        "isExtraImport": true,
-        "detail": "wredis.hash",
-        "documentation": {}
-    },
-    {
-        "label": "RedisHashManager",
-        "importPath": "wredis.hash",
-        "description": "wredis.hash",
-        "isExtraImport": true,
-        "detail": "wredis.hash",
-        "documentation": {}
-    },
-    {
-        "label": "RedisHashManager",
-        "importPath": "wredis.hash",
-        "description": "wredis.hash",
-        "isExtraImport": true,
-        "detail": "wredis.hash",
         "documentation": {}
     },
     {
@@ -495,12 +592,52 @@
         "documentation": {}
     },
     {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
         "label": "click",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "click",
         "description": "click",
         "detail": "click",
+        "documentation": {}
+    },
+    {
+        "label": "TrainerWrapper",
+        "importPath": "train_yolo.trainer_wrapper",
+        "description": "train_yolo.trainer_wrapper",
+        "isExtraImport": true,
+        "detail": "train_yolo.trainer_wrapper",
         "documentation": {}
     },
     {
@@ -520,7 +657,7 @@
         "documentation": {}
     },
     {
-        "label": "TrainerWrapper",
+        "label": "obtener_info_gpu_json",
         "importPath": "train_yolo.trainer_wrapper",
         "description": "train_yolo.trainer_wrapper",
         "isExtraImport": true,
@@ -604,46 +741,6 @@
         "documentation": {}
     },
     {
-        "label": "TrainingHistory",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "db",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "train_run",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "train",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "train",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
         "label": "MinioS3Client",
         "importPath": "worker_utils",
         "description": "worker_utils",
@@ -661,14 +758,6 @@
     },
     {
         "label": "MinioS3Client",
-        "importPath": "worker_utils",
-        "description": "worker_utils",
-        "isExtraImport": true,
-        "detail": "worker_utils",
-        "documentation": {}
-    },
-    {
-        "label": "ejecutar_en_hilo",
         "importPath": "worker_utils",
         "description": "worker_utils",
         "isExtraImport": true,
@@ -677,6 +766,14 @@
     },
     {
         "label": "SharedResource",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "health",
         "importPath": "worker_utils",
         "description": "worker_utils",
         "isExtraImport": true,
@@ -693,21 +790,21 @@
         "documentation": {}
     },
     {
-        "label": "torch",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "torch",
-        "description": "torch",
-        "detail": "torch",
-        "documentation": {}
-    },
-    {
         "label": "optuna",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "optuna",
         "description": "optuna",
         "detail": "optuna",
+        "documentation": {}
+    },
+    {
+        "label": "torch",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "torch",
+        "description": "torch",
+        "detail": "torch",
         "documentation": {}
     },
     {
@@ -752,6 +849,71 @@
         "documentation": {}
     },
     {
+        "label": "uvicorn",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "uvicorn",
+        "description": "uvicorn",
+        "detail": "uvicorn",
+        "documentation": {}
+    },
+    {
+        "label": "OmegaConf",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "DictConfig",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "OmegaConf",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "OmegaConf",
+        "importPath": "omegaconf",
+        "description": "omegaconf",
+        "isExtraImport": true,
+        "detail": "omegaconf",
+        "documentation": {}
+    },
+    {
+        "label": "RedisSortedSetManager",
+        "importPath": "wredis.sortedset",
+        "description": "wredis.sortedset",
+        "isExtraImport": true,
+        "detail": "wredis.sortedset",
+        "documentation": {}
+    },
+    {
+        "label": "RedisSortedSetManager",
+        "importPath": "wredis.sortedset",
+        "description": "wredis.sortedset",
+        "isExtraImport": true,
+        "detail": "wredis.sortedset",
+        "documentation": {}
+    },
+    {
+        "label": "ejecutar_en_hilo",
+        "importPath": "worker_utils.decorators",
+        "description": "worker_utils.decorators",
+        "isExtraImport": true,
+        "detail": "worker_utils.decorators",
+        "documentation": {}
+    },
+    {
         "label": "boto3",
         "kind": 6,
         "isExtraImport": true,
@@ -787,27 +949,27 @@
         "documentation": {}
     },
     {
-        "label": "DictConfig",
-        "importPath": "omegaconf",
-        "description": "omegaconf",
+        "label": "NoCredentialsError",
+        "importPath": "botocore.exceptions",
+        "description": "botocore.exceptions",
         "isExtraImport": true,
-        "detail": "omegaconf",
+        "detail": "botocore.exceptions",
         "documentation": {}
     },
     {
-        "label": "OmegaConf",
-        "importPath": "omegaconf",
-        "description": "omegaconf",
+        "label": "PartialCredentialsError",
+        "importPath": "botocore.exceptions",
+        "description": "botocore.exceptions",
         "isExtraImport": true,
-        "detail": "omegaconf",
+        "detail": "botocore.exceptions",
         "documentation": {}
     },
     {
-        "label": "OmegaConf",
-        "importPath": "omegaconf",
-        "description": "omegaconf",
+        "label": "ClientError",
+        "importPath": "botocore.exceptions",
+        "description": "botocore.exceptions",
         "isExtraImport": true,
-        "detail": "omegaconf",
+        "detail": "botocore.exceptions",
         "documentation": {}
     },
     {
@@ -888,15 +1050,6 @@
         "documentation": {}
     },
     {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
@@ -914,14 +1067,6 @@
         "documentation": {}
     },
     {
-        "label": "RedisSortedSetManager",
-        "importPath": "wredis.sortedset",
-        "description": "wredis.sortedset",
-        "isExtraImport": true,
-        "detail": "wredis.sortedset",
-        "documentation": {}
-    },
-    {
         "label": "DEFAULT_CONFIG",
         "importPath": "states",
         "description": "states",
@@ -930,7 +1075,23 @@
         "documentation": {}
     },
     {
+        "label": "Eda_calculate",
+        "importPath": "states",
+        "description": "states",
+        "isExtraImport": true,
+        "detail": "states",
+        "documentation": {}
+    },
+    {
         "label": "OptunaOptimize",
+        "importPath": "states",
+        "description": "states",
+        "isExtraImport": true,
+        "detail": "states",
+        "documentation": {}
+    },
+    {
+        "label": "Start_inform",
         "importPath": "states",
         "description": "states",
         "isExtraImport": true,
@@ -954,31 +1115,6 @@
         "documentation": {}
     },
     {
-        "label": "Start_inform",
-        "importPath": "states",
-        "description": "states",
-        "isExtraImport": true,
-        "detail": "states",
-        "documentation": {}
-    },
-    {
-        "label": "Eda_calculate",
-        "importPath": "states",
-        "description": "states",
-        "isExtraImport": true,
-        "detail": "states",
-        "documentation": {}
-    },
-    {
-        "label": "uvicorn",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "uvicorn",
-        "description": "uvicorn",
-        "detail": "uvicorn",
-        "documentation": {}
-    },
-    {
         "label": "artifacts",
         "kind": 5,
         "importPath": "enviroment.artifacts_valid",
@@ -992,7 +1128,7 @@
         "kind": 2,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())\n    except Exception:\n        count = 0",
+        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    with open(config_path, \"r\") as f:\n        user_config = yaml.safe_load(f)\n    try:\n        count = len(db.get_all())",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1037,7 +1173,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    try:\n        count = len(db.get_all())",
+        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    with open(config_path, \"r\") as f:\n        user_config = yaml.safe_load(f)",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1321,6 +1457,69 @@
         "documentation": {}
     },
     {
+        "label": "health",
+        "kind": 2,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "def health(version: str = \"v1.0\"):\n    \"\"\"\n    Función para iniciar el servicio de salud.\n    Args:\n        version (str): Versión de la API.\n    \"\"\"\n    global app_version, hash_manager, sorted_set_manager\n    app_version = version\n    with open(\"/config/config.yaml\", \"r\") as f:\n        config = f.read()",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "app = FastAPI()\napp_version = \"v1.0\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
+        "label": "app_version",
+        "kind": 5,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "app_version = \"v1.0\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
+        "label": "CONTROL_HOST",
+        "kind": 5,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "CONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
+        "label": "DEBUG_MODE",
+        "kind": 5,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "DEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager\n    \"\"\"Devuelve la versión de la API.\"\"\"\n    metadata = {\n        other_metadata: os.environ.get(other_metadata, None)",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
+        "label": "hash_manager",
+        "kind": 5,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager\n    \"\"\"Devuelve la versión de la API.\"\"\"\n    metadata = {\n        other_metadata: os.environ.get(other_metadata, None)\n        for other_metadata in TrainerWrapper.worker_metadata",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
+        "label": "sorted_set_manager",
+        "kind": 5,
+        "importPath": "services.worker.worker_utils.health",
+        "description": "services.worker.worker_utils.health",
+        "peekOfCode": "sorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager\n    \"\"\"Devuelve la versión de la API.\"\"\"\n    metadata = {\n        other_metadata: os.environ.get(other_metadata, None)\n        for other_metadata in TrainerWrapper.worker_metadata\n    }",
+        "detail": "services.worker.worker_utils.health",
+        "documentation": {}
+    },
+    {
         "label": "MinioS3Client",
         "kind": 6,
         "importPath": "services.worker.worker_utils.minio",
@@ -1519,29 +1718,11 @@
         "documentation": {}
     },
     {
-        "label": "health",
-        "kind": 2,
-        "importPath": "services.worker.worker",
-        "description": "services.worker.worker",
-        "peekOfCode": "def health():\n    logger.info(\"Starting health check...\")\n    uvicorn.run(app, host=\"0.0.0.0\", port=8000, log_level=\"warning\")\n# Configura el tercer logger: todos los niveles en un archivo separado (completamente independiente)\n# FileHandler(\"/var/log/worker/full_log.log\").push_application()\n# custom_logger = Logger(\"wyoloservice\")\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),",
-        "detail": "services.worker.worker",
-        "documentation": {}
-    },
-    {
         "label": "main",
         "kind": 2,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "def main(cfg: OmegaConf):\n    global DEFAULT_CONFIG\n    global hash_manager\n    global sorted_set_manager\n    global DEBUG_MODE\n    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(\n        \"localhost\", CONTROL_HOST",
-        "detail": "services.worker.worker",
-        "documentation": {}
-    },
-    {
-        "label": "app",
-        "kind": 5,
-        "importPath": "services.worker.worker",
-        "description": "services.worker.worker",
-        "peekOfCode": "app = FastAPI()\nfrom worker_utils import MinioS3Client, ejecutar_en_hilo, SharedResource\n__VERSION__ = \"v1.0.5\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo",
+        "peekOfCode": "def main(cfg: OmegaConf):\n    global DEFAULT_CONFIG\n    global DEBUG_MODE\n    cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.minio.MINIO_ENDPOINT = cfg.minio.MINIO_ENDPOINT.replace(\n        \"localhost\", CONTROL_HOST\n    )\n    cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace(\"localhost\", CONTROL_HOST)",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1550,7 +1731,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "__VERSION__ = \"v1.0.5\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"",
+        "peekOfCode": "__VERSION__ = \"v1.0.8\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1559,7 +1740,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "CONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)",
+        "peekOfCode": "CONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()\npipeline.set_steps(",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1568,25 +1749,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "DEBUG_MODE = None\nhash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\n# logger.add(\n#     sys.stdout,",
-        "detail": "services.worker.worker",
-        "documentation": {}
-    },
-    {
-        "label": "hash_manager",
-        "kind": 5,
-        "importPath": "services.worker.worker",
-        "description": "services.worker.worker",
-        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\n# logger.add(\n#     sys.stdout,\n#     level=\"INFO\",",
-        "detail": "services.worker.worker",
-        "documentation": {}
-    },
-    {
-        "label": "sorted_set_manager",
-        "kind": 5,
-        "importPath": "services.worker.worker",
-        "description": "services.worker.worker",
-        "peekOfCode": "sorted_set_manager = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\n# Configura el segundo logger: mensajes normales en la consola\n# logger.add(\n#     sys.stdout,\n#     level=\"INFO\",\n#     format=\"<green>{time}</green> | <level>{level}</level> | <cyan>{message}</cyan>\",",
+        "peekOfCode": "DEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1595,7 +1758,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        # (Eda_calculate(), Eda_calculate.__NAME__, Eda_calculate.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)",
+        "peekOfCode": "pipeline = Pipeline()\npipeline.set_steps(\n    [\n        (read_user_config, \"read_config\", \"v1.0\"),\n        (Start_inform(), Start_inform.__NAME__, Start_inform.__VERSION__),\n        (Eda_calculate(), Eda_calculate.__NAME__, Eda_calculate.__VERSION__),\n        (OptunaOptimize(), OptunaOptimize.__NAME__, OptunaOptimize.__VERSION__),\n        (results_up_to_minio, \"result_to_minio\", \"v1.0\"),\n    ]\n)",
         "detail": "services.worker.worker",
         "documentation": {}
     }

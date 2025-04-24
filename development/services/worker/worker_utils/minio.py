@@ -55,7 +55,7 @@ class MinioS3Client:
         try:
             # Intenta listar los buckets disponibles
             self.s3.list_buckets()
-            print("Conexión exitosa: Se puede acceder al servicio S3.")
+            # print("Conexión exitosa: Se puede acceder al servicio S3.")
             return True
         except NoCredentialsError:
             print("Error: No se encontraron credenciales válidas.")
