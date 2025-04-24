@@ -30,6 +30,14 @@ hash_manager = None
 sorted_set_manager = None
 
 
+@app.on_event("/startup")
+async def startup_event():
+    sleep_file = "/config/sleep"
+    if os.path.exists(sleep_file):
+        os.remove(sleep_file)
+    logger.info("Starting up the service...")
+
+
 @app.get("/")
 async def read_version():
 
@@ -111,7 +119,7 @@ async def read_version():
 
 
 @ejecutar_en_hilo
-def health(version: str = "v1.0"):
+def health(version: str):
     """
     Función para iniciar el servicio de salud.
     Args:
@@ -142,6 +150,5 @@ def health(version: str = "v1.0"):
         verbose=False,
     )
 
-    logger.info("Starting health check...")
-    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning")
     logger.info(f"Health check started with version {version}.")
+    uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning")

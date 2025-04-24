@@ -1,5 +1,7 @@
 import datetime
+import json
 import os
+import re
 import tempfile
 import time
 import traceback
@@ -33,7 +35,7 @@ from worker_utils import MinioS3Client, SharedResource, health
 setproctitle("train_service")
 
 
-__VERSION__ = "v1.0.8"
+__VERSION__ = "v1.0.9"
 
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
@@ -147,6 +149,53 @@ def main(cfg: OmegaConf):
 
     def process_requests(task_data: dict):
 
+        # valid if exists the sleep file (created by admin)
+        # and check if the sleep time is over
+        # if the file exists, the worker is in sleep mode
+        # and the file contains the metadata
+        # check if the file exists
+        sleep_file = "/config/sleep"
+        if os.path.exists(sleep_file):
+            # read the file in json format
+            try:
+                with open(sleep_file, "r") as f:
+                    metadata = json.load(f)
+            except json.JSONDecodeError as e:
+                logger.error(f"Error reading sleep file: {e}")
+                os.remove(sleep_file)
+                metadata = None
+
+            # check if the sleep time is over
+            if metadata:
+                datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                datetime_create = metadata["datetime"]
+
+                elapsed_time = (
+                    datetime.datetime.strptime(datetime_now, "%Y-%m-%d %H:%M:%S")
+                    - datetime.datetime.strptime(datetime_create, "%Y-%m-%d %H:%M:%S")
+                ).total_seconds()
+
+                if elapsed_time > 60 * 30:  # 30 minutes = 60*30 seconds
+                    # remove the file
+                    logger.info("Sleep time is over, removing file...")
+                    # remove the file
+                    os.remove(sleep_file)
+                else:
+                    # check if the sleep time is over
+                    logger.info(
+                        f"Worker in sleep mode... {metadata}, elapsed time: {elapsed_time}, sleep time: {60 * 30}"
+                    )
+
+                    logger.info("Worker awake...")
+                    recreate_request(
+                        topic=task_data["topic"],
+                        args_dict=task_data,
+                    )
+
+                    time.sleep(60)  # wait 1 minute before checking again
+
+                    return None
+
         # validar la cantidad de GPU disponible, si es menor a 2GB, no se ejecuta
         gpu_json_list: List[dict] = obtener_info_gpu_json()
         free = 0
@@ -202,7 +251,45 @@ def main(cfg: OmegaConf):
 
     # Receptores de colas de redis
 
-    # MODE STOP
+    # MODE ADMIN (for sleep), only is active when not is in DEBUG_MODE
+    if DEBUG_MODE is None:
+        logger.info(f"Activate admin topic: admin_{WORKER_HOST_TOPIC}")
+
+        @queue_manager.on_message(f"admin_{WORKER_HOST_TOPIC}")
+        def admin_worker(task_data: dict):
+            logger.debug(f"Received data in admin, {task_data}")
+
+            if task_data.get("admin", None) == USER_TOPIC:
+                logger.info("Activating sleep...")
+
+                # calculate the actual time
+                datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                # create a file to indicate that the worker is in sleep mode
+                metadata = {
+                    "task_id": task_data["task_id"],
+                    "user_code": task_data["user_code"],
+                    "datetime": datetime_now,
+                    "end_datetime": "30 minutes",
+                    "status": "sleep",
+                    "worker": WORKER_HOST_TOPIC,
+                    "worker_host": CONTROL_HOST,
+                    "user": USER_TOPIC,
+                }
+
+                # publish the sleep message to the queue for notification to the admin in the control
+                queue_manager.publish(
+                    queue_name="sleep_worker",
+                    data={"admin": metadata, "datetime": datetime_now},
+                )
+
+                with open("/config/sleep", "w") as f:
+                    # save metadata in the file in json format
+                    metadata_json = json.dumps(metadata)
+                    f.write(metadata_json)
+                logger.info("Worker in sleep mode...")
+
+    # MODE STOP (for emergency stop), only is active when not is in DEBUG_MODE
     if DEBUG_MODE is None:
         logger.info(f"Activate stop topic: stop_{WORKER_HOST_TOPIC}")
 
@@ -211,20 +298,65 @@ def main(cfg: OmegaConf):
             logger.debug(f"Received data in stop, {task_data}")
 
             if task_data.get("stop", None) == USER_TOPIC:
-                logger.info("Stopping worker...")
-                queue_manager.publish(
-                    queue_name="stop_worker",
-                    data={
-                        "stop": task_data,
-                        "datetime": datetime.datetime.now().strftime(
-                            "%Y-%m-%d %H:%M:%S"
-                        ),
-                    },
-                )
+                task_id = task_data.get("task_id", None)
 
-                logger.info("Stopping worker...")
-                # Detener la aplicación si ocurre un error
-                os._exit(0)
+                metadata = {
+                    "task_id": task_data["task_id"],
+                    "user_code": task_data["user_code"],
+                    "datetime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "status": "stop",
+                    "worker": WORKER_HOST_TOPIC,
+                    "worker_host": CONTROL_HOST,
+                    "user": USER_TOPIC,
+                }
+
+                if task_id:
+                    # create a file to indicate that the worker is in stop mode
+                    stop_training_file = f"/config/stop_training_{task_id}.txt"
+                    with open(stop_training_file, "w") as f:
+                        # save metadata in the file in json format
+                        metadata_json = json.dumps(metadata)
+                        f.write(metadata_json)
+                    # this file is used to stop the training process
+                    # and the worker will stop when the training is finished
+                    # and the file is removed
+                    logger.info(f"Worker in stop mode... {metadata}")
+
+                    while os.path.exists(stop_training_file):
+                        # wait until the file is removed
+                        logger.debug(
+                            f"Waiting for the file {stop_training_file} to be removed... (will be removed when the training is finished completely)"
+                        )
+                        time.sleep(5)
+
+                    # publish the stop message to the queue for notification to the admin in the control
+                    logger.info("Stopping worker...")
+                    queue_manager.publish(
+                        queue_name="stop_worker",
+                        data={
+                            "stop": metadata,
+                            "status": "stop",
+                            "datetime": datetime.datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S"
+                            ),
+                        },
+                    )
+                    # stop the worker
+                    os._exit(0)
+                else:
+                    logger.error("No task_id in stop message")
+                    # publish the stop message to the queue for notification to the admin in the control
+                    queue_manager.publish(
+                        queue_name="stop_worker",
+                        data={
+                            "stop": metadata,
+                            "status": "error",
+                            "error": "No task_id in stop message",
+                            "datetime": datetime.datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S"
+                            ),
+                        },
+                    )
 
     if USER_TOPIC:
         logger.info(f"Activate Private topic: {USER_TOPIC}")
@@ -275,7 +407,7 @@ def main(cfg: OmegaConf):
     else:
         logger.info(f"Not activate public topic ({PUBLIC_TOPIC}) in DEBUG_MODE")
 
-    health()
+    health(__VERSION__)
     queue_manager.start()
     queue_manager.wait()
 
