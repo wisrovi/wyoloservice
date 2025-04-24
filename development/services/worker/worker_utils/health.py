@@ -30,7 +30,7 @@ hash_manager = None
 sorted_set_manager = None
 
 
-@app.on_event("/startup")
+@app.get("/startup")
 async def startup_event():
     sleep_file = "/config/sleep"
     if os.path.exists(sleep_file):
