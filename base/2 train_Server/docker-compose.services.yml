@@ -55,7 +55,7 @@ services:
     restart: always
     environment:
       - WATCHTOWER_LABEL_ENABLE=true # Habilita el control por etiquetas
-      - WATCHTOWER_SCHEDULE="0 0 0,2,4,6,8,10,12,14,16,18,20,22 * * *" # todos los segundos, minutos, dias, semanas, meses, a las horas 0,2,...,22
+      - WATCHTOWER_SCHEDULE="0 0 */2 * * *"  # todos los segundos, minutos, dias, semanas, meses, a las horas 0,2,...,22
       - WATCHTOWER_CLEANUP=true # Elimina imágenes antiguas después de actualizar
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
