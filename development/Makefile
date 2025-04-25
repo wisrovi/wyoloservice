@@ -32,9 +32,7 @@ build_env:
 
 # ---------------------------------------------- SERVICES ----------------------------------------------
 
-
-
-start_services:
+user.env:
 	echo "USER=$$(whoami)" > user.env
 	echo "WORKER_HOST=$$(hostname -I | awk '{print $$1}')" >> user.env
 	echo "WORKER_HOSTNAME=$$(hostname)" >> user.env
@@ -52,7 +50,13 @@ start_services:
 	echo "WORKER_GPU_COUNT=$$(nvidia-smi --query-gpu=count --format=csv,noheader)" >> user.env
 	echo "WORKER_GPU_MODEL=$$(nvidia-smi --query-gpu=name --format=csv,noheader | head -n 1)" >> user.env
 	echo "WORKER_GPU_MEMORY=$$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | head -n 1)" >> user.env
-	docker-compose -f docker-compose.services.yml --compatibility up -d --build --force-recreate --no-deps
+	echo "WORKER_GPU_MEMORY=$$(nvidia-smi --query-gpu=memory.total --format=csv,noheader | head -n 1)" >> user.env
+	MEM_TOTAL=$$(awk '/^MemTotal:/ {print $$2}' /proc/meminfo); \
+    echo "WORKER_RAM_MEMORY=$$((MEM_TOTAL / 1048576 * 8 / 10))g" >> user.env
+	echo "WORKER_CPU_CORES=$$((`nproc` - 1)).0" >> user.env
+
+start_services: user.env
+	docker-compose -f docker-compose.services.yml --env-file user.env  --compatibility up -d --build --force-recreate --no-deps
 
 stop_services:
 	docker-compose -f docker-compose.services.yml down

@@ -116,7 +116,7 @@ class OptunaOptimize:
                         yaml.dump(config, yaml_file)
 
                     # borrar
-                    # OptunaOptimize.DEBUG_MODE = True
+                    OptunaOptimize.DEBUG_MODE = True
 
                     task_id = config.get("task_id")
                     stop_training_file = f"/config/stop_training_{task_id}.txt"
@@ -141,6 +141,9 @@ class OptunaOptimize:
                             verbose=self.verbose,
                             fitness=config.get("sweeper", {}).get("fitness", "fitness"),
                         )
+                        
+                    if os.path.exists(stop_training_file):
+                        return 0
 
                     best_model = f"{result_path}/{int(trial.number)}/train_{config['task_id']}/weights/best.pt"
                     if os.path.exists(best_model):

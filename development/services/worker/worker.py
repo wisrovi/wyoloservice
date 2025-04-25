@@ -21,6 +21,7 @@ from wpipe.pipe import Pipeline
 from wredis.hash import RedisHashManager
 from wredis.queue import RedisQueueManager
 from wredis.sortedset import RedisSortedSetManager
+import yaml
 
 from states import (
     DEFAULT_CONFIG,
@@ -87,8 +88,8 @@ def main(cfg: OmegaConf):
 
     DEFAULT_CONFIG.update(cfg)
 
-    # DEFAULT_CONFIG["minio"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
-    # DEFAULT_CONFIG["minio"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
+    DEFAULT_CONFIG["minio"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
+    DEFAULT_CONFIG["minio"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
 
     DEFAULT_CONFIG["dvc"]["MINIO_ID"] = os.getenv("CIFS_USER", "mlflow")
     DEFAULT_CONFIG["dvc"]["MINIO_SECRET_KEY"] = os.getenv("CIFS_PASS", "wyoloservice")
@@ -126,6 +127,15 @@ def main(cfg: OmegaConf):
 
     def complete_requests(results):
         try:
+            try:
+                params = results["train"]["best_trial"].params
+                metric = results["train"]["best_metric"]
+                best_model_path = results["train"]["best_model_path"]
+            except:
+                params = "stop and continue in other worker"
+                metric = "stop and continue in other worker"
+                best_model_path = "stop and continue in other worker"
+            
             queue_manager.publish(
                 queue_name=results_queue,
                 data={
@@ -136,9 +146,9 @@ def main(cfg: OmegaConf):
                     "imgsz": results["train"]["imgsz"],
                     "n_trials": results["sweeper"]["n_trials"],
                     "optimized_params": {
-                        "params": results["train"]["best_trial"].params,
-                        "best_model_path": results["train"]["best_model_path"],
-                        "metric": results["train"]["best_metric"],
+                        "params": params,
+                        "best_model_path": best_model_path,
+                        "metric": metric,
                     },
                     "optimizer": results["sweeper"]["algorithm"],
                 },
@@ -296,12 +306,17 @@ def main(cfg: OmegaConf):
         @queue_manager.on_message(f"stop_{WORKER_HOST_TOPIC}")
         def stop_worker(task_data: dict):
             logger.debug(f"Received data in stop, {task_data}")
+            
+            user_request = task_data["config_path"]
+            with open(user_request, "r") as file:
+                config = yaml.safe_load(file)
 
-            if task_data.get("stop", None) == USER_TOPIC:
-                task_id = task_data.get("task_id", None)
+            if config.get("stop", None) == USER_TOPIC:
+                task_id = config.get("task_id", None)
+                destinity = config.get("destinity", None)
 
                 metadata = {
-                    "task_id": task_data["task_id"],
+                    "task_id": config["task_id"],
                     "user_code": task_data["user_code"],
                     "datetime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "status": "stop",
@@ -341,6 +356,37 @@ def main(cfg: OmegaConf):
                             ),
                         },
                     )
+                    if destinity:
+                        if not isinstance(destinity, str):
+                            destinity = PUBLIC_TOPIC
+
+                        # publish the stop message to the queue for notification to the admin in the control
+                        # and to the worker
+                        # to stop the training process
+                        # and the worker will stop when the training is finished
+                        # and the file is removed
+                        queue_manager.publish(
+                            queue_name=destinity,
+                            data={
+                                "stop": metadata,
+                                "task_id": task_id,
+                                "config_path": f"/config_versions/{task_id}.yaml",
+                                "user_code": task_data["user_code"],
+                                "origin": {
+                                    "worker": WORKER_HOST_TOPIC,
+                                    "worker_host": CONTROL_HOST,
+                                    "user": USER_TOPIC,
+                                },
+                                #
+                                "status": "recreate",
+                                "message": f"Worker {WORKER_HOST_TOPIC} stopped",
+                                "error": None,
+                                "datetime": datetime.datetime.now().strftime(
+                                    "%Y-%m-%d %H:%M:%S"
+                                ),
+                            },
+                        )
+                        logger.warning(f"training '{task_id}' recreated for continue in '{destinity}' worker")
                     # stop the worker
                     os._exit(0)
                 else:

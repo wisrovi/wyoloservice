@@ -16,8 +16,8 @@ x-resources: &resources_gpu
   deploy:
     resources:
       limits:
-        cpus: "7.0"
-        memory: 24g
+        cpus: "${WORKER_CPU_CORES}"
+        memory: ${WORKER_RAM_MEMORY}
       reservations:
         devices:
           - driver: nvidia

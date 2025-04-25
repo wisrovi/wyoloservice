@@ -1,5 +1,21 @@
 [
     {
+        "label": "RedisStreamManager",
+        "importPath": "wredis.streams",
+        "description": "wredis.streams",
+        "isExtraImport": true,
+        "detail": "wredis.streams",
+        "documentation": {}
+    },
+    {
+        "label": "RedisStreamManager",
+        "importPath": "wredis.streams",
+        "description": "wredis.streams",
+        "isExtraImport": true,
+        "detail": "wredis.streams",
+        "documentation": {}
+    },
+    {
         "label": "time",
         "kind": 6,
         "isExtraImport": true,
@@ -36,20 +52,21 @@
         "documentation": {}
     },
     {
-        "label": "RedisStreamManager",
-        "importPath": "wredis.streams",
-        "description": "wredis.streams",
-        "isExtraImport": true,
-        "detail": "wredis.streams",
-        "documentation": {}
-    },
-    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
         "importPath": "os",
         "description": "os",
         "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "main",
+        "kind": 2,
+        "importPath": "conect_to_stream",
+        "description": "conect_to_stream",
+        "peekOfCode": "def main(task_id):\n    stream_manager = RedisStreamManager(\n        host=\"192.168.1.60\",\n        verbose=False,\n        port=23438,\n    )\n    print(\"Streaming activated in\", f\"stream:{task_id}\")\n    @stream_manager.on_message(\n        stream_name=f\"stream:{task_id}\",\n        group_name=f\"stream:{task_id}\",",
+        "detail": "conect_to_stream",
         "documentation": {}
     },
     {

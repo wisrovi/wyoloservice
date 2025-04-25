@@ -16,8 +16,8 @@ x-resources: &resources_gpu
   deploy:
     resources:
       limits:
-        cpus: "7.0"
-        memory: 24g
+        cpus: "${WORKER_CPU_CORES}"
+        memory: ${WORKER_RAM_MEMORY}
       reservations:
         # cpus: "1.0"
         # memory: 2048M
@@ -33,7 +33,7 @@ services:
     build:
       context: ./services
       dockerfile: Dockerfile.worker
-    image: wisrovi/wyoloservice_worker:v1.0.9
+    image: wisrovi/wyoloservice_worker:v1.0.10
     container_name: worker_demo
     env_file:
       - control_host.env
