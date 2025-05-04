@@ -1,0 +1,9 @@
+debug: stop_192.168.1.137
+stop: wisrovi
+task_id: 49eed38feb964cc3ba862ad1edd73042
+
+# destinity for continuation
+# destinity: true # for public queue
+# destinity: wisrovi  # for private queue
+# destinity: 192.168.1.137  # for private queue
+# destinity: training_queue  # for public queue

@@ -1,0 +1,7 @@
+keyboard
+requests
+wredis
+redis
+loguru
+colorama
+pyyaml

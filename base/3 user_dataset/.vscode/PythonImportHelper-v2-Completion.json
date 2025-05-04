@@ -1,11 +1,29 @@
 [
     {
-        "label": "time",
+        "label": "curses",
         "kind": 6,
         "isExtraImport": true,
-        "importPath": "time",
-        "description": "time",
-        "detail": "time",
+        "importPath": "curses",
+        "description": "curses",
+        "detail": "curses",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "signal",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "signal",
+        "description": "signal",
+        "detail": "signal",
         "documentation": {}
     },
     {
@@ -18,15 +36,6 @@
         "documentation": {}
     },
     {
-        "label": "requests",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "requests",
-        "description": "requests",
-        "detail": "requests",
-        "documentation": {}
-    },
-    {
         "label": "sys",
         "kind": 6,
         "isExtraImport": true,
@@ -36,20 +45,71 @@
         "documentation": {}
     },
     {
+        "label": "tempfile",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tempfile",
+        "description": "tempfile",
+        "detail": "tempfile",
+        "documentation": {}
+    },
+    {
+        "label": "time",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "time",
+        "description": "time",
+        "detail": "time",
+        "documentation": {}
+    },
+    {
+        "label": "yaml",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "yaml",
+        "description": "yaml",
+        "detail": "yaml",
+        "documentation": {}
+    },
+    {
+        "label": "Fore",
+        "importPath": "colorama",
+        "description": "colorama",
+        "isExtraImport": true,
+        "detail": "colorama",
+        "documentation": {}
+    },
+    {
+        "label": "Style",
+        "importPath": "colorama",
+        "description": "colorama",
+        "isExtraImport": true,
+        "detail": "colorama",
+        "documentation": {}
+    },
+    {
+        "label": "init",
+        "importPath": "colorama",
+        "description": "colorama",
+        "isExtraImport": true,
+        "detail": "colorama",
+        "documentation": {}
+    },
+    {
+        "label": "requests",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
+        "documentation": {}
+    },
+    {
         "label": "RedisStreamManager",
         "importPath": "wredis.streams",
         "description": "wredis.streams",
         "isExtraImport": true,
         "detail": "wredis.streams",
-        "documentation": {}
-    },
-    {
-        "label": "os",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "os",
-        "description": "os",
-        "detail": "os",
         "documentation": {}
     },
     {
@@ -75,7 +135,7 @@
         "kind": 2,
         "importPath": "user_request",
         "description": "user_request",
-        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")",
+        "peekOfCode": "def seleccionar_archivo():\n    \"\"\"Abre un diálogo para seleccionar un archivo.\"\"\"\n    filename = filedialog.askopenfilename()\n    return filename\ndef enviar_archivo(filename=None, streaming: bool = True):\n    global GLOBAL_RESPONSE, task_id\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")",
         "detail": "user_request",
         "documentation": {}
     },
@@ -84,16 +144,52 @@
         "kind": 2,
         "importPath": "user_request",
         "description": "user_request",
-        "peekOfCode": "def enviar_archivo(filename=None):\n    global GLOBAL_RESPONSE\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")\n        return\n    if not filename:\n        filename = seleccionar_archivo()\n        if not filename:",
+        "peekOfCode": "def enviar_archivo(filename=None, streaming: bool = True):\n    global GLOBAL_RESPONSE, task_id\n    \"\"\"Envía el archivo seleccionado a la API.\"\"\"\n    config = cargar_configuracion()\n    if not config:\n        print(\"Archivo de configuración no encontrado.\")\n        return\n    if not filename:\n        filename = seleccionar_archivo()\n        if not filename:",
         "detail": "user_request",
         "documentation": {}
     },
     {
-        "label": "GLOBAL_RESPONSE",
-        "kind": 5,
+        "label": "pedir_parametros",
+        "kind": 2,
         "importPath": "user_request",
         "description": "user_request",
-        "peekOfCode": "GLOBAL_RESPONSE = None\ndef obtener_usuario():\n    \"\"\"Obtiene el nombre de usuario usando 'whoami'.\"\"\"\n    try:\n        resultado = subprocess.run(\n            [\"whoami\"], capture_output=True, text=True, check=True\n        )\n        return resultado.stdout.strip()\n    except subprocess.CalledProcessError:\n        return \"usuario_desconocido\"",
+        "peekOfCode": "def pedir_parametros():\n    print(\"\\n\" + Fore.CYAN + \"¡Hola! Por favor, introduce los siguientes parámetros:\\n\" + Style.RESET_ALL)\n    # Solicitar hostname\n    while True:\n        hostname = input(Fore.GREEN + \"Hostname: \" + Style.RESET_ALL)\n        if hostname:  # Comprobar que no esté vacío\n            break\n        print(Fore.RED + \"¡Error! Por favor, introduce un valor válido para el hostname.\" + Style.RESET_ALL)\n    # Solicitar host IP\n    while True:",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "manejar_ctrl_c",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def manejar_ctrl_c(signum, frame):\n    global terminal\n    terminal = False\n    print(\"Control + C presionado, enviando archivo...\")\n    hostname, host_ip, destination = pedir_parametros()\n    # crear una carpeta temporal\n    with tempfile.TemporaryDirectory() as temp_dir:\n        # crear un archivo temporal\n        \"\"\"\n        debug: stop_192.168.1.137",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "manejar_ctrl_d",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def manejar_ctrl_d():\n    print(\"Control + D presionado, enviando archivo...\")\ndef manejar_teclas(event):\n    if event.state == 4:  # 4 significa que la tecla Ctrl está presionada\n        if event.keysym == \"c\":\n            manejar_ctrl_c()\n        elif event.keysym == \"d\":\n            manejar_ctrl_d()\ndef by_terminal(stdscr):\n    # stdscr.clear()",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "manejar_teclas",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def manejar_teclas(event):\n    if event.state == 4:  # 4 significa que la tecla Ctrl está presionada\n        if event.keysym == \"c\":\n            manejar_ctrl_c()\n        elif event.keysym == \"d\":\n            manejar_ctrl_d()\ndef by_terminal(stdscr):\n    # stdscr.clear()\n    # stdscr.refresh()\n    print(",
+        "detail": "user_request",
+        "documentation": {}
+    },
+    {
+        "label": "by_terminal",
+        "kind": 2,
+        "importPath": "user_request",
+        "description": "user_request",
+        "peekOfCode": "def by_terminal(stdscr):\n    # stdscr.clear()\n    # stdscr.refresh()\n    print(\n        \"Presiona Ctrl+C para detener el entrenamiento remoto y continuarlo en otro worker\\n\"\n    )\n    print(\"Presiona Ctrl+D para detener el entrenamiento remoto sin continuarlo\\n\")\n    print(\"Presiona Ctrl+Z para salir de este programa.\\n\")\n    # Ejecución desde la línea de comandos con un path de archivo\n    filename = sys.argv[1]",
         "detail": "user_request",
         "documentation": {}
     }

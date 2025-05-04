@@ -21,8 +21,8 @@ with open(config_path, "r") as f:
 
 redis_config = cfg.get("redis", {})
 queue_manager = RedisQueueManager(
-    host=redis_config.get("REDIS_HOST"),
-    port=redis_config.get("REDIS_PORT"),
+    host="redis",
+    port=6379,
     db=redis_config.get("REDIS_DB"),
 )
 
