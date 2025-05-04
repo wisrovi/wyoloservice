@@ -3,9 +3,9 @@ import shutil
 import uuid
 
 import yaml
-from train_yolo import TrainingHistory, db
+from app.database import TrainingHistory, db
 
-from api.minio import download_model, list_models
+# from api.minio import download_model, list_models
 
 from fastapi import FastAPI, File, UploadFile
 from wredis.queue import RedisQueueManager
@@ -14,7 +14,7 @@ CONFIG_DIR = "/config_versions"
 os.makedirs(CONFIG_DIR, exist_ok=True)
 
 
-config_path = "/app/config.yaml"
+config_path = "/code/app/config.yaml"
 with open(config_path, "r") as f:
     cfg = yaml.safe_load(f)
 

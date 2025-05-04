@@ -4,7 +4,7 @@ version: "3.8"
 services:
   # api
   api_user:
-    image: wisrovi/wyoloservice_api:v1.0
+    image: wisrovi/wyoloservice_api
     restart: always
     ports:
       - "23450:8000"

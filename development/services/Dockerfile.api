@@ -16,6 +16,7 @@ WORKDIR /code
 COPY api/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
+
 WORKDIR /code/app
 COPY ./api /code/app
 COPY ./lib/train_yolo/database.py /code/app

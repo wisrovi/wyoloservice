@@ -7,7 +7,7 @@ create_network:
 
 config.py:
 	pip install customtkinter
-	curl -o config.py https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/config.py?token=GHSAT0AAAAAAC5G4WBVLLWNP4HLOJFAHW2K2AW42EQ
+	curl -o config.py https://raw.githubusercontent.com/wisrovi/wyoloservice/refs/heads/main/base/1%20control_server/config.py
 	python config.py
 
 docker-compose.files.yml:
