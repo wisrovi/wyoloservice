@@ -6,7 +6,7 @@ services:
     build:
       context: ./services
       dockerfile: Dockerfile.api
-    image: wisrovi/wyoloservice:api
+    image: wisrovi/wyoloservice_api:v1.0
     restart: always
     ports:
       - "23450:8000"

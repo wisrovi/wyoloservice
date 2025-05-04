@@ -31,7 +31,7 @@ app = FastAPI()
 
 
 @app.post("/train/")
-def start_training(user_code: str, file: UploadFile = File(...)):
+def start_training(user_code: str, file: UploadFile = File(...), resume: bool = False):
     """Registra un entrenamiento y lo encola en Redis."""
 
     task_id = str(uuid.uuid4()).replace("-", "").replace("_", "")
@@ -42,6 +42,17 @@ def start_training(user_code: str, file: UploadFile = File(...)):
 
     with open(config_path, "r") as f:
         user_config = yaml.safe_load(f)
+
+    # validar si resume esta presente
+    if resume:
+        user_config["train"]["resume"] = True
+
+    user_config["request_by"] = user_code
+    user_config["task_id"] = task_id
+
+    # actualizar el config_path en el archivo de configuracion original
+    with open(config_path, "w") as f:
+        yaml.dump(user_config, f)
 
     try:
         count = len(db.get_all())
