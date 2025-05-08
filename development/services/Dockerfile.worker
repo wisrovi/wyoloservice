@@ -120,6 +120,6 @@ RUN echo "alias train_service='python'" >> ~/.bashrc
 # Create the train_service script
 RUN echo '#!/bin/sh\nexec python "$@"' > /usr/local/bin/train_service && chmod +x /usr/local/bin/train_service
 
-
+ENV CONTROL_HOST=test
 
 CMD ["sh", "-c", "/usr/local/bin/mount-cifs.sh && train_service worker.py"]

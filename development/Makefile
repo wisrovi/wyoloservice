@@ -62,7 +62,7 @@ stop_services:
 	docker-compose -f docker-compose.services.yml down
 
 build_services:
-	docker-compose -f docker-compose.services.yml build
+	docker-compose -f docker-compose.services.yml  --env-file user.env  build
 
 into_worker:
 	docker-compose -f docker-compose.services.yml exec  worker bash

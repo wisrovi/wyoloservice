@@ -1,14 +1,17 @@
+import argparse
 import datetime
 import json
 import os
-import re
+import sys
 import tempfile
 import time
 import traceback
 from typing import List
+import uuid
 
 import hydra
 import mlflow
+import yaml
 
 # from logbook import FileHandler, Logger
 from loguru import logger
@@ -16,13 +19,6 @@ from omegaconf import OmegaConf
 
 # Cambiar el nombre del proceso
 from setproctitle import setproctitle
-from train_yolo.trainer_wrapper import obtener_info_gpu_json
-from wpipe.pipe import Pipeline
-from wredis.hash import RedisHashManager
-from wredis.queue import RedisQueueManager
-from wredis.sortedset import RedisSortedSetManager
-import yaml
-
 from states import (
     DEFAULT_CONFIG,
     Eda_calculate,
@@ -31,12 +27,15 @@ from states import (
     read_user_config,
     results_up_to_minio,
 )
+from train_yolo.trainer_wrapper import obtener_info_gpu_json
 from worker_utils import MinioS3Client, SharedResource, health
+from wpipe.pipe import Pipeline
+from wredis.queue import RedisQueueManager
 
 setproctitle("train_service")
 
 
-__VERSION__ = "v1.0.9"
+__VERSION__ = "v1.0.10"
 
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
@@ -63,6 +62,35 @@ pipeline.set_steps(
         (results_up_to_minio, "result_to_minio", "v1.0"),
     ]
 )
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(
+        description="Un script que recibe un argumento --config como string y un argumento --epochs como int"
+    )
+    parser.add_argument("--config", type=str, help="Ruta al archivo de configuración")
+    parser.add_argument(
+        "--epochs",
+        type=int,
+        default=2,
+        help="Número de épocas para el entrenamiento (default: 2)",
+    )
+    return parser.parse_known_args()  # Usa parse_known_args
+
+
+def remove_argparse_arguments(args):
+    # Elimina los argumentos de argparse de sys.argv
+    sys.argv = [sys.argv[0]]  # Mantén el nombre del script
+    for arg in args:
+        if arg.startswith("--config") or arg.startswith("--epochs"):
+            continue
+        sys.argv.append(arg)
+
+
+# Analiza los argumentos de argparse ANTES de inicializar Hydra
+args, unknown = parse_arguments()
+# Elimina los argumentos de argparse de sys.argv
+remove_argparse_arguments(unknown)
 
 
 @hydra.main(config_path="/app", config_name="config", version_base=None)
@@ -135,7 +163,7 @@ def main(cfg: OmegaConf):
                 params = "stop and continue in other worker"
                 metric = "stop and continue in other worker"
                 best_model_path = "stop and continue in other worker"
-            
+
             queue_manager.publish(
                 queue_name=results_queue,
                 data={
@@ -306,7 +334,7 @@ def main(cfg: OmegaConf):
         @queue_manager.on_message(f"stop_{WORKER_HOST_TOPIC}")
         def stop_worker(task_data: dict):
             logger.debug(f"Received data in stop, {task_data}")
-            
+
             user_request = task_data["config_path"]
             with open(user_request, "r") as file:
                 config = yaml.safe_load(file)
@@ -386,7 +414,9 @@ def main(cfg: OmegaConf):
                                 ),
                             },
                         )
-                        logger.warning(f"training '{task_id}' recreated for continue in '{destinity}' worker")
+                        logger.warning(
+                            f"training '{task_id}' recreated for continue in '{destinity}' worker"
+                        )
                     # stop the worker
                     os._exit(0)
                 else:
@@ -452,10 +482,69 @@ def main(cfg: OmegaConf):
 
     else:
         logger.info(f"Not activate public topic ({PUBLIC_TOPIC}) in DEBUG_MODE")
+    # El worker se inicia con el argumento --config y --epochs
 
-    health(__VERSION__)
-    queue_manager.start()
-    queue_manager.wait()
+    # el --config es un archivo de configuración
+    # que contiene la configuración del entrenamiento
+    # y se inicia el worker con esa configuración para el entrenamiento
+    # si no se pasa el argumento --config, se inicia el worker normalmente
+
+    # el --epochs es un argumento opcional
+    # que se usa para el entrenamiento
+    # y se inicia el worker con esa configuración para el entrenamiento
+    # si no se pasa el argumento --epochs, epoca por defecto es 2
+
+    if args.config:
+        config_path = args.config
+
+        # validar si el archivo existe
+        if not os.path.exists(config_path):
+            logger.error(f"El archivo de configuración no existe: {config_path}")
+            return
+        # validar si el archivo es un archivo yaml
+        if not config_path.endswith(".yaml"):
+            logger.error(
+                f"El archivo de configuración no es un archivo yaml: {config_path}"
+            )
+            return
+
+        # trabajar en una carpeta temporal
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Cargar la configuración desde el archivo
+            with open(config_path, "r") as file:
+                config = yaml.safe_load(file)
+                # validar si el config tiene la clave "train"
+                if "train" not in config:
+                    logger.error(
+                        f"El archivo de configuración no tiene la clave 'train': {config_path}"
+                    )
+                    return
+
+                config["train"]["epochs"] = args.epochs
+
+            # Guardar la configuración en un archivo temporal
+            config_path = os.path.join(temp_dir, "config.yaml")
+            with open(config_path, "w") as file:
+                yaml.dump(config, file)
+
+            logger.info(
+                f"Train config path: {args.config} in worker version {__VERSION__}"
+            )
+
+            task_data = {
+                "task_id": f'test_{str(uuid.uuid4()).replace("-", "")}',
+                "config_path": config_path,
+                "user_code": "test",
+                "db_count": 1,
+            }
+
+            results = process_requests(task_data)
+            complete_requests(results)
+    else:
+        # Si no se pasa el argumento --config, se inicia el worker normalmente
+        health(__VERSION__)
+        queue_manager.start()
+        queue_manager.wait()
 
 
 if __name__ == "__main__":

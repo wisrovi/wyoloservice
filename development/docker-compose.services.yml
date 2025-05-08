@@ -39,7 +39,7 @@ services:
       - control_host.env
       - user.env
     # restart: always
-    # command: tail -f /dev/null
+    command: tail -f /dev/null
     privileged: true
     volumes:
       - ./demo:/demo
@@ -56,6 +56,9 @@ services:
       timeout: 2s
       retries: 1
       start_period: 20s
+
+  # docker run --rm --gpus all -it --env-file control_host.env --shm-size="24g" --privileged wisrovi/wyoloservice_worker:v1.0.10 zsh
+  # docker run --rm --gpus all --env-file control_host.env --shm-size="24g" --privileged -it wisrovi/wyoloservice_worker:v1.0.10 ./train_service.sh --config /datasets/clasificacion/colorball.v8i.multiclass/config_train.yaml
 
 
 # Para crear la red y el servidor NFS
