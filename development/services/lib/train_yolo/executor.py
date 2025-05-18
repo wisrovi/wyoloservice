@@ -25,6 +25,7 @@ def ejecutar_comando(args: dict, trial_number: int, verbose=True, config_path=No
             host=redis_config.get("REDIS_HOST"),
             port=redis_config.get("REDIS_PORT"),
             db=redis_config.get("REDIS_DB"),
+            verbose=False
         )
 
     buffer = []  # Para almacenar toda la salida y parsear al final

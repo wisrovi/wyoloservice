@@ -33,13 +33,13 @@ services:
     build:
       context: ./services
       dockerfile: Dockerfile.worker
-    image: wisrovi/wyoloservice_worker:v1.0.10
+    image: wisrovi/wyoloservice_worker:v1.0.11
     container_name: worker_demo
     env_file:
       - control_host.env
       - user.env
     # restart: always
-    command: tail -f /dev/null
+    # command: tail -f /dev/null
     privileged: true
     volumes:
       - ./demo:/demo
