@@ -96,7 +96,10 @@ async def read_version():
     available = gpu_0_memoryTotal - (gpu_0_memoryTotal * NOT_TO_USE_GPU)
     gpu_0_memoryFree = min(available, gpu_0_memoryFree)
 
-    member_name = f'{metadata["WORKER_HOST"]} ({metadata["USER"]})'
+    worker_ip = metadata["WORKER_HOST"]
+    worker_hostname = metadata["USER"]
+    concurrent_train = os.environ.get("NUM_CURRENT_TRAIN", 1)
+    member_name = f'{worker_ip} ({worker_hostname}-[{concurrent_train}])'
     if os.environ.get("debug", None):
         member_name += "[debug]"
     member_name += f" -> {app_version}"

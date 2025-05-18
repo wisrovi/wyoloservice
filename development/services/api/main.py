@@ -30,6 +30,66 @@ queue_manager = RedisQueueManager(
 app = FastAPI()
 
 
+@app.post("/recreate/")
+def recreate(
+    user_code: str,
+    task_id: str,
+    last_model: str,
+    file: UploadFile = File(...),
+    resume: bool = True,
+    destinity: str = "recreate",
+):
+    config_path = os.path.join(CONFIG_DIR, f"{task_id}.yaml")
+    with open(config_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    with open(config_path, "r") as f:
+        user_config = yaml.safe_load(f)
+
+    # validar si resume esta presente
+    user_config["train"]["resume"] = True
+
+    user_config["request_by"] = user_code
+    user_config["task_id"] = task_id
+
+    # esto fuerza el sistema a que use el modelo entregado y reportado como last_model
+    user_config["sweeper"]["model"] = ["choice", last_model]
+    user_config["model"] = last_model
+    user_config["recreate"] = True
+
+    # actualizar el config_path en el archivo de configuracion original
+    with open(config_path, "w") as f:
+        yaml.dump(user_config, f)
+
+    # Insertar un nuevo usuario con el nuevo campo
+    db.insert(
+        TrainingHistory(
+            id=count + 1,
+            task_id=task_id,
+            status="pending",
+            user_code=user_code,
+            config_path=config_path,
+        )
+    )
+
+    try:
+        count = len(db.get_all())
+    except Exception:
+        count = 0
+
+    queue_manager.publish(
+        queue_name=destinity,
+        data={
+            "task_id": task_id,
+            "config_path": config_path,
+            "user_code": user_code,
+            "db_count": count + 1,
+        },
+    )
+
+    return {"message": "Entrenamiento registrado", "task_id": task_id}
+
+
 @app.post("/train/")
 def start_training(user_code: str, file: UploadFile = File(...), resume: bool = False):
     """Registra un entrenamiento y lo encola en Redis."""

@@ -24,7 +24,7 @@ sudo docker push wisrovi/wyoloservice_api:latest
 
 
 
-VERSION=v1.0.6
+VERSION=v1.0.10
 
 # para el worker
 sudo docker push wisrovi/wyoloservice_worker:$VERSION

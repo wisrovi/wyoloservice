@@ -116,7 +116,7 @@ class OptunaOptimize:
                         yaml.dump(config, yaml_file)
 
                     # borrar
-                    OptunaOptimize.DEBUG_MODE = False
+                    OptunaOptimize.DEBUG_MODE = True
 
                     task_id = config.get("task_id")
                     stop_training_file = f"/config/stop_training_{task_id}.txt"

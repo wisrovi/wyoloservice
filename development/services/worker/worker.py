@@ -11,7 +11,14 @@ import uuid
 
 import hydra
 import mlflow
+import requests
 import yaml
+
+# para informacion inicial
+from rich.console import Console
+from rich.table import Table
+from rich.panel import Panel
+from rich.text import Text
 
 # from logbook import FileHandler, Logger
 from loguru import logger
@@ -31,11 +38,14 @@ from train_yolo.trainer_wrapper import obtener_info_gpu_json
 from worker_utils import MinioS3Client, SharedResource, health
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
+from wredis.hash import RedisHashManager
 
 setproctitle("train_service")
 
+console = Console()
 
-__VERSION__ = "v1.0.10"
+
+__VERSION__ = "v1.0.11"
 
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
@@ -109,7 +119,6 @@ def main(cfg: OmegaConf):
     cfg.redis.REDIS_HOST = cfg.redis.REDIS_HOST.replace("localhost", CONTROL_HOST)
 
     mlflow.set_tracking_uri(cfg.mlflow.MLFLOW_TRACKING_URI)
-    logger.info(f"__VERSION__: {__VERSION__}")
 
     # convertir a dict
     cfg = OmegaConf.to_container(cfg, resolve=True)
@@ -140,6 +149,13 @@ def main(cfg: OmegaConf):
         db=redis_config.get("REDIS_DB"),
         verbose=False,
     )
+    
+    hash_manager = RedisHashManager(
+        host=redis_config.get("REDIS_HOST"),
+        port=redis_config.get("REDIS_PORT"),
+        db=redis_config.get("REDIS_DB"),
+        verbose=False,
+    )
 
     DEBUG_MODE = os.environ.get("debug", None)
     PUBLIC_TOPIC = redis_config.get("TOPIC")
@@ -148,10 +164,24 @@ def main(cfg: OmegaConf):
 
     results_queue = redis_config.get("RESULT_TOPIC", redis_config.get("TOPIC"))
 
-    logger.info(f"Results queue: {results_queue}")
-    logger.info(f"Debug mode: {DEBUG_MODE}")
+    info_data = {
+        "VERSION": __VERSION__,
+        "Results queue": results_queue,
+        "Debug mode": "True" if DEBUG_MODE else "False",
+    }
 
-    shared_resource = SharedResource()
+    info_data_private = {
+        "CONTROL_HOST": CONTROL_HOST,
+        "CIFS_USER": os.getenv("CIFS_USER", "mlflow"),
+        "CIFS_PASS": os.getenv("CIFS_PASS", "wyoloservice"),
+        "NUM_CURRENT_TRAIN": os.getenv("NUM_CURRENT_TRAIN", "1"),
+        "MAX_GPU": os.getenv("MAX_GPU", "60"),
+    }
+
+    private_topics = []
+    public_topics = []
+
+    shared_resource = SharedResource(hash_manager)
 
     def complete_requests(results):
         try:
@@ -291,7 +321,7 @@ def main(cfg: OmegaConf):
 
     # MODE ADMIN (for sleep), only is active when not is in DEBUG_MODE
     if DEBUG_MODE is None:
-        logger.info(f"Activate admin topic: admin_{WORKER_HOST_TOPIC}")
+        private_topics.append(f"admin_{WORKER_HOST_TOPIC}")
 
         @queue_manager.on_message(f"admin_{WORKER_HOST_TOPIC}")
         def admin_worker(task_data: dict):
@@ -329,7 +359,7 @@ def main(cfg: OmegaConf):
 
     # MODE STOP (for emergency stop), only is active when not is in DEBUG_MODE
     if DEBUG_MODE is None:
-        logger.info(f"Activate stop topic: stop_{WORKER_HOST_TOPIC}")
+        private_topics.append(f"stop_{WORKER_HOST_TOPIC}")
 
         @queue_manager.on_message(f"stop_{WORKER_HOST_TOPIC}")
         def stop_worker(task_data: dict):
@@ -360,6 +390,7 @@ def main(cfg: OmegaConf):
                         # save metadata in the file in json format
                         metadata_json = json.dumps(metadata)
                         f.write(metadata_json)
+
                     # this file is used to stop the training process
                     # and the worker will stop when the training is finished
                     # and the file is removed
@@ -385,35 +416,46 @@ def main(cfg: OmegaConf):
                         },
                     )
                     if destinity:
+                        # To make the process easier, a message is sent to the API,
+                        # indicating the task_id, the path of the last model and the path of the original configuration file.
                         if not isinstance(destinity, str):
                             destinity = PUBLIC_TOPIC
 
-                        # publish the stop message to the queue for notification to the admin in the control
-                        # and to the worker
-                        # to stop the training process
-                        # and the worker will stop when the training is finished
-                        # and the file is removed
-                        queue_manager.publish(
-                            queue_name=destinity,
-                            data={
-                                "stop": metadata,
-                                "task_id": task_id,
-                                "config_path": f"/config_versions/{task_id}.yaml",
-                                "user_code": task_data["user_code"],
-                                "origin": {
-                                    "worker": WORKER_HOST_TOPIC,
-                                    "worker_host": CONTROL_HOST,
-                                    "user": USER_TOPIC,
-                                },
-                                #
-                                "status": "recreate",
-                                "message": f"Worker {WORKER_HOST_TOPIC} stopped",
-                                "error": None,
-                                "datetime": datetime.datetime.now().strftime(
-                                    "%Y-%m-%d %H:%M:%S"
-                                ),
-                            },
+                        last_user = task_data["user_code"]
+                        train_config = f"/config_versions/{task_id}.yaml"
+
+                        originl_dataset_path = config["train"]["data"]
+                        last_model = f"{originl_dataset_path}weights/last.pt"
+
+                        files = {
+                            "file": (
+                                "config_train.yaml",
+                                open(train_config, "rb"),
+                                "application/x-yaml",
+                            )
+                        }
+                        headers = {"accept": "application/json"}
+                        params = {
+                            "user_code": last_user,
+                            "resume": True,
+                            "task_id": task_id,
+                            "last_model": last_model,
+                            "destinity": destinity,
+                        }
+                        url = f"http://{CONTROL_HOST}:23450/recreate/"
+                        response = requests.post(
+                            url, params=params, headers=headers, files=files
                         )
+
+                        if response.status_code == 200:
+                            logger.info(
+                                f"Recreate request sent to {destinity} worker: {response.json()}"
+                            )
+                        else:
+                            logger.error(
+                                f"Error sending recreate request to {destinity} worker: {response.status_code}, {response.text}"
+                            )
+
                         logger.warning(
                             f"training '{task_id}' recreated for continue in '{destinity}' worker"
                         )
@@ -435,7 +477,7 @@ def main(cfg: OmegaConf):
                     )
 
     if USER_TOPIC:
-        logger.info(f"Activate Private topic: {USER_TOPIC}")
+        private_topics.append(USER_TOPIC)
 
         @queue_manager.on_message(USER_TOPIC)
         def private_worker(task_data: dict):
@@ -450,7 +492,7 @@ def main(cfg: OmegaConf):
                 complete_requests(results)
 
     if WORKER_HOST_TOPIC:
-        logger.info(f"Activate worker topic: {WORKER_HOST_TOPIC}")
+        private_topics.append(WORKER_HOST_TOPIC)
 
         @queue_manager.on_message(WORKER_HOST_TOPIC)
         def private_worker_2(task_data: dict):
@@ -466,7 +508,7 @@ def main(cfg: OmegaConf):
 
     # NOTA: cuando se levanta el worker en modo debug, no funciona la cola "PUBLIC_TOPIC"
     if DEBUG_MODE is None:
-        logger.info(f"Activate public topic: {PUBLIC_TOPIC}")
+        public_topics.append(PUBLIC_TOPIC)
 
         @queue_manager.on_message(PUBLIC_TOPIC)
         def public_worker(task_data: dict):
@@ -481,6 +523,7 @@ def main(cfg: OmegaConf):
                 complete_requests(results)
 
     else:
+        public_topics.append("-")
         logger.info(f"Not activate public topic ({PUBLIC_TOPIC}) in DEBUG_MODE")
     # El worker se inicia con el argumento --config y --epochs
 
@@ -493,6 +536,54 @@ def main(cfg: OmegaConf):
     # que se usa para el entrenamiento
     # y se inicia el worker con esa configuración para el entrenamiento
     # si no se pasa el argumento --epochs, epoca por defecto es 2
+
+    # Tabla para la información principal
+    table_info = Table(
+        title="Información Inicial", show_header=True, header_style="bold magenta"
+    )
+    table_info.add_column("Campo", style="cyan")
+    table_info.add_column("Valor", style="green")
+
+    for key, value in info_data.items():
+        table_info.add_row(key, value)
+
+    table_info_private = Table(
+        title="Información Privada", show_header=True, header_style="bold magenta"
+    )
+    table_info_private.add_column("Campo", style="cyan")
+    table_info_private.add_column("Valor", style="green")
+    for key, value in info_data_private.items():
+        table_info_private.add_row(key, value)
+
+    # Tabla para tópicos privados
+    table_private = Table(
+        title="🔐 Tópicos Privados", show_header=False, border_style="red"
+    )
+    table_private.add_column("Nombre del tópico", style="yellow")
+    for topic in private_topics:
+        table_private.add_row(topic)
+
+    # Tabla para tópicos públicos
+    table_public = Table(
+        title="🌍 Tópicos Públicos", show_header=False, border_style="blue"
+    )
+    table_public.add_column("Nombre del tópico", style="green")
+    for topic in public_topics:
+        table_public.add_row(topic)
+
+    # Mostrar todo en consola
+    for _ in range(5):
+        console.print()
+
+    console.print(table_info)
+    console.print(table_info_private)
+    console.print()
+    console.print(table_private)
+    console.print()
+    console.print(table_public)
+    console.print(
+        "[bold green]✅ Health check started with version v1.0.10[/bold green]"
+    )
 
     if args.config:
         config_path = args.config

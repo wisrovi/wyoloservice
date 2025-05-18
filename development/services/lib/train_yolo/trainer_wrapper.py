@@ -393,11 +393,12 @@ class TrainerWrapper:
 
                 # Log the artifacts
                 try:
-                    mlflow.log_artifacts(
+                    current_training_path = (
                         self.config["train"]["project"]
                         + "train_"
                         + self.config["task_id"]
                     )
+                    mlflow.log_artifacts(current_training_path)
                 except:
                     pass
 
@@ -406,44 +407,22 @@ class TrainerWrapper:
                 # to
                 # self.config["train"]{"data"} + "weights/last.pt"
                 try:
+                    originl_dataset_path = self.config["train"]["data"]
                     os.makedirs(
                         os.path.join(
-                            self.config["train"]["data"],
+                            originl_dataset_path,
                             "weights",
                         ),
                         exist_ok=True,
                     )
                     os.system(
-                        f"cp {self.config['train']['project']}train_{self.config['task_id']}/weights/last.pt {self.config['train']['data']}weights/last.pt"
+                        f"cp {self.config['train']['project']}train_{self.config['task_id']}/weights/last.pt {originl_dataset_path}weights/last.pt"
                     )
                 except:
                     logger.error(
                         f"Error al copiar el modelo final a {self.config['train']['data']}weights/last.pt"
                     )
 
-                # modify the f"/config_versions/{task_id}.yaml" in "model" and put the path of the last.pt
-                config_path = f"/config_versions/{task_id}.yaml"
-                if os.path.exists(config_path):
-                    with open(config_path, "r") as file:
-                        config = yaml.safe_load(file)
-
-                    # Update the model path
-                    config["model"] = os.path.join(
-                        self.config["train"]["data"], "weights", "last.pt"
-                    )
-
-                    # add resume=True in config["train"]
-                    if "train" in config:
-                        config["train"]["resume"] = True
-                    # Save the updated config
-
-                    try:
-                        # TODO: no deja guardar el archivo por lo que se rompe la ejecucion, quizas en la api cuando se cree toque guardarlo y luego darle permisos 777 al archivo, hay que ver
-                        os.remove(config_path)
-                        with open(config_path, "w") as file:
-                            yaml.dump(config, file)
-                    except Exception as e:
-                        print(e)
                 # Log the final model
                 mlflow.log_artifact(
                     os.path.join(

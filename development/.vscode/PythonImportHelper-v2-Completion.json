@@ -46,74 +46,18 @@
     },
     {
         "label": "TrainingHistory",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
+        "importPath": "app.database",
+        "description": "app.database",
         "isExtraImport": true,
-        "detail": "train_yolo",
+        "detail": "app.database",
         "documentation": {}
     },
     {
         "label": "db",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
+        "importPath": "app.database",
+        "description": "app.database",
         "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "TrainingHistory",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "db",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "train",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "train_run",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "train",
-        "importPath": "train_yolo",
-        "description": "train_yolo",
-        "isExtraImport": true,
-        "detail": "train_yolo",
-        "documentation": {}
-    },
-    {
-        "label": "download_model",
-        "importPath": "api.minio",
-        "description": "api.minio",
-        "isExtraImport": true,
-        "detail": "api.minio",
-        "documentation": {}
-    },
-    {
-        "label": "list_models",
-        "importPath": "api.minio",
-        "description": "api.minio",
-        "isExtraImport": true,
-        "detail": "api.minio",
+        "detail": "app.database",
         "documentation": {}
     },
     {
@@ -624,6 +568,14 @@
         "documentation": {}
     },
     {
+        "label": "RedisHashManager",
+        "importPath": "wredis.hash",
+        "description": "wredis.hash",
+        "isExtraImport": true,
+        "detail": "wredis.hash",
+        "documentation": {}
+    },
+    {
         "label": "click",
         "kind": 6,
         "isExtraImport": true,
@@ -738,6 +690,46 @@
         "importPath": "numpy",
         "description": "numpy",
         "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "TrainingHistory",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "db",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train_run",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
+        "documentation": {}
+    },
+    {
+        "label": "train",
+        "importPath": "train_yolo",
+        "description": "train_yolo",
+        "isExtraImport": true,
+        "detail": "train_yolo",
         "documentation": {}
     },
     {
@@ -898,14 +890,6 @@
         "documentation": {}
     },
     {
-        "label": "RedisSortedSetManager",
-        "importPath": "wredis.sortedset",
-        "description": "wredis.sortedset",
-        "isExtraImport": true,
-        "detail": "wredis.sortedset",
-        "documentation": {}
-    },
-    {
         "label": "ejecutar_en_hilo",
         "importPath": "worker_utils.decorators",
         "description": "worker_utils.decorators",
@@ -1050,6 +1034,79 @@
         "documentation": {}
     },
     {
+        "label": "Console",
+        "importPath": "rich.console",
+        "description": "rich.console",
+        "isExtraImport": true,
+        "detail": "rich.console",
+        "documentation": {}
+    },
+    {
+        "label": "Console",
+        "importPath": "rich.console",
+        "description": "rich.console",
+        "isExtraImport": true,
+        "detail": "rich.console",
+        "documentation": {}
+    },
+    {
+        "label": "Table",
+        "importPath": "rich.table",
+        "description": "rich.table",
+        "isExtraImport": true,
+        "detail": "rich.table",
+        "documentation": {}
+    },
+    {
+        "label": "Table",
+        "importPath": "rich.table",
+        "description": "rich.table",
+        "isExtraImport": true,
+        "detail": "rich.table",
+        "documentation": {}
+    },
+    {
+        "label": "Panel",
+        "importPath": "rich.panel",
+        "description": "rich.panel",
+        "isExtraImport": true,
+        "detail": "rich.panel",
+        "documentation": {}
+    },
+    {
+        "label": "Panel",
+        "importPath": "rich.panel",
+        "description": "rich.panel",
+        "isExtraImport": true,
+        "detail": "rich.panel",
+        "documentation": {}
+    },
+    {
+        "label": "Text",
+        "importPath": "rich.text",
+        "description": "rich.text",
+        "isExtraImport": true,
+        "detail": "rich.text",
+        "documentation": {}
+    },
+    {
+        "label": "Text",
+        "importPath": "rich.text",
+        "description": "rich.text",
+        "isExtraImport": true,
+        "detail": "rich.text",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
+        "documentation": {}
+    },
+    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
@@ -1059,11 +1116,12 @@
         "documentation": {}
     },
     {
-        "label": "Pipeline",
-        "importPath": "wpipe.pipe",
-        "description": "wpipe.pipe",
+        "label": "requests",
+        "kind": 6,
         "isExtraImport": true,
-        "detail": "wpipe.pipe",
+        "importPath": "requests",
+        "description": "requests",
+        "detail": "requests",
         "documentation": {}
     },
     {
@@ -1115,6 +1173,14 @@
         "documentation": {}
     },
     {
+        "label": "Pipeline",
+        "importPath": "wpipe.pipe",
+        "description": "wpipe.pipe",
+        "isExtraImport": true,
+        "detail": "wpipe.pipe",
+        "documentation": {}
+    },
+    {
         "label": "artifacts",
         "kind": 5,
         "importPath": "enviroment.artifacts_valid",
@@ -1124,11 +1190,20 @@
         "documentation": {}
     },
     {
+        "label": "recreate",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def recreate(\n    user_code: str,\n    task_id: str,\n    last_model: str,\n    file: UploadFile = File(...),\n    resume: bool = True,\n    destinity: str = \"recreate\",\n):\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
         "label": "start_training",
         "kind": 2,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    with open(config_path, \"r\") as f:\n        user_config = yaml.safe_load(f)\n    try:\n        count = len(db.get_all())",
+        "peekOfCode": "def start_training(user_code: str, file: UploadFile = File(...), resume: bool = False):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    with open(config_path, \"r\") as f:\n        user_config = yaml.safe_load(f)\n    # validar si resume esta presente\n    if resume:",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1137,7 +1212,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\nconfig_path = \"/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),",
+        "peekOfCode": "CONFIG_DIR = \"/config_versions\"\nos.makedirs(CONFIG_DIR, exist_ok=True)\nconfig_path = \"/code/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=redis_config.get(\"REDIS_DB\"),",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1146,7 +1221,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "config_path = \"/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()",
+        "peekOfCode": "config_path = \"/code/app/config.yaml\"\nwith open(config_path, \"r\") as f:\n    cfg = yaml.safe_load(f)\nredis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1155,7 +1230,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "redis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"",
+        "peekOfCode": "redis_config = cfg.get(\"redis\", {})\nqueue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()\n@app.post(\"/recreate/\")\ndef recreate(\n    user_code: str,",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1164,7 +1239,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "queue_manager = RedisQueueManager(\n    host=redis_config.get(\"REDIS_HOST\"),\n    port=redis_config.get(\"REDIS_PORT\"),\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")",
+        "peekOfCode": "queue_manager = RedisQueueManager(\n    host=\"redis\",\n    port=6379,\n    db=redis_config.get(\"REDIS_DB\"),\n)\napp = FastAPI()\n@app.post(\"/recreate/\")\ndef recreate(\n    user_code: str,\n    task_id: str,",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1173,7 +1248,7 @@
         "kind": 5,
         "importPath": "services.api.main",
         "description": "services.api.main",
-        "peekOfCode": "app = FastAPI()\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:\n        shutil.copyfileobj(file.file, buffer)\n    with open(config_path, \"r\") as f:\n        user_config = yaml.safe_load(f)",
+        "peekOfCode": "app = FastAPI()\n@app.post(\"/recreate/\")\ndef recreate(\n    user_code: str,\n    task_id: str,\n    last_model: str,\n    file: UploadFile = File(...),\n    resume: bool = True,\n    destinity: str = \"recreate\",\n):",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1461,7 +1536,7 @@
         "kind": 2,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "def health(version: str = \"v1.0\"):\n    \"\"\"\n    Función para iniciar el servicio de salud.\n    Args:\n        version (str): Versión de la API.\n    \"\"\"\n    global app_version, hash_manager, sorted_set_manager\n    app_version = version\n    with open(\"/config/config.yaml\", \"r\") as f:\n        config = f.read()",
+        "peekOfCode": "def health(version: str):\n    \"\"\"\n    Función para iniciar el servicio de salud.\n    Args:\n        version (str): Versión de la API.\n    \"\"\"\n    global app_version, hash_manager, sorted_set_manager\n    app_version = version\n    with open(\"/config/config.yaml\", \"r\") as f:\n        config = f.read()",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1470,7 +1545,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "app = FastAPI()\napp_version = \"v1.0\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():",
+        "peekOfCode": "app = FastAPI()\napp_version = \"v1.0\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1479,7 +1554,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "app_version = \"v1.0\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager",
+        "peekOfCode": "app_version = \"v1.0\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1488,7 +1563,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "CONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager",
+        "peekOfCode": "CONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1497,7 +1572,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "DEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager\n    \"\"\"Devuelve la versión de la API.\"\"\"\n    metadata = {\n        other_metadata: os.environ.get(other_metadata, None)",
+        "peekOfCode": "DEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.get(\"/\")",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1506,7 +1581,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager\n    \"\"\"Devuelve la versión de la API.\"\"\"\n    metadata = {\n        other_metadata: os.environ.get(other_metadata, None)\n        for other_metadata in TrainerWrapper.worker_metadata",
+        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.get(\"/\")\nasync def read_version():",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1515,7 +1590,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "sorted_set_manager = None\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager\n    global sorted_set_manager\n    \"\"\"Devuelve la versión de la API.\"\"\"\n    metadata = {\n        other_metadata: os.environ.get(other_metadata, None)\n        for other_metadata in TrainerWrapper.worker_metadata\n    }",
+        "peekOfCode": "sorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1551,7 +1626,7 @@
         "kind": 6,
         "importPath": "services.worker.worker_utils.semaphore",
         "description": "services.worker.worker_utils.semaphore",
-        "peekOfCode": "class SharedResource:\n    def __init__(self):\n        # Initialized to 1, acts like a lock\n        NUM_CURRENT_TRAIN = max(int(os.environ.get(\"NUM_CURRENT_TRAIN\", 1)), 1)\n        self.semaphore = threading.Semaphore(NUM_CURRENT_TRAIN)\n        self.resource_available = True\n        self.end_time = 0\n        self.start_time = 0\n    def elapsedtime(self):\n        return self.end_time - self.start_time",
+        "peekOfCode": "class SharedResource:\n    def __init__(self, hash_manager: RedisHashManager = None):\n        # Initialized to 1, acts like a lock\n        NUM_CURRENT_TRAIN = max(int(os.environ.get(\"NUM_CURRENT_TRAIN\", 1)), 1)\n        self.semaphore = threading.Semaphore(NUM_CURRENT_TRAIN)\n        self.resource_available = True\n        self.end_time = 0\n        self.start_time = 0\n        self.hash_manager = hash_manager\n    def elapsedtime(self):",
         "detail": "services.worker.worker_utils.semaphore",
         "documentation": {}
     },
@@ -1718,6 +1793,78 @@
         "documentation": {}
     },
     {
+        "label": "console",
+        "kind": 5,
+        "importPath": "services.worker.test_info",
+        "description": "services.worker.test_info",
+        "peekOfCode": "console = Console()\n# Datos del log parseados manualmente (puedes automatizar esto si lees desde archivo)\ninfo_data = {\n    \"__VERSION__\": \"v1.0.10\",\n    \"Results queue\": \"results_queue\",\n    \"Debug mode\": \"None\"\n}\ntopics_list = [\n    \"admin_192.168.1.137\",\n    \"stop_192.168.1.137\",",
+        "detail": "services.worker.test_info",
+        "documentation": {}
+    },
+    {
+        "label": "info_data",
+        "kind": 5,
+        "importPath": "services.worker.test_info",
+        "description": "services.worker.test_info",
+        "peekOfCode": "info_data = {\n    \"__VERSION__\": \"v1.0.10\",\n    \"Results queue\": \"results_queue\",\n    \"Debug mode\": \"None\"\n}\ntopics_list = [\n    \"admin_192.168.1.137\",\n    \"stop_192.168.1.137\",\n    \"wisrovi\",\n    \"192.168.1.137\",",
+        "detail": "services.worker.test_info",
+        "documentation": {}
+    },
+    {
+        "label": "topics_list",
+        "kind": 5,
+        "importPath": "services.worker.test_info",
+        "description": "services.worker.test_info",
+        "peekOfCode": "topics_list = [\n    \"admin_192.168.1.137\",\n    \"stop_192.168.1.137\",\n    \"wisrovi\",\n    \"192.168.1.137\",\n    \"training_queue\"\n]\n# Tabla para la información principal\ntable_info = Table(title=\"Información Inicial\", show_header=True, header_style=\"bold magenta\")\ntable_info.add_column(\"Campo\", style=\"cyan\")",
+        "detail": "services.worker.test_info",
+        "documentation": {}
+    },
+    {
+        "label": "table_info",
+        "kind": 5,
+        "importPath": "services.worker.test_info",
+        "description": "services.worker.test_info",
+        "peekOfCode": "table_info = Table(title=\"Información Inicial\", show_header=True, header_style=\"bold magenta\")\ntable_info.add_column(\"Campo\", style=\"cyan\")\ntable_info.add_column(\"Valor\", style=\"green\")\nfor key, value in info_data.items():\n    table_info.add_row(key, value)\n# Panel con los tópicos como lista\ntopics_text = Text(\"\\n\".join(f\"• {topic}\" for topic in topics_list), style=\"yellow\")\npanel_topics = Panel(topics_text, title=\"Tópicos Activados\", border_style=\"blue\")\n# Mostrar todo en consola\nconsole.print(table_info)",
+        "detail": "services.worker.test_info",
+        "documentation": {}
+    },
+    {
+        "label": "topics_text",
+        "kind": 5,
+        "importPath": "services.worker.test_info",
+        "description": "services.worker.test_info",
+        "peekOfCode": "topics_text = Text(\"\\n\".join(f\"• {topic}\" for topic in topics_list), style=\"yellow\")\npanel_topics = Panel(topics_text, title=\"Tópicos Activados\", border_style=\"blue\")\n# Mostrar todo en consola\nconsole.print(table_info)\nconsole.print(panel_topics)\nconsole.print(\"[bold green]✅ Health check started with version v1.0.10[/bold green]\")",
+        "detail": "services.worker.test_info",
+        "documentation": {}
+    },
+    {
+        "label": "panel_topics",
+        "kind": 5,
+        "importPath": "services.worker.test_info",
+        "description": "services.worker.test_info",
+        "peekOfCode": "panel_topics = Panel(topics_text, title=\"Tópicos Activados\", border_style=\"blue\")\n# Mostrar todo en consola\nconsole.print(table_info)\nconsole.print(panel_topics)\nconsole.print(\"[bold green]✅ Health check started with version v1.0.10[/bold green]\")",
+        "detail": "services.worker.test_info",
+        "documentation": {}
+    },
+    {
+        "label": "parse_arguments",
+        "kind": 2,
+        "importPath": "services.worker.worker",
+        "description": "services.worker.worker",
+        "peekOfCode": "def parse_arguments():\n    parser = argparse.ArgumentParser(\n        description=\"Un script que recibe un argumento --config como string y un argumento --epochs como int\"\n    )\n    parser.add_argument(\"--config\", type=str, help=\"Ruta al archivo de configuración\")\n    parser.add_argument(\n        \"--epochs\",\n        type=int,\n        default=2,\n        help=\"Número de épocas para el entrenamiento (default: 2)\",",
+        "detail": "services.worker.worker",
+        "documentation": {}
+    },
+    {
+        "label": "remove_argparse_arguments",
+        "kind": 2,
+        "importPath": "services.worker.worker",
+        "description": "services.worker.worker",
+        "peekOfCode": "def remove_argparse_arguments(args):\n    # Elimina los argumentos de argparse de sys.argv\n    sys.argv = [sys.argv[0]]  # Mantén el nombre del script\n    for arg in args:\n        if arg.startswith(\"--config\") or arg.startswith(\"--epochs\"):\n            continue\n        sys.argv.append(arg)\n# Analiza los argumentos de argparse ANTES de inicializar Hydra\nargs, unknown = parse_arguments()\n# Elimina los argumentos de argparse de sys.argv",
+        "detail": "services.worker.worker",
+        "documentation": {}
+    },
+    {
         "label": "main",
         "kind": 2,
         "importPath": "services.worker.worker",
@@ -1727,11 +1874,20 @@
         "documentation": {}
     },
     {
+        "label": "console",
+        "kind": 5,
+        "importPath": "services.worker.worker",
+        "description": "services.worker.worker",
+        "peekOfCode": "console = Console()\n__VERSION__ = \"v1.0.11\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)",
+        "detail": "services.worker.worker",
+        "documentation": {}
+    },
+    {
         "label": "__VERSION__",
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "__VERSION__ = \"v1.0.8\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()",
+        "peekOfCode": "__VERSION__ = \"v1.0.11\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()",
         "detail": "services.worker.worker",
         "documentation": {}
     },
