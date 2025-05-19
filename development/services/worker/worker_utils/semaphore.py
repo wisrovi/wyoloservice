@@ -63,7 +63,9 @@ class SharedResource:
             )
 
             # ------------------------------------
-            key_worker = f"train_started:worker:{year_month_day}"
+            worker_host = os.environ.get("WORKER_HOST", None)
+            worker_user = os.environ.get("USER", None)
+            key_worker = f"train_started:worker:{worker_host}_{worker_user}:{year_month_day}"
             worker_info = {
                 "experiment_name": experiment_name,
                 "user_code": user_code,
