@@ -53,6 +53,10 @@ def validate_yolo_dataset(data_yaml: str | Path, model_path: str | Path = 'yolov
         Callable: The actual decorator that wraps the main function.
     """
     # Ensure paths are Path objects for consistent handling
+    if not data_yaml:
+        raise ValueError("data_yaml parameter cannot be None or empty")
+    if not model_path:
+        raise ValueError("model_path parameter cannot be None or empty")
     _data_yaml_path = Path(data_yaml)
     _model_path_obj = Path(model_path)
 
