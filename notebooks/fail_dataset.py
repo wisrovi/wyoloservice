@@ -61,7 +61,11 @@ def validate_yolo_dataset(data_yaml: str | Path, model_path: str | Path = 'yolov
     _model_path_obj = Path(model_path)
 
     # Set the logging level for this specific logger instance
-    logger.level(log_level.upper())
+    valid_log_levels = ["TRACE", "DEBUG", "INFO", "SUCCESS", "WARNING", "ERROR", "CRITICAL"]
+    normalized_level = log_level.upper()
+    if normalized_level not in valid_log_levels:
+        raise ValueError(f"Invalid log_level: {log_level}. Must be one of {valid_log_levels}")
+    logger.level(normalized_level)
 
     def decorator(func):
         @wraps(func)
