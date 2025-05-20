@@ -75,8 +75,9 @@ def validate_yolo_dataset(data_yaml: str | Path, model_path: str | Path = 'yolov
             # --- 1. Early Argument and Path Validation ---
             try:
                 if not _data_yaml_path.exists():
-                    raise DatasetNotFoundError(
-                        f"The dataset configuration file was NOT found at: '{_data_yaml_path}'."
+                    # Check for model file existence unless it's a known Ultralytics pre-trained model
+                    is_ultralytics_pretrained = any(str(_model_path_obj).startswith(prefix) and str(_model_path_obj).endswith('.pt') 
+                                                   for prefix in ['yolov8', 'yolov5', 'yolov3', 'yolov9'])
                     )
                 
                 # Check for model file existence unless it's a known Ultralytics pre-trained model
