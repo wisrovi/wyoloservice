@@ -57,6 +57,11 @@ def validate_yolo_dataset(data_yaml: str | Path, model_path: str | Path = 'yolov
         raise ValueError("data_yaml parameter cannot be None or empty")
     if not model_path:
         raise ValueError("model_path parameter cannot be None or empty")
+    try:
+        _data_yaml_path = Path(data_yaml)
+        _model_path_obj = Path(model_path)
+    except TypeError:
+        raise ValueError("data_yaml and model_path must be convertible to Path objects")
     _data_yaml_path = Path(data_yaml)
     _model_path_obj = Path(model_path)
 
