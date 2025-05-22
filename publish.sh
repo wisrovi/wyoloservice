@@ -18,8 +18,9 @@ sudo docker push wisrovi/wyoloservice:user
 
 
 # para la api
-sudo docker push wisrovi/wyoloservice_api:v1.0
-sudo docker tag wisrovi/wyoloservice_api:v1.0 wisrovi/wyoloservice_api:latest
+make build_env 
+sudo docker push wisrovi/wyoloservice_api:v1.1.0
+sudo docker tag wisrovi/wyoloservice_api:v1.1.0 wisrovi/wyoloservice_api:latest
 sudo docker push wisrovi/wyoloservice_api:latest
 
 
@@ -27,10 +28,9 @@ sudo docker push wisrovi/wyoloservice_api:latest
 VERSION=v1.0.11
 
 # para el worker
-
+make build_services start_services
 sudo docker push wisrovi/wyoloservice_worker:v1.0.12
-sudo docker push wisrovi/wyoloservice_worker:$VERSION
-sudo docker tag wisrovi/wyoloservice_worker:$VERSION wisrovi/wyoloservice_worker:latest
+sudo docker tag wisrovi/wyoloservice_worker:v1.0.12 wisrovi/wyoloservice_worker:latest
 sudo docker push wisrovi/wyoloservice_worker:latest
 
 

@@ -39,7 +39,13 @@ sleep_file = "/config/sleep"
 @app.get("/end_admin_mode")
 async def startup_event(user: str = None):
     """
-    Inicia el servicio de salud.
+    End admin mode.
+    Args:
+        user (str): The user requesting to end admin mode.
+    Returns:
+        dict: A response indicating the success or failure of the operation.
+    Raises:
+        Exception: If the user is not authorized to end admin mode.
     """
 
     if USER_TOPIC != user:
@@ -60,6 +66,14 @@ async def startup_event(user: str = None):
 
 @app.get("/start_admin_mode")
 async def shutdown_event(user: str = None):
+    """
+    Start admin mode.
+
+    Args:
+        user (str): The user requesting to start admin mode.
+    Returns:
+        dict: A response indicating the success or failure of the operation.
+    """
 
     if USER_TOPIC != user:
         return {
@@ -98,10 +112,34 @@ async def shutdown_event(user: str = None):
 
 
 @app.post("/stop/")
-async def stop_training(task_id: str):
+async def stop_training(task_id: str, user: str = None):
     """
-    Detiene el entrenamiento en curso.
+    Stop the training process.
+
+    Args:
+        task_id (str): The ID of the training task to stop.
+        user (str): The user requesting the stop action.
+    Returns:
+        dict: A response indicating the success or failure of the operation.
     """
+
+    if USER_TOPIC != user:
+        return {
+            "status": "error",
+            "message": f"User {user} is not authorized to stop training.",
+        }
+
+    if not task_id:
+        return {
+            "status": "error",
+            "message": "task_id is required.",
+        }
+    if not isinstance(task_id, str):
+        return {
+            "status": "error",
+            "message": "task_id must be a string.",
+        }
+
     # Detener el entrenamiento en curso
     metadata = {
         "task_id": task_id,
