@@ -1,7 +1,6 @@
 import datetime
 import json
 import os
-import re
 import uuid
 from typing import List
 
@@ -11,10 +10,10 @@ from loguru import logger
 from omegaconf import OmegaConf
 from setproctitle import setproctitle  # Para cambiar el nombre del proceso
 from train_yolo.trainer_wrapper import TrainerWrapper, obtener_info_gpu_json
-from wredis.hash import RedisHashManager
-from wredis.sortedset import RedisSortedSetManager
-
 from worker_utils.decorators import ejecutar_en_hilo
+from wredis.hash import RedisHashManager
+from wredis.queue import RedisQueueManager
+from wredis.sortedset import RedisSortedSetManager
 
 # Cambiar el nombre del proceso
 setproctitle("train_service")
@@ -29,16 +28,73 @@ if CONTROL_HOST is None:
 
 
 DEBUG_MODE = os.environ.get("debug", None)
+USER_TOPIC = os.environ.get("USER", None)
 hash_manager = None
 sorted_set_manager = None
+queue_manager = None
+
+sleep_file = "/config/sleep"
 
 
-@app.get("/startup")
-async def startup_event():
-    sleep_file = "/config/sleep"
+@app.get("/end_admin_mode")
+async def startup_event(user: str = None):
+    """
+    Inicia el servicio de salud.
+    """
+
+    if USER_TOPIC != user:
+        return {
+            "status": "error",
+            "message": f"User {user} is not authorized to start admin mode.",
+        }
+
     if os.path.exists(sleep_file):
         os.remove(sleep_file)
     logger.info("Starting up the service...")
+
+    return {
+        "status": "success",
+        "message": "The service is now in active mode.",
+    }
+
+
+@app.get("/start_admin_mode")
+async def shutdown_event(user: str = None):
+
+    if USER_TOPIC != user:
+        return {
+            "status": "error",
+            "message": f"User {user} is not authorized to start admin mode.",
+        }
+
+    datetime_now = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    metadata = {
+        "user_code": "local",
+        "datetime": datetime_now,
+        "end_datetime": "30 minutes",
+        "status": "sleep",
+        "worker": os.environ.get("WORKER_HOST", None),
+        "worker_host": CONTROL_HOST,
+        "user": USER_TOPIC,
+    }
+
+    if not os.path.exists(sleep_file):
+        with open(sleep_file, "w") as f:
+            # save metadata in the file in json format
+            metadata_json = json.dumps(metadata)
+            f.write(metadata_json)
+
+    queue_manager.publish(
+        queue_name="sleep_worker",
+        data={"admin": metadata, "datetime": datetime_now},
+    )
+
+    return {
+        "status": "success",
+        "message": "The service is now in sleep mode.",
+        "metadata": metadata,
+    }
 
 
 @app.post("/stop/")
@@ -160,7 +216,7 @@ def health(version: str):
         version (str): Versión de la API.
     """
 
-    global app_version, hash_manager, sorted_set_manager
+    global app_version, hash_manager, sorted_set_manager, queue_manager
 
     app_version = version
 
@@ -178,6 +234,13 @@ def health(version: str):
     )
 
     sorted_set_manager = RedisSortedSetManager(
+        host=redis_config.get("REDIS_HOST"),
+        port=redis_config.get("REDIS_PORT"),
+        db=redis_config.get("REDIS_DB"),
+        verbose=False,
+    )
+
+    queue_manager = RedisQueueManager(
         host=redis_config.get("REDIS_HOST"),
         port=redis_config.get("REDIS_PORT"),
         db=redis_config.get("REDIS_DB"),
