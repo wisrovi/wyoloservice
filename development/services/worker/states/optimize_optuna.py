@@ -26,7 +26,7 @@ class OptunaOptimize:
 
     __VERSION__ = "0.1.0"
     __NAME__ = "model_train"
-    DEBUG_MODE = os.environ.get("debug", None)
+    DEBUG_MODE = os.environ.get("debug_training", None)
     verbose = False
 
     def __init__(self, verbose: bool = False):
@@ -122,7 +122,7 @@ class OptunaOptimize:
                         yaml.dump(config, yaml_file)
 
                     # borrar
-                    OptunaOptimize.DEBUG_MODE = False
+                    # OptunaOptimize.DEBUG_MODE = False
 
                     task_id = config.get("task_id")
                     fitness = config.get("sweeper", {}).get("fitness", "fitness")
