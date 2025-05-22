@@ -35,7 +35,16 @@ from states import (
     results_up_to_minio,
 )
 from train_yolo.trainer_wrapper import obtener_info_gpu_json
-from worker_utils import MinioS3Client, SharedResource, health
+from worker_utils import (
+    MinioS3Client,
+    SharedResource,
+    health,
+    validate_yolo_dataset,
+    YOLOValidationFailedError,
+    PermissionsError,
+    DatasetContentError,
+    DatasetNotFoundError,
+)
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
 from wredis.hash import RedisHashManager
@@ -45,7 +54,7 @@ setproctitle("train_service")
 console = Console()
 
 
-__VERSION__ = "v1.0.11"
+__VERSION__ = "v1.0.12"
 
 
 CONTROL_HOST = os.getenv("CONTROL_HOST", None)
@@ -149,7 +158,7 @@ def main(cfg: OmegaConf):
         db=redis_config.get("REDIS_DB"),
         verbose=False,
     )
-    
+
     hash_manager = RedisHashManager(
         host=redis_config.get("REDIS_HOST"),
         port=redis_config.get("REDIS_PORT"),
@@ -319,8 +328,182 @@ def main(cfg: OmegaConf):
 
     # Receptores de colas de redis
 
+    # MODE EVALUATE (for dataset validation), only is active when not is in DEBUG_MODE
+    if True:
+        EVALUATE_TOPIC_RESULTS = "evaluate_results"
+
+        public_topics.append(f"evaluate")
+        private_topics.append(f"evaluate_{WORKER_HOST_TOPIC}")
+
+        def _evaluate_yolo_dataset(
+            data_yaml: str,
+            model_path: str,
+            topic: str,
+            task_id: str,
+            user_code: str = "test",
+        ):
+            """
+            Function simulating a successful training run after dataset validation.
+
+            Args:
+                data_yaml (str): Path to the dataset YAML file.
+                model_path (str): Path to the model file.
+            """
+
+            @validate_yolo_dataset(data_yaml=data_yaml, model_path=model_path)
+            def _evaluate():
+                """Function simulating a successful training run after dataset validation."""
+                logger.info(
+                    f"Dataset validation successful. Proceeding with training using model: {model_path}"
+                )
+                return True
+
+            try:
+                results = shared_resource.execute_process(
+                    function=_evaluate,
+                    args_dict={},
+                )
+            except YOLOValidationFailedError as e:
+                logger.error(f"Error UNEXPECTEDLY caught in valid scenario: {e}")
+                queue_manager.publish(
+                    queue_name=EVALUATE_TOPIC_RESULTS,
+                    data={
+                        "task_id": task_id,
+                        "user_code": user_code,
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                        "status": "YOLOValidationFailedError",
+                        "message": f"Error UNEXPECTEDLY caught in valid scenario: {e}",
+                    },
+                )
+                return
+            except DatasetNotFoundError as e:
+                logger.error(f"'DatasetNotFoundError' caught as expected: {e}")
+                queue_manager.publish(
+                    queue_name=EVALUATE_TOPIC_RESULTS,
+                    data={
+                        "task_id": task_id,
+                        "user_code": user_code,
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                        "status": "DatasetNotFoundError",
+                        "message": f"Dataset not found: {e}",
+                    },
+                )
+                return
+            except PermissionsError as e:
+                logger.error(f"'PermissionsError' caught as expected: {e}")
+                queue_manager.publish(
+                    queue_name=EVALUATE_TOPIC_RESULTS,
+                    data={
+                        "task_id": task_id,
+                        "user_code": user_code,
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                        "status": "PermissionsError",
+                        "message": f"Dataset validation failed: {e}",
+                    },
+                )
+                return
+            except DatasetContentError as e:
+                logger.error(f"'DatasetContentError' caught as expected: {e}")
+                queue_manager.publish(
+                    queue_name=EVALUATE_TOPIC_RESULTS,
+                    data={
+                        "task_id": task_id,
+                        "user_code": user_code,
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                        "status": "DatasetContentError",
+                        "message": f"Dataset validation failed: {e}",
+                    },
+                )
+                return
+            except Exception as e:
+                logger.critical(
+                    f"Unexpected and unhandled error in valid scenario: {e}"
+                )
+                queue_manager.publish(
+                    queue_name=EVALUATE_TOPIC_RESULTS,
+                    data={
+                        "task_id": task_id,
+                        "user_code": user_code,
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                        "status": "Exception",
+                        "message": f"Dataset validation failed: {e}",
+                    },
+                )
+                return
+
+            if results is None or shared_resource.elapsedtime() < 10:
+                recreate_request(
+                    topic=topic,
+                    args_dict={
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                    },
+                )
+            else:
+                # Publish the results to the results queue
+                queue_manager.publish(
+                    queue_name=EVALUATE_TOPIC_RESULTS,
+                    data={
+                        "task_id": task_id,
+                        "user_code": user_code,
+                        "data_yaml": data_yaml,
+                        "model_path": model_path,
+                        "topic": topic,
+                        "status": "success",
+                        "message": "Dataset validation successful.",
+                    },
+                )
+
+        @queue_manager.on_message(f"evaluate_{WORKER_HOST_TOPIC}")
+        def evaluate_worker_private_mode(task_data: dict):
+            logger.debug(f"Received data in evaluate, {task_data}")
+            task_id = task_data["task_id"]
+            user_code = task_data["user_code"]
+
+            _evaluate_yolo_dataset(
+                data_yaml=task_data["data_yaml"],
+                model_path=task_data["model_path"],
+                topic=f"evaluate_{WORKER_HOST_TOPIC}",
+                task_id=task_id,
+                user_code=user_code,
+            )
+
+        if DEBUG_MODE is None:
+            @queue_manager.on_message(f"evaluate")
+            def evaluate_worker_public_mode(task_data: dict):
+                logger.debug(f"Received data in evaluate, {task_data}")
+                task_id = task_data["task_id"]
+                user_code = task_data["user_code"]
+
+                _evaluate_yolo_dataset(
+                    data_yaml=task_data["data_yaml"],
+                    model_path=task_data["model_path"],
+                    topic="evaluate",
+                    task_id=task_id,
+                    user_code=user_code,
+                )
+                
+                # example request
+                #task_data = {
+                #     "task_id": "test",
+                #     "user_code": "test",
+                #     "data_yaml": "/app/datasets/valid_dataset.yaml",
+                #     "model_path": "/app/yolo_weights/yolov8n.pt",
+                # }
+
     # MODE ADMIN (for sleep), only is active when not is in DEBUG_MODE
-    if DEBUG_MODE is None:
+    if True:
         private_topics.append(f"admin_{WORKER_HOST_TOPIC}")
 
         @queue_manager.on_message(f"admin_{WORKER_HOST_TOPIC}")
@@ -358,7 +541,7 @@ def main(cfg: OmegaConf):
                 logger.info("Worker in sleep mode...")
 
     # MODE STOP (for emergency stop), only is active when not is in DEBUG_MODE
-    if DEBUG_MODE is None:
+    if True:
         private_topics.append(f"stop_{WORKER_HOST_TOPIC}")
 
         @queue_manager.on_message(f"stop_{WORKER_HOST_TOPIC}")

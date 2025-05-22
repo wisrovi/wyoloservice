@@ -522,7 +522,7 @@ class TrainerWrapper:
 
         self.model = model
 
-        # Configura los callbacks
+        # Configure the callbacks
         if "minio" in self.config and "mlflow" in self.config:
             self.model.add_callback("on_train_start", self.on_train_start)
             self.model.add_callback("on_train_end", self.on_train_end)

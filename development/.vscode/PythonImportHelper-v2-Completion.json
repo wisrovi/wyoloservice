@@ -296,6 +296,14 @@
         "documentation": {}
     },
     {
+        "label": "logger",
+        "importPath": "loguru",
+        "description": "loguru",
+        "isExtraImport": true,
+        "detail": "loguru",
+        "documentation": {}
+    },
+    {
         "label": "setproctitle",
         "importPath": "setproctitle",
         "description": "setproctitle",
@@ -512,6 +520,14 @@
         "documentation": {}
     },
     {
+        "label": "YOLO",
+        "importPath": "ultralytics",
+        "description": "ultralytics",
+        "isExtraImport": true,
+        "detail": "ultralytics",
+        "documentation": {}
+    },
+    {
         "label": "RTDETR",
         "importPath": "ultralytics",
         "description": "ultralytics",
@@ -625,6 +641,14 @@
         "documentation": {}
     },
     {
+        "label": "Path",
+        "importPath": "pathlib",
+        "description": "pathlib",
+        "isExtraImport": true,
+        "detail": "pathlib",
+        "documentation": {}
+    },
+    {
         "label": "setup",
         "importPath": "setuptools",
         "description": "setuptools",
@@ -646,6 +670,14 @@
         "isExtraImport": true,
         "importPath": "functools",
         "description": "functools",
+        "detail": "functools",
+        "documentation": {}
+    },
+    {
+        "label": "wraps",
+        "importPath": "functools",
+        "description": "functools",
+        "isExtraImport": true,
         "detail": "functools",
         "documentation": {}
     },
@@ -773,6 +805,46 @@
         "documentation": {}
     },
     {
+        "label": "validate_yolo_dataset",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "YOLOValidationFailedError",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "PermissionsError",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "DatasetContentError",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
+        "label": "DatasetNotFoundError",
+        "importPath": "worker_utils",
+        "description": "worker_utils",
+        "isExtraImport": true,
+        "detail": "worker_utils",
+        "documentation": {}
+    },
+    {
         "label": "math",
         "kind": 6,
         "isExtraImport": true,
@@ -838,6 +910,15 @@
         "importPath": "multiprocessing",
         "description": "multiprocessing",
         "detail": "multiprocessing",
+        "documentation": {}
+    },
+    {
+        "label": "sys",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "sys",
+        "description": "sys",
+        "detail": "sys",
         "documentation": {}
     },
     {
@@ -1098,15 +1179,6 @@
         "documentation": {}
     },
     {
-        "label": "sys",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "sys",
-        "description": "sys",
-        "detail": "sys",
-        "documentation": {}
-    },
-    {
         "label": "traceback",
         "kind": 6,
         "isExtraImport": true,
@@ -1195,6 +1267,24 @@
         "importPath": "services.api.main",
         "description": "services.api.main",
         "peekOfCode": "def recreate(\n    user_code: str,\n    task_id: str,\n    last_model: str,\n    file: UploadFile = File(...),\n    resume: bool = True,\n    destinity: str = \"recreate\",\n):\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "evaluate",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def evaluate(user_code: str, data_yaml: str, model_path: str, topic: str = \"evaluate\"):\n    \"\"\"Ejecuta una evaluación de un modelo en un conjunto de datos.\n    Args:\n        user_code (str): Código del usuario que solicita la evaluación.\n        data_yaml (str): Ruta al archivo YAML que contiene la configuración de los datos.\n        model_path (str): Ruta al modelo a evaluar.\n        topic (str): Nombre del tema en Redis donde se publicará la tarea. Por defecto es \"evaluate\".\n    Returns:\n        dict: Mensaje de confirmación y el ID de la tarea.\n    \"\"\"",
+        "detail": "services.api.main",
+        "documentation": {}
+    },
+    {
+        "label": "stop_training",
+        "kind": 2,
+        "importPath": "services.api.main",
+        "description": "services.api.main",
+        "peekOfCode": "def stop_training(user_code: str, file: UploadFile = File(...)):\n    \"\"\"Detiene un entrenamiento en curso.\"\"\"\n    # Detener el entrenamiento en curso\n    start_training(user_code=user_code, file=file, resume=False)\n@app.post(\"/train/\")\ndef start_training(user_code: str, file: UploadFile = File(...), resume: bool = False):\n    \"\"\"Registra un entrenamiento y lo encola en Redis.\"\"\"\n    task_id = str(uuid.uuid4()).replace(\"-\", \"\").replace(\"_\", \"\")\n    config_path = os.path.join(CONFIG_DIR, f\"{task_id}.yaml\")\n    with open(config_path, \"wb\") as buffer:",
         "detail": "services.api.main",
         "documentation": {}
     },
@@ -1532,6 +1622,51 @@
         "documentation": {}
     },
     {
+        "label": "YOLOValidationFailedError",
+        "kind": 6,
+        "importPath": "services.worker.worker_utils.fail_dataset",
+        "description": "services.worker.worker_utils.fail_dataset",
+        "peekOfCode": "class YOLOValidationFailedError(Exception):\n    \"\"\"Base exception for YOLO dataset validation failures.\"\"\"\n    pass\nclass DatasetNotFoundError(YOLOValidationFailedError):\n    \"\"\"Exception raised when the dataset YAML file, model file, or internal dataset paths are not found.\"\"\"\n    pass\nclass DatasetContentError(YOLOValidationFailedError):\n    \"\"\"Exception raised when the dataset's content (images/labels) is invalid or malformed.\"\"\"\n    pass\nclass PermissionsError(YOLOValidationFailedError):",
+        "detail": "services.worker.worker_utils.fail_dataset",
+        "documentation": {}
+    },
+    {
+        "label": "DatasetNotFoundError",
+        "kind": 6,
+        "importPath": "services.worker.worker_utils.fail_dataset",
+        "description": "services.worker.worker_utils.fail_dataset",
+        "peekOfCode": "class DatasetNotFoundError(YOLOValidationFailedError):\n    \"\"\"Exception raised when the dataset YAML file, model file, or internal dataset paths are not found.\"\"\"\n    pass\nclass DatasetContentError(YOLOValidationFailedError):\n    \"\"\"Exception raised when the dataset's content (images/labels) is invalid or malformed.\"\"\"\n    pass\nclass PermissionsError(YOLOValidationFailedError):\n    \"\"\"Exception raised when there are permission issues accessing dataset or model files.\"\"\"\n    pass\n# --- validate_yolo_dataset Decorator Factory ---",
+        "detail": "services.worker.worker_utils.fail_dataset",
+        "documentation": {}
+    },
+    {
+        "label": "DatasetContentError",
+        "kind": 6,
+        "importPath": "services.worker.worker_utils.fail_dataset",
+        "description": "services.worker.worker_utils.fail_dataset",
+        "peekOfCode": "class DatasetContentError(YOLOValidationFailedError):\n    \"\"\"Exception raised when the dataset's content (images/labels) is invalid or malformed.\"\"\"\n    pass\nclass PermissionsError(YOLOValidationFailedError):\n    \"\"\"Exception raised when there are permission issues accessing dataset or model files.\"\"\"\n    pass\n# --- validate_yolo_dataset Decorator Factory ---\ndef validate_yolo_dataset(\n    data_yaml: str | Path,\n    model_path: str | Path = \"yolov8n.pt\",",
+        "detail": "services.worker.worker_utils.fail_dataset",
+        "documentation": {}
+    },
+    {
+        "label": "PermissionsError",
+        "kind": 6,
+        "importPath": "services.worker.worker_utils.fail_dataset",
+        "description": "services.worker.worker_utils.fail_dataset",
+        "peekOfCode": "class PermissionsError(YOLOValidationFailedError):\n    \"\"\"Exception raised when there are permission issues accessing dataset or model files.\"\"\"\n    pass\n# --- validate_yolo_dataset Decorator Factory ---\ndef validate_yolo_dataset(\n    data_yaml: str | Path,\n    model_path: str | Path = \"yolov8n.pt\",\n    log_level: str = \"INFO\",\n    **val_kwargs,\n):",
+        "detail": "services.worker.worker_utils.fail_dataset",
+        "documentation": {}
+    },
+    {
+        "label": "validate_yolo_dataset",
+        "kind": 2,
+        "importPath": "services.worker.worker_utils.fail_dataset",
+        "description": "services.worker.worker_utils.fail_dataset",
+        "peekOfCode": "def validate_yolo_dataset(\n    data_yaml: str | Path,\n    model_path: str | Path = \"yolov8n.pt\",\n    log_level: str = \"INFO\",\n    **val_kwargs,\n):\n    \"\"\"\n    Decorator factory to validate an Ultralytics YOLOv8 dataset before executing a function.\n    Ensures the dataset is valid before proceeding, raising specific exceptions if issues are found.\n    Args:",
+        "detail": "services.worker.worker_utils.fail_dataset",
+        "documentation": {}
+    },
+    {
         "label": "health",
         "kind": 2,
         "importPath": "services.worker.worker_utils.health",
@@ -1572,7 +1707,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "DEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.get(\"/\")",
+        "peekOfCode": "DEBUG_MODE = os.environ.get(\"debug\", None)\nhash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.post(\"/stop/\")",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1581,7 +1716,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.get(\"/\")\nasync def read_version():",
+        "peekOfCode": "hash_manager = None\nsorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.post(\"/stop/\")\nasync def stop_training(task_id: str):",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1590,7 +1725,7 @@
         "kind": 5,
         "importPath": "services.worker.worker_utils.health",
         "description": "services.worker.worker_utils.health",
-        "peekOfCode": "sorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.get(\"/\")\nasync def read_version():\n    global hash_manager",
+        "peekOfCode": "sorted_set_manager = None\n@app.get(\"/startup\")\nasync def startup_event():\n    sleep_file = \"/config/sleep\"\n    if os.path.exists(sleep_file):\n        os.remove(sleep_file)\n    logger.info(\"Starting up the service...\")\n@app.post(\"/stop/\")\nasync def stop_training(task_id: str):\n    \"\"\"",
         "detail": "services.worker.worker_utils.health",
         "documentation": {}
     },
@@ -1878,7 +2013,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "console = Console()\n__VERSION__ = \"v1.0.11\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)",
+        "peekOfCode": "console = Console()\n__VERSION__ = \"v1.0.12\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)",
         "detail": "services.worker.worker",
         "documentation": {}
     },
@@ -1887,7 +2022,7 @@
         "kind": 5,
         "importPath": "services.worker.worker",
         "description": "services.worker.worker",
-        "peekOfCode": "__VERSION__ = \"v1.0.11\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()",
+        "peekOfCode": "__VERSION__ = \"v1.0.12\"\nCONTROL_HOST = os.getenv(\"CONTROL_HOST\", None)\nif CONTROL_HOST is None:\n    raise Exception(\"CONTROL_HOST env var is not set\")\nDEBUG_MODE = None\n# Configura el primer logger: solo errores en un archivo\nlogger.add(\n    \"/var/log/worker/error_log.log\", level=\"ERROR\", rotation=\"10 MB\", retention=\"7 days\"\n)\npipeline = Pipeline()",
         "detail": "services.worker.worker",
         "documentation": {}
     },

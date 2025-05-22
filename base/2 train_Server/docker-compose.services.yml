@@ -4,7 +4,7 @@ version: "3.8"
 x-resources: &resources_gpu
   # la shm_size es calculada de acuerdo al 80% de la memoria RAM como maximo
   # es importante que el ordenador a entrenar tenga al menos lo mismo de swap que de RAM
-  shm_size: "24g"  
+  shm_size: "24g"
   logging:
     driver: "json-file"
     options:
@@ -41,6 +41,8 @@ services:
     labels:
       - "autoheal=true"
       - "com.centurylinklabs.watchtower.enable=true" # Habilita Watchtower para este contenedor
+    ports:
+      - "23455:8000" # API
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/"]
       interval: 20s
@@ -66,7 +68,6 @@ services:
       - CURL_TIMEOUT=30
       - AUTOHEAL_CONTAINER_LABEL=all
     volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock'
+      - "/var/run/docker.sock:/var/run/docker.sock"
     image: willfarrell/autoheal
     restart: always
-

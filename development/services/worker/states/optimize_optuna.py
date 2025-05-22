@@ -75,6 +75,12 @@ class OptunaOptimize:
                     progress_bar.update(1)
                     yield progress_bar, None
 
+        def get_anulated_trial():
+            if sweeper_config.get("direction", "minimize") == "minimize":
+                return 1e100
+            else:
+                return -1e100
+
         @OptunaOptimize.clean_gpu
         @OptunaOptimize.load_train_config(
             config_path=request_config_user.get("config_path")
@@ -119,34 +125,39 @@ class OptunaOptimize:
                     OptunaOptimize.DEBUG_MODE = False
 
                     task_id = config.get("task_id")
+                    fitness = config.get("sweeper", {}).get("fitness", "fitness")
                     stop_training_file = f"/config/stop_training_{task_id}.txt"
-                    if os.path.exists(stop_training_file):
-                        raise optuna.TrialPruned("Condition to stop training met.")
 
                     # Run the training process
-                    if OptunaOptimize.DEBUG_MODE:
-                        metric = None
-                        request_config = train.callback(
-                            config_path=temp_config_path,
-                            fitness=config.get("sweeper", {}).get("fitness", "fitness"),
-                            trial_number=int(trial.number),
-                        )
-                        metric = request_config["train"]["results"][
-                            config.get("sweeper", {}).get("fitness", "fitness")
-                        ]
-                    else:
-                        metric = train_run(
-                            config_path=temp_config_path,
-                            trial_number=int(trial.number),
-                            verbose=self.verbose,
-                            fitness=config.get("sweeper", {}).get("fitness", "fitness"),
-                        )
-                        
+                    if not os.path.exists(stop_training_file):
+                        if OptunaOptimize.DEBUG_MODE:
+                            metric = None
+                            request_config = train.callback(
+                                config_path=temp_config_path,
+                                fitness=fitness,
+                                trial_number=int(trial.number),
+                            )
+                            metric = request_config["train"]["results"][fitness]
+                        else:
+                            metric = train_run(
+                                config_path=temp_config_path,
+                                trial_number=int(trial.number),
+                                verbose=self.verbose,
+                                fitness=fitness,
+                            )
+
                     if os.path.exists(stop_training_file):
-                        return 0
+                        # if the stop file exists, return a large value
+                        # to indicate that the training should be stopped
+                        if self.verbose:
+                            logger.info(
+                                f"Stop training file found: {stop_training_file}"
+                            )
+                        return get_anulated_trial()
 
                     best_model = f"{result_path}/{int(trial.number)}/train_{config['task_id']}/weights/best.pt"
                     if os.path.exists(best_model):
+                        os.makedirs(f"{result_path}/trail_history/", exist_ok=True)
                         OptunaOptimize.copy_file(
                             origin_path=best_model,
                             destiny_path=f"{result_path}/trail_history/trial_{int(trial.number)}.pt",
@@ -157,7 +168,11 @@ class OptunaOptimize:
                         or not isinstance(metric, float)
                         or math.isnan(metric)
                     ):
-                        raise optuna.TrialPruned("Insufficient performance.")
+                        sms = f"[{task_id}] Insufficient performance in trial {trial.number}, the {fitness} is None or NaN. [{metric}]"
+                        if self.verbose:
+                            logger.error(sms)
+                        # raise optuna.TrialPruned(sms)
+                    return get_anulated_trial()
 
                 return metric
             except Exception as e:

@@ -33,7 +33,7 @@ services:
     build:
       context: ./services
       dockerfile: Dockerfile.worker
-    image: wisrovi/wyoloservice_worker:v1.0.11
+    image: wisrovi/wyoloservice_worker:v1.0.12
     container_name: worker_demo
     env_file:
       - control_host.env
@@ -47,6 +47,8 @@ services:
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
+    ports:
+      - "23455:8000" # API
     labels:
       - "autoheal=true"
       - "com.centurylinklabs.watchtower.enable=true" # Habilita Watchtower para este contenedor

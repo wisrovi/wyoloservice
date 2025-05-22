@@ -1,4 +1,7 @@
+import datetime
+import json
 import os
+import re
 import uuid
 from typing import List
 
@@ -36,6 +39,34 @@ async def startup_event():
     if os.path.exists(sleep_file):
         os.remove(sleep_file)
     logger.info("Starting up the service...")
+
+
+@app.post("/stop/")
+async def stop_training(task_id: str):
+    """
+    Detiene el entrenamiento en curso.
+    """
+    # Detener el entrenamiento en curso
+    metadata = {
+        "task_id": task_id,
+        "user_code": "local",
+        "datetime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "status": "stop",
+        "worker": os.environ.get("WORKER_HOST", None),
+        "worker_host": CONTROL_HOST,
+        "user": os.environ.get("USER", None),
+    }
+
+    stop_training_file = f"/config/stop_training_{task_id}.txt"
+    with open(stop_training_file, "w") as f:
+        metadata_json = json.dumps(metadata)
+        f.write(metadata_json)
+
+    response = {
+        "status": "success",
+        "message": f"Training with task_id {task_id} has been stopped.",
+    }
+    return response
 
 
 @app.get("/")
@@ -99,7 +130,7 @@ async def read_version():
     worker_ip = metadata["WORKER_HOST"]
     worker_hostname = metadata["USER"]
     concurrent_train = os.environ.get("NUM_CURRENT_TRAIN", 1)
-    member_name = f'{worker_ip} ({worker_hostname}-[{concurrent_train}])'
+    member_name = f"{worker_ip} ({worker_hostname}-[{concurrent_train}])"
     if os.environ.get("debug", None):
         member_name += "[debug]"
     member_name += f" -> {app_version}"

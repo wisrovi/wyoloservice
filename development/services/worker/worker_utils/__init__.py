@@ -1,6 +1,6 @@
 from worker_utils.minio import (
     initialize_minio_client,
-    MinioS3Client,    
+    MinioS3Client,
 )
 
 from worker_utils.decorators import (
@@ -10,6 +10,13 @@ from worker_utils.decorators import (
     load_train_config,
     get_ray_suggestions,
     ejecutar_en_hilo,
+)
+from worker_utils.fail_dataset import (
+    validate_yolo_dataset,
+    YOLOValidationFailedError,
+    PermissionsError,
+    DatasetContentError,
+    DatasetNotFoundError
 )
 
 from states.optimize_optuna import OptunaOptimize

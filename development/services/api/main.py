@@ -90,6 +90,42 @@ def recreate(
     return {"message": "Entrenamiento registrado", "task_id": task_id}
 
 
+@app.post("/evaluate/")
+def evaluate(user_code: str, data_yaml: str, model_path: str, topic: str = "evaluate"):
+    """Ejecuta una evaluación de un modelo en un conjunto de datos.
+
+    Args:
+        user_code (str): Código del usuario que solicita la evaluación.
+        data_yaml (str): Ruta al archivo YAML que contiene la configuración de los datos.
+        model_path (str): Ruta al modelo a evaluar.
+        topic (str): Nombre del tema en Redis donde se publicará la tarea. Por defecto es "evaluate".
+
+    Returns:
+        dict: Mensaje de confirmación y el ID de la tarea.
+    """
+
+    task_id = str(uuid.uuid4()).replace("-", "").replace("_", "")
+
+    queue_manager.publish(
+        queue_name=topic,
+        data={
+            "task_id": task_id,
+            "user_code": user_code,
+            "data_yaml": data_yaml,
+            "model_path": model_path,
+        },
+    )
+    return {"message": "Evaluación registrada", "task_id": task_id}
+
+
+@app.post("/stop/")
+def stop_training(user_code: str, file: UploadFile = File(...)):
+    """Detiene un entrenamiento en curso."""
+
+    # Detener el entrenamiento en curso
+    start_training(user_code=user_code, file=file, resume=False)
+
+
 @app.post("/train/")
 def start_training(user_code: str, file: UploadFile = File(...), resume: bool = False):
     """Registra un entrenamiento y lo encola en Redis."""
