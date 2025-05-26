@@ -58,7 +58,8 @@ class OptunaOptimize:
         tempfolder = request_config_user["tempfile"]
 
         task_id = request_config_user.get("task_id")
-        stop_training_file = f"/config/stop_training_{task_id}.txt"
+        def get_stop_training_file(task_id):
+            return f"/config/stop_training_{task_id}.txt"
 
         result_path = (
             f'{tempfolder}/models/{sweeper_config.get("study_name", "default_study")}/'
