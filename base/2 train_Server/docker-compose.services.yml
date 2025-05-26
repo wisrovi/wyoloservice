@@ -42,13 +42,14 @@ services:
       - "autoheal=true"
       - "com.centurylinklabs.watchtower.enable=true" # Habilita Watchtower para este contenedor
     ports:
-      - "23455:8000" # API
+      - "23455:8000" # Worker API
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/ && nvidia-smi || exit 1"]
       interval: 20s
-      timeout: 2s
-      retries: 1
+      timeout: 5s
+      retries: 3
       start_period: 20s
+
 
   watchtower:
     image: containrrr/watchtower
