@@ -58,6 +58,8 @@ class OptunaOptimize:
         tempfolder = request_config_user["tempfile"]
 
         task_id = request_config_user.get("task_id")
+        def get_stop_training_file(task_id):
+            return f"/config/stop_training_{task_id}.txt"
 
         result_path = (
             f'{tempfolder}/models/{sweeper_config.get("study_name", "default_study")}/'
@@ -123,10 +125,8 @@ class OptunaOptimize:
 
                     # borrar
                     # OptunaOptimize.DEBUG_MODE = False
-
-                    task_id = config.get("task_id")
                     fitness = config.get("sweeper", {}).get("fitness", "fitness")
-                    stop_training_file = f"/config/stop_training_{task_id}.txt"
+                    
 
                     # Run the training process
                     if not os.path.exists(stop_training_file):
@@ -192,19 +192,19 @@ class OptunaOptimize:
         # This is a workaround to stop the training process
         # when the user sends a stop signal
         # to the worker
-        stop_training_file = f"/config/stop_training_{task_id}.txt"
         if os.path.exists(stop_training_file):
             os.remove(stop_training_file)
             logger.info("Training stopped successfully.")
+            return (None, None, None, None)
 
         try:
             best_trial = study.best_trial
             best_params = study.best_params
             best_metric = best_trial.value  # Obtener la mejor métrica
 
-            return best_trial, best_params, best_metric, result_path
+            return (best_trial, best_params, best_metric, result_path)
         except Exception:
-            return None, None, None, None
+            return (None, None, None, None)
 
     def onnx_convert(self, best_model_path: str, imgsz: int):
         """Convert a PyTorch model to ONNX format.
@@ -268,6 +268,13 @@ class OptunaOptimize:
         best_trial, best_params, best_metric, result_path = self.search_best_model(
             request_config_user
         )
+
+        task_id = request_config_user.get("task_id")
+        stop_training_file = f"/config/stop_training_{task_id}.txt"
+        if os.path.exists(stop_training_file):
+            os.remove(stop_training_file)
+            logger.info("Training stopped successfully.")
+            return {}
 
         if best_trial and best_params and best_metric:
             best_model_path = (
