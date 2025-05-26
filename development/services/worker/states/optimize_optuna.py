@@ -271,6 +271,8 @@ class OptunaOptimize:
         task_id = request_config_user.get("task_id")
         stop_training_file = f"/config/stop_training_{task_id}.txt"
         if os.path.exists(stop_training_file):
+            os.remove(stop_training_file)
+            logger.info("Training stopped successfully.")
             return {}
 
         if best_trial and best_params and best_metric:
