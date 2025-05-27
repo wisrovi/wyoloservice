@@ -54,7 +54,8 @@ def show_qr_in_terminal():
     console = Console()
 
     # Limpia la pantalla de la terminal para una presentación limpia
-    os.system('cls' if os.name == 'nt' else 'clear')
+    console = Console()
+    console.clear()
 
     # Intenta obtener la URL de la variable de entorno 'QR_URL'
     url_to_display = os.getenv('QR_URL', DEFAULT_URL)
