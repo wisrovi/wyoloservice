@@ -25,3 +25,5 @@ from worker_utils.utils import merge_configs, copiar_archivo
 from worker_utils.semaphore import SharedResource
 
 from worker_utils.health import health
+
+from worker_utils.qr import show_qr_in_terminal
