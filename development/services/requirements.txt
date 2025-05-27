@@ -27,6 +27,11 @@ seaborn
 Pillow
 matplotlib
 setproctitle
+
+qrcode
+Pillow
+rich
+
 # ray[tune]
 # dvclive  # not yet available
 
