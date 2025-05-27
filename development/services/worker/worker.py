@@ -44,6 +44,7 @@ from worker_utils import (
     PermissionsError,
     DatasetContentError,
     DatasetNotFoundError,
+    show_qr_in_terminal,
 )
 from wpipe.pipe import Pipeline
 from wredis.queue import RedisQueueManager
@@ -116,6 +117,8 @@ remove_argparse_arguments(unknown)
 def main(cfg: OmegaConf):
     global DEFAULT_CONFIG
     global DEBUG_MODE
+
+    show_qr_in_terminal()
 
     cfg.mlflow.MLFLOW_TRACKING_URI = cfg.mlflow.MLFLOW_TRACKING_URI.replace(
         "localhost", CONTROL_HOST
