@@ -15,16 +15,16 @@ DEFAULT_URL = "https://www.linkedin.com/in/wisrovi-rodriguez"
 # --- Fin de la configuración del script ---
 
 def generate_qr_ascii(url: str, box_size: int = 1, border: int = 1) -> str:
-"""
-Genera un código QR de la URL dada y lo representa como una cadena de caracteres ASCII.
-"""
-try:
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_M,  # Medium error correction
-        box_size=box_size,
-        border=border,
-    )
+    """
+    Genera un código QR de la URL dada y lo representa como una cadena de caracteres ASCII.
+    """
+    try:
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,  # Medium error correction
+            box_size=box_size,
+            border=border,
+        )
         qr.add_data(url)
         qr.make(fit=True)
 
