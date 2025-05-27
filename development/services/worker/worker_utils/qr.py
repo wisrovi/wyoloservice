@@ -59,8 +59,9 @@ def show_qr_in_terminal():
     # Intenta obtener la URL de la variable de entorno 'QR_URL'
     url_to_display = os.getenv('QR_URL', DEFAULT_URL)
 
-    if not url_to_display:
-        console.print("[bold red]ERROR: No se pudo obtener una URL válida.[/bold red]", err=True)
+    # Validación básica de formato de URL
+    if not url_to_display.startswith(('http://', 'https://')):
+        console.print("[bold red]ERROR: URL inválida. Debe comenzar con http:// o https://[/bold red]", err=True)
         sys.exit(1)
 
     # Genera el contenido ASCII del QR
