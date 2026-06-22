@@ -22,3 +22,4 @@ mount -t cifs //$CONTROL_HOST/shared /database \
 echo "Montando /datasets/..."
 mount -t cifs //$CONTROL_HOST/shared /datasets/ \
     -o username=$CIFS_USER,password=$CIFS_PASS,port=23445,file_mode=0777,dir_mode=0777,iocharset=utf8
+
