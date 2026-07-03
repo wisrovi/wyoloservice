@@ -1,7 +1,7 @@
 # wyoloservice (Legacy - Train Service 1)
 
 > [!WARNING]
-> **Deprecated:** This repository contains the legacy **Train Service 1** code. It has been completely superseded by [Train Service 2 (NeuralForgeAI)](file:///home/william.rodriguez/Documents/w_libraries/train_service2/wyoloservice2_production/README.md).
+> **Deprecated:** This repository contains the legacy **Train Service 1** code. It has been completely superseded by [Train Service 2 (NeuralForgeAI)](https://github.com/wisrovi/wyoloservice2_production).
 > Please refer to the new system for distributed optimizations, Celery queues, and native YOLO26 support.
 
 ---
